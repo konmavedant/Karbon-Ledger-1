@@ -1,13 +1,13 @@
-name = "youreachedrahat/talendro"
+name = "KonmaORG/Karbon-Ledger"
 version = "0.0.0"
 compiler = "v1.1.5"
 plutus = "v3"
 license = "Apache-2.0"
-description = "Aiken contracts for project 'youreachedrahat/talendro'"
+description = "Aiken contracts for project 'KonmaORG/Karbon-Ledger'"
 
 [repository]
-user = "youreachedrahat"
-project = "talendro"
+user = "KonmaORG"
+project = "Karbon-Ledger"
 platform = "github"
 
 [[dependencies]]

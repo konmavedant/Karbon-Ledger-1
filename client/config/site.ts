@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Aiken Lucid Template",
+  name: "Karbon-Ledger",
   description: "Make beautiful websites regardless of your design experience.",
   navItems: [
     {
@@ -56,7 +56,7 @@ export const siteConfig = {
     },
   ],
   links: {
-    github: "https://github.com/youreachedrahat",
+    github: "https://github.com/KonmaORG/Karbon-Ledger",
     twitter: "https://twitter.com/getnextui",
     docs: "https://nextui.org",
     discord: "https://discord.gg/9b6yyZKmH4",
