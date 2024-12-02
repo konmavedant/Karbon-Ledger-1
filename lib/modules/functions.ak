@@ -1,6 +1,6 @@
 use aiken/collection/dict
 use aiken/collection/list
-use cardano/assets.{PolicyId, Value}
+use cardano/assets.{AssetName, PolicyId, Value}
 use cardano/transaction.{InlineDatum,
   Input, Output, OutputReference, find_input}
 use modules/types.{ConfigDatum, ScriptDatum}
@@ -23,7 +23,15 @@ pub fn must_burn_exactly_one(mint: Value, policy_id: PolicyId) -> Bool {
     mint
       |> assets.tokens(policy_id)
       |> dict.to_pairs()
-  qty == 1
+  qty == -1
+}
+
+pub fn must_burn_less_than_0(mint: Value) -> Bool {
+  let values: List<(PolicyId, AssetName, Int)> =
+    mint
+      |> assets.flatten
+
+  list.all(values, fn((_, _, amount)) { amount < 0 })
 }
 
 pub fn find_ref_input_with_config_nft(

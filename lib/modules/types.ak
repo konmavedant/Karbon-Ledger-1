@@ -14,6 +14,7 @@ pub type Action =
 pub type ConfigDatum {
   fees_address: Address,
   fees: Lovelace,
-  multisig_validator: List<VerificationKeyHash>,
-  multisig_refupdate: List<VerificationKeyHash>,
+  spend_address: Address,
+  multisig_validator_group: List<VerificationKeyHash>,
+  multisig_refutxoupdate: List<VerificationKeyHash>,
 }
