@@ -46,7 +46,7 @@ pub fn must_burn_less_than_0(mint: Value, policy_id: PolicyId) -> Bool {
 pub fn find_ref_input_with_config_nft(
   inputs: List<Input>,
   nft: PolicyId,
-  _tx: Transaction,
+  _tx,
 ) -> Input {
   expect Some(ref_input) =
     list.find(
