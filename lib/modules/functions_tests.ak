@@ -11,9 +11,6 @@ use mocktail/virgin_output_reference.{mock_utxo_ref}
 use modules/functions as function
 use modules/types.{ConfigDatum, ScriptDatum}
 
-// use tx_util/builder/txn.{add_mint, add_tx_input}
-// use tx_util/builder/txn.{add_mint, add_tx_input}
-
 test must_consume_utxo_pass() {
   let inputs1 =
     Input {
