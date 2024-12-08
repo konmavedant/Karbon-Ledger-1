@@ -1,13 +1,17 @@
-use aiken/crypto.{Script}
-//VerificationKeyHash
+use aiken/crypto.{VerificationKeyHash}
 use cardano/address.{Address}
+use cardano/assets.{AssetName, PolicyId}
 
-// use cardano/assets.{Lovelace}
+pub type AssetClass {
+  policy_id: PolicyId,
+  asset_name: AssetName,
+}
 
-pub type ScriptDatum {
+pub type KarbonDatum {
   developer: Address,
-  document: Script,
-  fees: Int,
+  document: ByteArray,
+  fees_amount: Int,
+  fees_asset_class: AssetClass,
 }
 
 pub type Action =
@@ -18,8 +22,9 @@ pub type Atleast =
 
 pub type ConfigDatum {
   fees_address: Address,
-  fees: Int,
+  fees_amount: Int,
+  fees_asset_class: AssetClass,
   spend_address: Address,
+  multisig_validator_group: (List<VerificationKeyHash>, Atleast),
+  multisig_refutxoupdate: (List<VerificationKeyHash>, Atleast),
 }
-//multisig_validator_group: (List<VerificationKeyHash>, Atleast),
-//multisig_refutxoupdate: List<VerificationKeyHash>,
