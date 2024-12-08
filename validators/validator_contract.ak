@@ -38,7 +38,7 @@ validator validator_contract_mint(config_nft: PolicyId) {
             fn(output) { output.address == ref_datum.spend_address },
           )
         and {
-          must_mint_exactly_one(policy_id, tx.mint),
+          must_mint_exactly_one(mint, policy_id),
           must_send_fees_to_address(outputs, ref_datum),
           must_send_nft_and_datum_to_script(script_output, policy_id),
         }

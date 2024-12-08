@@ -1,4 +1,4 @@
-use cardano/address.{from_script, from_verification_key}
+use cardano/address.{from_verification_key}
 use cardano/assets
 use cardano/transaction.{OutputReference}
 use mocktail/virgin_address.{mock_pub_key_address}

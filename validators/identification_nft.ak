@@ -8,14 +8,15 @@ use modules/types.{Action}
 // TODO:  separate spend and mint handler
 validator identification_nft(o_ref: OutputReference) {
   mint(redeemer: Action, policy_id: PolicyId, tx: Transaction) {
+    let Transaction { inputs, mint, .. } = tx
     when redeemer is {
       // 1 = minting
       1 -> and {
-          must_consume_utxo(tx.inputs, o_ref)?,
-          must_mint_exactly_one(policy_id, tx.mint)?,
+          must_consume_utxo(inputs, o_ref)?,
+          must_mint_exactly_one(mint, policy_id)?,
         }
       // 0 = burning
-      0 -> must_burn_exactly_one(policy_id, tx.mint)?
+      0 -> must_burn_exactly_one(mint, policy_id)?
       _ -> fail
     }
   }

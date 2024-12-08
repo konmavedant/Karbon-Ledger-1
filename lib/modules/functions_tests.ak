@@ -84,7 +84,7 @@ test mock_minting_exactly_one_passs() {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_mint_exactly_one(policy_id1, tx.mint)
+  function.must_mint_exactly_one(tx.mint, policy_id1)
 }
 
 test mock_minting_exactly_one_fail_minting2() fail {
@@ -96,7 +96,7 @@ test mock_minting_exactly_one_fail_minting2() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_mint_exactly_one(policy_id1, tx.mint)
+  function.must_mint_exactly_one(tx.mint, policy_id1)
 }
 
 test mock_minting_exactly_one_fail_policyid_dontmatch() fail {
@@ -108,7 +108,7 @@ test mock_minting_exactly_one_fail_policyid_dontmatch() fail {
     }
   let policy_id1 = mock_policy_id(1)
 
-  function.must_mint_exactly_one(policy_id1, tx.mint)
+  function.must_mint_exactly_one(tx.mint, policy_id1)
 }
 
 test mock_minting_exactly_one_fail_qty_0() fail {
@@ -121,7 +121,7 @@ test mock_minting_exactly_one_fail_qty_0() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_mint_exactly_one(policy_id1, tx.mint)
+  function.must_mint_exactly_one(tx.mint, policy_id1)
 }
 
 test mock_minting_exactly_one_fail_negative_qty() fail {
@@ -134,7 +134,7 @@ test mock_minting_exactly_one_fail_negative_qty() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_mint_exactly_one(policy_id1, tx.mint)
+  function.must_mint_exactly_one(tx.mint, policy_id1)
 }
 
 test must_burn_exactly_one_pass() {
@@ -147,7 +147,7 @@ test must_burn_exactly_one_pass() {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_burn_exactly_one(policy_id1, tx.mint)
+  function.must_burn_exactly_one(tx.mint, policy_id1)
 }
 
 test must_burn_exactly_one_fail_burn2() fail {
@@ -160,7 +160,7 @@ test must_burn_exactly_one_fail_burn2() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_burn_exactly_one(policy_id1, tx.mint)
+  function.must_burn_exactly_one(tx.mint, policy_id1)
 }
 
 test must_burn_exactly_one_fail_diff_poilicyid() fail {
@@ -173,7 +173,7 @@ test must_burn_exactly_one_fail_diff_poilicyid() fail {
     }
   let policy_id1 = mock_policy_id(1)
 
-  function.must_burn_exactly_one(policy_id1, tx.mint)
+  function.must_burn_exactly_one(tx.mint, policy_id1)
 }
 
 test must_burn_exactly_one_fail_qty_0() fail {
@@ -186,7 +186,7 @@ test must_burn_exactly_one_fail_qty_0() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_burn_exactly_one(policy_id1, tx.mint)
+  function.must_burn_exactly_one(tx.mint, policy_id1)
 }
 
 test must_burn_exactly_one_fail_qty_1() fail {
@@ -199,7 +199,7 @@ test must_burn_exactly_one_fail_qty_1() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_burn_exactly_one(policy_id1, tx.mint)
+  function.must_burn_exactly_one(tx.mint, policy_id1)
 }
 
 test find_ref_input_with_config_nft_pass() {

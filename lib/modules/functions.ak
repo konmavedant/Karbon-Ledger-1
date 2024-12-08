@@ -1,15 +1,16 @@
 use aiken/collection/dict
 use aiken/collection/list
 use cardano/assets.{AssetName, PolicyId, Value}
-use cardano/transaction.{InlineDatum, Input, Output, OutputReference} as tx
+use cardano/transaction.{InlineDatum,
+  Input, Output, OutputReference, find_input}
 use modules/types.{ConfigDatum, ScriptDatum}
 
 pub fn must_consume_utxo(inputs: List<Input>, o_ref: OutputReference) {
-  expect Some(_input) = tx.find_input(inputs, o_ref)
+  expect Some(_input) = find_input(inputs, o_ref)
   True
 }
 
-pub fn must_mint_exactly_one(policy_id: PolicyId, mint: Value) -> Bool {
+pub fn must_mint_exactly_one(mint: Value, policy_id: PolicyId) -> Bool {
   expect [Pair(_, qty)] =
     mint
       |> assets.tokens(policy_id)
@@ -17,7 +18,7 @@ pub fn must_mint_exactly_one(policy_id: PolicyId, mint: Value) -> Bool {
   (qty == 1)?
 }
 
-pub fn must_burn_exactly_one(policy_id: PolicyId, mint: Value) -> Bool {
+pub fn must_burn_exactly_one(mint: Value, policy_id: PolicyId) -> Bool {
   expect [Pair(_, qty)] =
     mint
       |> assets.tokens(policy_id)
