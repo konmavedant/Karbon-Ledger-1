@@ -1,5 +1,6 @@
 use aiken/collection/dict
 use aiken/collection/list
+use aiken/crypto.{VerificationKeyHash}
 use cardano/assets.{AssetName, PolicyId, Value}
 use cardano/transaction.{InlineDatum,
   Input, Output, OutputReference, find_input}
@@ -73,11 +74,11 @@ pub fn must_send_nft_and_datum_to_script(output: Output, policy_id: PolicyId) {
 }
 
 pub fn atleast_signedby(
-  signatories: List<ByteArray>,
+  signatories: List<VerificationKeyHash>,
   atleast_signatories: Multisig,
 ) -> Bool {
   let Multisig { required, signers } = atleast_signatories
-  required <= list.count(signers, fn(signer) { list.has(signatories, signer) })
+  (required <= list.count(signers, fn(signer) { list.has(signatories, signer) }))?
 }
 
 pub fn funds_sent_to_developer() {
