@@ -1,9 +1,6 @@
-// use cardano/address.{from_verification_key}
-// use cardano/assets
-// use cardano/transaction.{OutputReference}
-// use mocktail/virgin_address.{mock_pub_key_address}
-// use mocktail/virgin_key_hash.{mock_script_hash}
-// use modules/types.{ConfigDatum, KarbonDatum}
+use mocktail/virgin_address.{mock_pub_key_address}
+use mocktail/virgin_key_hash.{mock_policy_id, mock_pub_key_hash}
+use modules/types.{AssetClass, ConfigDatum, KarbonDatum, Multisig}
 
 // pub const output_reference =
 //   OutputReference(
@@ -20,36 +17,40 @@
 
 // pub const token_name = assets.from_asset(token_policyid, "KARBON_TOKEN", 1)
 
-// // pub const in_datum =
-// //   KarbonDatum {
-// //     developer: from_script(
-// //       #"00000000000000000000000000000000000000000000000000000056",
-// //     ),
-// //     document: #"00000000000000000000000000000000000000000000000000000000",
-// //     fees: 0,
-// //   }
+pub const in_datum =
+  KarbonDatum {
+    developer: mock_pub_key_address(0, None),
+    document: "doc_hash",
+    fees_amount: 0,
+    fees_asset_class: AssetClass {
+      policy_id: mock_policy_id(0),
+      asset_name: "token",
+    },
+  }
 
-// // pub const confi_d =
-// //   ConfigDatum {
-// //     fees_address: from_verification_key(
-// //       #"00000000000000000000000000000000000000000000000000000056",
-// //     ),
-// //     fees: 2_000_000,
-// //     spend_address: from_script(
-// //       #"00000000000000000000000000000000000000000000000000000001",
-// //     ),
-// //   }
-
-// pub const in_datum =
-//   KarbonDatum {
-//     developer: mock_pub_key_address(0, None),
-//     document: mock_script_hash(0),
-//     fees: 0,
-//   }
-
-// pub const confi_d =
-//   ConfigDatum {
-//     fees_address: mock_pub_key_address(0, None),
-//     fees: 2_000_000,
-//     spend_address: mock_pub_key_address(0, None),
-//   }
+pub const config_d =
+  ConfigDatum {
+    fees_address: mock_pub_key_address(0, None),
+    fees_amount: 2_000_000,
+    fees_asset_class: AssetClass {
+      policy_id: mock_policy_id(0),
+      asset_name: "Token",
+    },
+    spend_address: mock_pub_key_address(0, None),
+    multisig_validator_group: Multisig {
+      required: 3,
+      signers: [
+        mock_pub_key_hash(0),
+        mock_pub_key_hash(1),
+        mock_pub_key_hash(2),
+      ],
+    },
+    multisig_refutxoupdate: Multisig {
+      required: 3,
+      signers: [
+        mock_pub_key_hash(0),
+        mock_pub_key_hash(2),
+        mock_pub_key_hash(1),
+      ],
+    },
+  }
