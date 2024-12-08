@@ -3,7 +3,7 @@ use aiken/collection/list
 use cardano/assets.{AssetName, PolicyId, Value}
 use cardano/transaction.{InlineDatum,
   Input, Output, OutputReference, find_input}
-use modules/types.{ConfigDatum, KarbonDatum}
+use modules/types.{ConfigDatum, KarbonDatum, Multisig}
 
 pub fn must_consume_utxo(inputs: List<Input>, o_ref: OutputReference) {
   expect Some(_input) = find_input(inputs, o_ref)
@@ -70,4 +70,16 @@ pub fn must_send_nft_and_datum_to_script(output: Output, policy_id: PolicyId) {
   expect _: KarbonDatum = output_datum
   // output_datum.fee == configDatum.fee (should be check)
   list.has(output.value |> assets.policies, policy_id)?
+}
+
+pub fn atleast_signedby(
+  signatories: List<ByteArray>,
+  atleast_signatories: Multisig,
+) -> Bool {
+  let Multisig { required, signers } = atleast_signatories
+  required <= list.count(signers, fn(signer) { list.has(signatories, signer) })
+}
+
+pub fn funds_sent_to_developer() {
+  todo
 }

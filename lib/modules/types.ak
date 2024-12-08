@@ -17,14 +17,25 @@ pub type KarbonDatum {
 pub type Action =
   Int
 
+pub type AcceptRejectAction {
+  Accept
+  Reject
+}
+
 pub type Atleast =
   Int
+
+pub type Multisig {
+  required: Atleast,
+  signers: List<VerificationKeyHash>,
+}
 
 pub type ConfigDatum {
   fees_address: Address,
   fees_amount: Int,
   fees_asset_class: AssetClass,
   spend_address: Address,
-  multisig_validator_group: (List<VerificationKeyHash>, Atleast),
-  multisig_refutxoupdate: (List<VerificationKeyHash>, Atleast),
+  // minter_policyid: 
+  multisig_validator_group: Multisig,
+  multisig_refutxoupdate: Multisig,
 }
