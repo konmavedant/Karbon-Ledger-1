@@ -1,31 +1,25 @@
 use aiken/collection/dict
 use aiken/collection/list
 use cardano/assets.{AssetName, PolicyId, Value}
-use cardano/transaction.{
-  InlineDatum, Input, Output, OutputReference, Transaction,
-} as tx
+use cardano/transaction.{InlineDatum, Input, Output, OutputReference} as tx
 use modules/types.{ConfigDatum, ScriptDatum}
 
-pub fn must_consume_utxo(
-  inputs: List<Input>,
-  o_ref: OutputReference,
-  tx: Transaction,
-) {
+pub fn must_consume_utxo(inputs: List<Input>, o_ref: OutputReference) {
   expect Some(_input) = tx.find_input(inputs, o_ref)
   True
 }
 
-pub fn must_mint_exactly_one(policy_id: PolicyId, tx: Transaction) -> Bool {
+pub fn must_mint_exactly_one(policy_id: PolicyId, mint: Value) -> Bool {
   expect [Pair(_, qty)] =
-    tx.mint
+    mint
       |> assets.tokens(policy_id)
       |> dict.to_pairs()
   (qty == 1)?
 }
 
-pub fn must_burn_exactly_one(policy_id: PolicyId, tx: Transaction) -> Bool {
+pub fn must_burn_exactly_one(policy_id: PolicyId, mint: Value) -> Bool {
   expect [Pair(_, qty)] =
-    tx.mint
+    mint
       |> assets.tokens(policy_id)
       |> dict.to_pairs()
   trace @"policy_id": policy_id
@@ -46,7 +40,6 @@ pub fn must_burn_less_than_0(mint: Value, policy_id: PolicyId) -> Bool {
 pub fn find_ref_input_with_config_nft(
   inputs: List<Input>,
   nft: PolicyId,
-  _tx: Transaction,
 ) -> Input {
   expect Some(ref_input) =
     list.find(

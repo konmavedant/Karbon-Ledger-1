@@ -4,12 +4,10 @@ use cardano/transaction.{
   InlineDatum, Input, NoDatum, Output, Transaction, placeholder,
 }
 use mocktail/virgin_address.{mock_pub_key_address}
-use mocktail/virgin_key_hash.{
-  mock_policy_id, mock_pub_key_hash, mock_script_hash,
-}
+use mocktail/virgin_key_hash.{mock_policy_id, mock_pub_key_hash}
 use mocktail/virgin_output_reference.{mock_utxo_ref}
+use modules/constant.{confi_d, in_datum}
 use modules/functions as function
-use modules/types.{ConfigDatum, ScriptDatum}
 
 test must_consume_utxo_pass() {
   let inputs1 =
@@ -30,7 +28,7 @@ test must_consume_utxo_pass() {
 
   let tx = Transaction { ..placeholder, inputs: [inputs1] }
 
-  function.must_consume_utxo([inputs1], o_ref, tx)
+  function.must_consume_utxo(tx.inputs, o_ref)
 }
 
 test must_consume_utxo_fail_other_utxo() fail {
@@ -52,7 +50,7 @@ test must_consume_utxo_fail_other_utxo() fail {
 
   let tx = Transaction { ..placeholder, inputs: [inputs1] }
 
-  function.must_consume_utxo([inputs1], o_ref, tx)
+  function.must_consume_utxo(tx.inputs, o_ref)
 }
 
 test must_consume_utxo_fail_other_input_oref() fail {
@@ -74,10 +72,10 @@ test must_consume_utxo_fail_other_input_oref() fail {
 
   let tx = Transaction { ..placeholder, inputs: [inputs1] }
 
-  function.must_consume_utxo([inputs1], o_ref, tx)
+  function.must_consume_utxo(tx.inputs, o_ref)
 }
 
-test mock_minting_exactly_one() {
+test mock_minting_exactly_one_passs() {
   let mock_token_name = "ABC"
   let tx =
     Transaction {
@@ -86,7 +84,7 @@ test mock_minting_exactly_one() {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_mint_exactly_one(policy_id1, tx)
+  function.must_mint_exactly_one(policy_id1, tx.mint)
 }
 
 test mock_minting_exactly_one_fail_minting2() fail {
@@ -98,7 +96,7 @@ test mock_minting_exactly_one_fail_minting2() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_mint_exactly_one(policy_id1, tx)
+  function.must_mint_exactly_one(policy_id1, tx.mint)
 }
 
 test mock_minting_exactly_one_fail_policyid_dontmatch() fail {
@@ -110,7 +108,7 @@ test mock_minting_exactly_one_fail_policyid_dontmatch() fail {
     }
   let policy_id1 = mock_policy_id(1)
 
-  function.must_mint_exactly_one(policy_id1, tx)
+  function.must_mint_exactly_one(policy_id1, tx.mint)
 }
 
 test mock_minting_exactly_one_fail_qty_0() fail {
@@ -123,7 +121,7 @@ test mock_minting_exactly_one_fail_qty_0() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_mint_exactly_one(policy_id1, tx)
+  function.must_mint_exactly_one(policy_id1, tx.mint)
 }
 
 test mock_minting_exactly_one_fail_negative_qty() fail {
@@ -136,7 +134,7 @@ test mock_minting_exactly_one_fail_negative_qty() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_mint_exactly_one(policy_id1, tx)
+  function.must_mint_exactly_one(policy_id1, tx.mint)
 }
 
 test must_burn_exactly_one_pass() {
@@ -149,7 +147,7 @@ test must_burn_exactly_one_pass() {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_burn_exactly_one(policy_id1, tx)
+  function.must_burn_exactly_one(policy_id1, tx.mint)
 }
 
 test must_burn_exactly_one_fail_burn2() fail {
@@ -162,7 +160,7 @@ test must_burn_exactly_one_fail_burn2() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_burn_exactly_one(policy_id1, tx)
+  function.must_burn_exactly_one(policy_id1, tx.mint)
 }
 
 test must_burn_exactly_one_fail_diff_poilicyid() fail {
@@ -175,7 +173,7 @@ test must_burn_exactly_one_fail_diff_poilicyid() fail {
     }
   let policy_id1 = mock_policy_id(1)
 
-  function.must_burn_exactly_one(policy_id1, tx)
+  function.must_burn_exactly_one(policy_id1, tx.mint)
 }
 
 test must_burn_exactly_one_fail_qty_0() fail {
@@ -188,7 +186,7 @@ test must_burn_exactly_one_fail_qty_0() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_burn_exactly_one(policy_id1, tx)
+  function.must_burn_exactly_one(policy_id1, tx.mint)
 }
 
 test must_burn_exactly_one_fail_qty_1() fail {
@@ -201,7 +199,7 @@ test must_burn_exactly_one_fail_qty_1() fail {
     }
   let policy_id1 = mock_policy_id(0)
 
-  function.must_burn_exactly_one(policy_id1, tx)
+  function.must_burn_exactly_one(policy_id1, tx.mint)
 }
 
 test find_ref_input_with_config_nft_pass() {
@@ -213,22 +211,18 @@ test find_ref_input_with_config_nft_pass() {
           payment_credential: VerificationKey(mock_pub_key_hash(0)),
           stake_credential: None,
         },
-        value: from_asset(mock_policy_id(0), "ABC", 10_000_000),
+        value: from_asset(mock_policy_id(0), "ABC", 1),
         datum: NoDatum,
         reference_script: None,
       },
     }
   let nft = mock_policy_id(0)
-  let tx =
-    Transaction {
-      ..placeholder,
-      inputs: [inputs1],
-      mint: from_asset(nft, "ABC", 0),
-    }
-  function.find_ref_input_with_config_nft([inputs1], nft, tx) == inputs1
+  let tx = Transaction { ..placeholder, inputs: [inputs1] }
+  //mint: from_asset(nft, "ABC", 0),
+  function.find_ref_input_with_config_nft(tx.inputs, nft) == inputs1
 }
 
-test find_ref_input_with_config_nft_fail() fail {
+test find_ref_input_with_config_nft_fail_diff_PID() fail {
   let inputs1 =
     Input {
       output_reference: mock_utxo_ref(0, 0),
@@ -237,29 +231,17 @@ test find_ref_input_with_config_nft_fail() fail {
           payment_credential: VerificationKey(mock_pub_key_hash(0)),
           stake_credential: None,
         },
-        value: from_asset(mock_policy_id(1), "ABC", 10_000_000),
+        value: from_asset(mock_policy_id(1), "ABC", 1),
         datum: NoDatum,
         reference_script: None,
       },
     }
   let nft = mock_policy_id(0)
-  let tx =
-    Transaction {
-      ..placeholder,
-      inputs: [inputs1],
-      mint: from_asset(nft, "ABC", 0),
-    }
-  function.find_ref_input_with_config_nft([inputs1], nft, tx) == inputs1
+  let tx = Transaction { ..placeholder, inputs: [inputs1] }
+  function.find_ref_input_with_config_nft(tx.inputs, nft) == inputs1
 }
 
 test must_send_fees_to_address_pass() {
-  let redeemer =
-    ConfigDatum {
-      fees_address: mock_pub_key_address(0, None),
-      fees: 2_000_000,
-      spend_address: mock_pub_key_address(0, None),
-    }
-
   let output =
     Output {
       address: mock_pub_key_address(0, None),
@@ -267,17 +249,10 @@ test must_send_fees_to_address_pass() {
       datum: NoDatum,
       reference_script: None,
     }
-  function.must_send_fees_to_address([output], redeemer)
+  function.must_send_fees_to_address([output], confi_d)
 }
 
 test must_send_fees_to_address_less_fees() fail {
-  let redeemer =
-    ConfigDatum {
-      fees_address: mock_pub_key_address(0, None),
-      fees: 2_000_000,
-      spend_address: mock_pub_key_address(0, None),
-    }
-
   let output =
     Output {
       address: mock_pub_key_address(0, None),
@@ -285,17 +260,10 @@ test must_send_fees_to_address_less_fees() fail {
       datum: NoDatum,
       reference_script: None,
     }
-  function.must_send_fees_to_address([output], redeemer)
+  function.must_send_fees_to_address([output], confi_d)
 }
 
 test must_send_fees_to_address_more_fees() fail {
-  let redeemer =
-    ConfigDatum {
-      fees_address: mock_pub_key_address(0, None),
-      fees: 2_000_000,
-      spend_address: mock_pub_key_address(0, None),
-    }
-
   let output =
     Output {
       address: mock_pub_key_address(0, None),
@@ -303,59 +271,21 @@ test must_send_fees_to_address_more_fees() fail {
       datum: NoDatum,
       reference_script: None,
     }
-  function.must_send_fees_to_address([output], redeemer)
+  function.must_send_fees_to_address([output], confi_d)
 }
 
 test must_send_fees_to_address_wrong_fees_address() fail {
-  let redeemer =
-    ConfigDatum {
-      fees_address: mock_pub_key_address(1, None),
-      fees: 2_000_000,
-      spend_address: mock_pub_key_address(0, None),
-    }
-
   let output =
     Output {
-      address: mock_pub_key_address(0, None),
+      address: mock_pub_key_address(1, None),
       value: from_lovelace(10_000_000),
       datum: NoDatum,
       reference_script: None,
     }
-  function.must_send_fees_to_address([output], redeemer)
+  function.must_send_fees_to_address([output], confi_d)
 }
-
-test must_send_fees_to_address_wrong_output_address() fail {
-  let redeemer =
-    ConfigDatum {
-      fees_address: mock_pub_key_address(0, None),
-      fees: 2_000_000,
-      spend_address: mock_pub_key_address(0, None),
-    }
-
-  let output =
-    Output {
-      address: mock_pub_key_address(1, None),
-      value: from_lovelace(1_000_000),
-      datum: NoDatum,
-      reference_script: None,
-    }
-  function.must_send_fees_to_address([output], redeemer)
-}
-
-// type MockDatum {
-//   ScriptDatum
-// }
-
-pub const in_datum =
-  ScriptDatum {
-    developer: mock_pub_key_address(0, None),
-    document: mock_script_hash(0),
-    fees: 0,
-  }
 
 test must_send_nft_and_datum_to_script_pass() {
-  // let target_state = ScriptDatum
-  // let target_datum: Data = target_state
   let output =
     Output {
       address: mock_pub_key_address(0, None),
@@ -363,19 +293,9 @@ test must_send_nft_and_datum_to_script_pass() {
       datum: InlineDatum(in_datum),
       reference_script: None,
     }
-
   let policy_id1 = mock_policy_id(0)
-
   function.must_send_nft_and_datum_to_script(output, policy_id1)
 }
-
-// let output =
-//   mock_output(
-//     address: mock_pub_key_address(0, None),
-//     value: from_asset(mock_policy_id(0), "", 0),
-//     datum: InlineDatum(ScriptDatum),
-//     reference_script: None,
-//   )
 
 test must_send_nft_and_datum_to_script_output_diff_policy_id() fail {
   let output =
@@ -404,18 +324,11 @@ test must_send_nft_and_datum_to_script_output_NoDAtum() fail {
 }
 
 test must_send_nft_and_datum_to_script_output_another_datum() fail {
-  let datum1 =
-    ConfigDatum {
-      fees_address: mock_pub_key_address(0, None),
-      fees: 0,
-      spend_address: mock_pub_key_address(0, None),
-    }
-
   let output =
     Output {
       address: mock_pub_key_address(0, None),
       value: from_asset(mock_policy_id(1), "", 1),
-      datum: InlineDatum(datum1),
+      datum: InlineDatum(confi_d),
       reference_script: None,
     }
   let policy_id1 = mock_policy_id(0)

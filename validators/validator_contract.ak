@@ -28,7 +28,7 @@ validator validator_contract_mint(config_nft: PolicyId) {
     when redeemer is {
       0 -> {
         let ref_input =
-          find_ref_input_with_config_nft(reference_inputs, config_nft, tx)
+          find_ref_input_with_config_nft(reference_inputs, config_nft)
         expect InlineDatum(ref_input_datum) = ref_input.output.datum
         expect ref_datum: ConfigDatum = ref_input_datum
 
@@ -38,7 +38,7 @@ validator validator_contract_mint(config_nft: PolicyId) {
             fn(output) { output.address == ref_datum.spend_address },
           )
         and {
-          must_mint_exactly_one(policy_id, tx),
+          must_mint_exactly_one(policy_id, tx.mint),
           must_send_fees_to_address(outputs, ref_datum),
           must_send_nft_and_datum_to_script(script_output, policy_id),
         }

@@ -11,11 +11,11 @@ validator identification_nft(o_ref: OutputReference) {
     when redeemer is {
       // 1 = minting
       1 -> and {
-          must_consume_utxo(tx.inputs, o_ref, tx)?,
-          must_mint_exactly_one(policy_id, tx)?,
+          must_consume_utxo(tx.inputs, o_ref)?,
+          must_mint_exactly_one(policy_id, tx.mint)?,
         }
       // 0 = burning
-      0 -> must_burn_exactly_one(policy_id, tx)?
+      0 -> must_burn_exactly_one(policy_id, tx.mint)?
       _ -> fail
     }
   }
