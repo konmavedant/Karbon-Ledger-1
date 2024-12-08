@@ -7,13 +7,6 @@ pub type AssetClass {
   asset_name: AssetName,
 }
 
-pub type KarbonDatum {
-  developer: Address,
-  document: ByteArray,
-  fees_amount: Int,
-  fees_asset_class: AssetClass,
-}
-
 pub type Action =
   Int
 
@@ -38,4 +31,11 @@ pub type ConfigDatum {
   // minter_policyid: 
   multisig_validator_group: Multisig,
   multisig_refutxoupdate: Multisig,
+}
+
+pub type KarbonDatum {
+  developer: Address,
+  document: ByteArray,
+  fees_amount: Int,
+  fees_asset_class: AssetClass,
 }
