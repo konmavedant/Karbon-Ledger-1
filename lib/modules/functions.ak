@@ -4,7 +4,7 @@ use aiken/crypto.{VerificationKeyHash}
 use cardano/assets.{AssetName, PolicyId, Value}
 use cardano/transaction.{InlineDatum,
   Input, Output, OutputReference, find_input}
-use modules/types.{ConfigDatum, KarbonDatum, Multisig}
+use modules/types.{AssetClass, ConfigDatum, KarbonDatum, Multisig}
 
 pub fn must_consume_utxo(inputs: List<Input>, o_ref: OutputReference) {
   expect Some(_input) = find_input(inputs, o_ref)
@@ -55,12 +55,13 @@ pub fn must_send_fees_to_address(
   outputs: List<Output>,
   ref_datum: ConfigDatum,
 ) -> Bool {
+  let AssetClass { policyid, assetname } = ref_datum.fees_asset_class
   list.any(
     outputs,
     fn(output) {
       and {
         (output.address == ref_datum.fees_address)?,
-        (assets.lovelace_of(output.value) == ref_datum.fees_amount)?,
+        (assets.quantity_of(output.value, policyid, assetname) == ref_datum.fees_amount)?,
       }
     },
   )
