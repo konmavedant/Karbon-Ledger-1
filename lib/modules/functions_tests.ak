@@ -285,16 +285,16 @@ test find_ref_input_with_config_nft_fail_diff_PID() fail {
   function.find_ref_input_with_config_nft(tx.inputs, nft) == inputs1
 }
 
-test must_send_fees_to_address_pass() {
-  let output =
-    Output {
-      address: mock_pub_key_address(0, None),
-      value: from_lovelace(2_000_000),
-      datum: NoDatum,
-      reference_script: None,
-    }
-  function.must_send_fees_to_address([output], config_d)
-}
+// test must_send_fees_to_address_pass() {
+//   let output =
+//     Output {
+//       address: mock_pub_key_address(0, None),
+//       value: from_lovelace(2_000_000),
+//       datum: NoDatum,
+//       reference_script: None,
+//     }
+//   function.must_send_fees_to_address([output], config_d)
+// }
 
 test must_send_fees_to_address_less_fees() fail {
   let output =

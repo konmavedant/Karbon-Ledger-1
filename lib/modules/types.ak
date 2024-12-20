@@ -39,3 +39,9 @@ pub type KarbonDatum {
   fees_amount: Int,
   fees_asset_class: AssetClass,
 }
+
+pub type KarbonRedeemer {
+  action: AcceptRejectAction,
+  amount: Int,
+  asset_name: AssetName,
+}
