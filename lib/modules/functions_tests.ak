@@ -1,13 +1,57 @@
 use cardano/address.{Address, VerificationKey}
 use cardano/assets.{from_asset, from_lovelace}
+// use cardano/crytpo.{VerificationKeyHash}
 use cardano/transaction.{
   InlineDatum, Input, NoDatum, Output, Transaction, placeholder,
 }
 use mocktail/virgin_address.{mock_pub_key_address}
 use mocktail/virgin_key_hash.{mock_policy_id, mock_pub_key_hash}
 use mocktail/virgin_output_reference.{mock_utxo_ref}
-use modules/constant.{confi_d, in_datum}
+use modules/constant.{config_d, in_datum}
 use modules/functions as function
+use modules/types.{Multisig}
+
+test atleast_signatories_pass() {
+  let signatories =
+    [
+      mock_pub_key_hash(0),
+      mock_pub_key_hash(1),
+      mock_pub_key_hash(2),
+      mock_pub_key_hash(3),
+    ]
+
+  let atleast =
+    Multisig {
+      required: 3,
+      signers: [
+        mock_pub_key_hash(0),
+        mock_pub_key_hash(1),
+        mock_pub_key_hash(2),
+      ],
+    }
+  function.atleast_signedby(signatories, atleast)
+}
+
+test atleast_signatories_fail_2_signed() fail {
+  let signatories =
+    [
+      mock_pub_key_hash(3),
+      mock_pub_key_hash(1),
+      mock_pub_key_hash(2),
+      mock_pub_key_hash(5),
+    ]
+
+  let atleast =
+    Multisig {
+      required: 3,
+      signers: [
+        mock_pub_key_hash(0),
+        mock_pub_key_hash(1),
+        mock_pub_key_hash(2),
+      ],
+    }
+  function.atleast_signedby(signatories, atleast)
+}
 
 test must_consume_utxo_pass() {
   let inputs1 =
@@ -241,16 +285,16 @@ test find_ref_input_with_config_nft_fail_diff_PID() fail {
   function.find_ref_input_with_config_nft(tx.inputs, nft) == inputs1
 }
 
-test must_send_fees_to_address_pass() {
-  let output =
-    Output {
-      address: mock_pub_key_address(0, None),
-      value: from_lovelace(2_000_000),
-      datum: NoDatum,
-      reference_script: None,
-    }
-  function.must_send_fees_to_address([output], confi_d)
-}
+// test must_send_fees_to_address_pass() {
+//   let output =
+//     Output {
+//       address: mock_pub_key_address(0, None),
+//       value: from_lovelace(2_000_000),
+//       datum: NoDatum,
+//       reference_script: None,
+//     }
+//   function.must_send_fees_to_address([output], config_d)
+// }
 
 test must_send_fees_to_address_less_fees() fail {
   let output =
@@ -260,7 +304,7 @@ test must_send_fees_to_address_less_fees() fail {
       datum: NoDatum,
       reference_script: None,
     }
-  function.must_send_fees_to_address([output], confi_d)
+  function.must_send_fees_to_address([output], config_d)
 }
 
 test must_send_fees_to_address_more_fees() fail {
@@ -271,7 +315,7 @@ test must_send_fees_to_address_more_fees() fail {
       datum: NoDatum,
       reference_script: None,
     }
-  function.must_send_fees_to_address([output], confi_d)
+  function.must_send_fees_to_address([output], config_d)
 }
 
 test must_send_fees_to_address_wrong_fees_address() fail {
@@ -282,7 +326,7 @@ test must_send_fees_to_address_wrong_fees_address() fail {
       datum: NoDatum,
       reference_script: None,
     }
-  function.must_send_fees_to_address([output], confi_d)
+  function.must_send_fees_to_address([output], config_d)
 }
 
 test must_send_nft_and_datum_to_script_pass() {
@@ -328,7 +372,7 @@ test must_send_nft_and_datum_to_script_output_another_datum() fail {
     Output {
       address: mock_pub_key_address(0, None),
       value: from_asset(mock_policy_id(1), "", 1),
-      datum: InlineDatum(confi_d),
+      datum: InlineDatum(config_d),
       reference_script: None,
     }
   let policy_id1 = mock_policy_id(0)

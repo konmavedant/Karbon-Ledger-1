@@ -1,25 +1,47 @@
-use aiken/crypto.{Script}
-//VerificationKeyHash
+use aiken/crypto.{VerificationKeyHash}
 use cardano/address.{Address}
+use cardano/assets.{AssetName, PolicyId}
 
-// use cardano/assets.{Lovelace}
-
-pub type ScriptDatum {
-  developer: Address,
-  document: Script,
-  fees: Int,
+pub type AssetClass {
+  policy_id: PolicyId,
+  asset_name: AssetName,
 }
 
 pub type Action =
   Int
 
+pub type AcceptRejectAction {
+  Accept
+  Reject
+}
+
 pub type Atleast =
   Int
 
+pub type Multisig {
+  required: Atleast,
+  signers: List<VerificationKeyHash>,
+}
+
 pub type ConfigDatum {
   fees_address: Address,
-  fees: Int,
+  fees_amount: Int,
+  fees_asset_class: AssetClass,
   spend_address: Address,
+  // minter_policyid: 
+  multisig_validator_group: Multisig,
+  multisig_refutxoupdate: Multisig,
 }
-//multisig_validator_group: (List<VerificationKeyHash>, Atleast),
-//multisig_refutxoupdate: List<VerificationKeyHash>,
+
+pub type KarbonDatum {
+  developer: Address,
+  document: ByteArray,
+  fees_amount: Int,
+  fees_asset_class: AssetClass,
+}
+
+pub type KarbonRedeemer {
+  action: AcceptRejectAction,
+  amount: Int,
+  asset_name: AssetName,
+}
