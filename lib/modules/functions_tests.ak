@@ -397,3 +397,17 @@ test name_oref_fail(){
   function.token_name_oref(oref) == crypto.blake2b_224("1230")
 
 }
+
+test name_oref_pass2(){
+// let  campaign_nonce = mock_utxo_ref(0, 0)
+
+  let oref = OutputReference("123",0)
+  function.token_name_oref2(oref) == "123"
+
+}
+
+test name_oref_pass3() {
+  let oref = OutputReference(#"123456", 0) // transaction_id as ByteArray
+
+    function.token_name_oref2(oref) == #"00123456" // Expected result after pushing 0 as the first byte
+}

@@ -133,3 +133,12 @@ pub fn token_name_oref(o_ref: OutputReference) {
     )
   hashed
 }
+
+
+pub fn token_name_oref2(o_ref: OutputReference) {
+  let OutputReference { transaction_id, output_index } = o_ref
+  // let tx_id_bytes = string.to_bytearray(transaction_id) // Convert transaction_id to ByteArray
+  let combined_bytes = bytearray.push(transaction_id, output_index) // Push output_index
+  // let hashed = crypto.blake2b_224(combined_bytes)
+  combined_bytes
+}
