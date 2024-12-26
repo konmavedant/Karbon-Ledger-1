@@ -11,7 +11,7 @@ use cardano/transaction.{InlineDatum,
 use modules/types.{
   AssetClass, ConfigDatum, KarbonDatum, KarbonRedeemer, Multisig,
 }
-
+use aiken/cbor
 pub fn must_consume_utxo(inputs: List<Input>, o_ref: OutputReference) {
   expect Some(_input) = find_input(inputs, o_ref)
   True
@@ -136,10 +136,8 @@ pub fn token_name_oref(o_ref: OutputReference) {
 
 pub fn token_name_oref2(o_ref: OutputReference) {
   let OutputReference { transaction_id, output_index } = o_ref
-  // let tx_id_bytes = string.to_bytearray(transaction_id) // Convert transaction_id to ByteArray
-  let combined_bytes = bytearray.push(transaction_id, output_index)
-  // Push output_index
-  // let hashed = crypto.blake2b_224(combined_bytes)
+  let combined_bytes = crypto.blake2b_224(bytearray.push(transaction_id, output_index))
+
   combined_bytes
 }
 
@@ -159,4 +157,10 @@ pub fn correct_asset_name_in_datum(
     assets.tokens(value, policy_id) |> dict.to_pairs
 
   mint_assetname == asset_name
+}
+
+//alternate method
+
+pub fn token_name(oref){
+  oref |> cbor.serialise |> crypto.blake2b_224
 }
