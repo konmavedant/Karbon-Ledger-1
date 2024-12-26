@@ -1,6 +1,9 @@
 use aiken/collection/dict
 use aiken/collection/list
 use aiken/crypto.{VerificationKeyHash}
+use aiken/primitive/bytearray
+use aiken/primitive/int
+use aiken/primitive/string
 use cardano/address.{Address}
 use cardano/assets.{AssetName, PolicyId, Value}
 use cardano/transaction.{InlineDatum,
@@ -8,9 +11,6 @@ use cardano/transaction.{InlineDatum,
 use modules/types.{
   AssetClass, ConfigDatum, KarbonDatum, KarbonRedeemer, Multisig,
 }
-use aiken/primitive/string
-use aiken/primitive/int
-use aiken/primitive/bytearray
 
 pub fn must_consume_utxo(inputs: List<Input>, o_ref: OutputReference) {
   expect Some(_input) = find_input(inputs, o_ref)
@@ -95,10 +95,10 @@ pub fn funds_sent_to_developer(
   policy_id: PolicyId,
 ) -> Bool {
   let KarbonDatum { developer, .. } = datum
-  let KarbonRedeemer { amount, asset_name, .. } = redeemer
+  let KarbonRedeemer { amount, oref, .. } = redeemer
   expect Some(output) =
     list.find(outputs, fn(output) { output.address == developer })
-  (assets.quantity_of(output.value, policy_id, asset_name) == amount)?
+  (assets.quantity_of(output.value, policy_id, token_name_oref(oref)) == amount)?
 }
 
 pub fn must_mint_tokens(
@@ -106,11 +106,11 @@ pub fn must_mint_tokens(
   policy_id: PolicyId,
   redeemer: KarbonRedeemer,
 ) {
-  let KarbonRedeemer { amount, asset_name, .. } = redeemer
+  let KarbonRedeemer { amount, oref, .. } = redeemer
   expect [Pair(mint_assetname, qty)] =
     assets.tokens(mint, policy_id) |> dict.to_pairs
   and {
-    mint_assetname == asset_name,
+    mint_assetname == token_name_oref(oref),
     qty == amount,
   }
 }
@@ -120,25 +120,43 @@ pub fn must_spend_script_input(inputs: List<Input>, address: Address) {
   input.output.address == address
 }
 
-
 //fucntion for oref transaction_id + output_index == name of asset
 
 pub fn token_name_oref(o_ref: OutputReference) {
   let OutputReference { transaction_id, output_index } = o_ref
   let hashed =
     crypto.blake2b_224(
-      bytearray.to_string(transaction_id)
-        |> string.concat(int.to_string(output_index))
-        |> string.to_bytearray,
+      bytearray.concat(
+        transaction_id,
+        bytearray.from_int_little_endian(output_index, 2),
+      ),
     )
   hashed
 }
 
-
 pub fn token_name_oref2(o_ref: OutputReference) {
   let OutputReference { transaction_id, output_index } = o_ref
   // let tx_id_bytes = string.to_bytearray(transaction_id) // Convert transaction_id to ByteArray
-  let combined_bytes = bytearray.push(transaction_id, output_index) // Push output_index
+  let combined_bytes = bytearray.push(transaction_id, output_index)
+  // Push output_index
   // let hashed = crypto.blake2b_224(combined_bytes)
   combined_bytes
+}
+
+pub fn is_category_from_supported_categories(
+  categories: List<ByteArray>,
+  category: ByteArray,
+) -> Bool {
+  list.has(categories, category)
+}
+
+pub fn correct_asset_name_in_datum(
+  value: Value,
+  policy_id: PolicyId,
+  asset_name: ByteArray,
+) -> Bool {
+  expect [Pair(mint_assetname, 1)] =
+    assets.tokens(value, policy_id) |> dict.to_pairs
+
+  mint_assetname == asset_name
 }

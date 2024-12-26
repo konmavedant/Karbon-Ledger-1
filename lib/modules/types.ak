@@ -1,6 +1,7 @@
 use aiken/crypto.{VerificationKeyHash}
 use cardano/address.{Address}
 use cardano/assets.{AssetName, PolicyId}
+use cardano/transaction.{OutputReference}
 
 pub type AssetClass {
   policy_id: PolicyId,
@@ -28,6 +29,7 @@ pub type ConfigDatum {
   fees_amount: Int,
   fees_asset_class: AssetClass,
   spend_address: Address,
+  categories: List<ByteArray>,
   // minter_policyid: 
   multisig_validator_group: Multisig,
   multisig_refutxoupdate: Multisig,
@@ -36,6 +38,8 @@ pub type ConfigDatum {
 pub type KarbonDatum {
   developer: Address,
   document: ByteArray,
+  category: ByteArray,
+  asset_name: ByteArray,
   fees_amount: Int,
   fees_asset_class: AssetClass,
 }
@@ -43,5 +47,5 @@ pub type KarbonDatum {
 pub type KarbonRedeemer {
   action: AcceptRejectAction,
   amount: Int,
-  asset_name: AssetName,
+  oref: OutputReference,
 }
