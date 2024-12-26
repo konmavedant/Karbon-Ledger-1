@@ -8,6 +8,9 @@ use cardano/transaction.{InlineDatum,
 use modules/types.{
   AssetClass, ConfigDatum, KarbonDatum, KarbonRedeemer, Multisig,
 }
+use aiken/primitive/string
+use aiken/primitive/int
+use aiken/primitive/bytearray
 
 pub fn must_consume_utxo(inputs: List<Input>, o_ref: OutputReference) {
   expect Some(_input) = find_input(inputs, o_ref)
@@ -115,4 +118,18 @@ pub fn must_mint_tokens(
 pub fn must_spend_script_input(inputs: List<Input>, address: Address) {
   let input <- list.any(inputs)
   input.output.address == address
+}
+
+
+//fucntion for oref transaction_id + output_index == name of asset
+
+pub fn token_name_oref(o_ref: OutputReference) {
+  let OutputReference { transaction_id, output_index } = o_ref
+  let hashed =
+    crypto.blake2b_224(
+      bytearray.to_string(transaction_id)
+        |> string.concat(int.to_string(output_index))
+        |> string.to_bytearray,
+    )
+  hashed
 }

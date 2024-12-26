@@ -2,8 +2,9 @@ use cardano/address.{Address, VerificationKey}
 use cardano/assets.{from_asset, from_lovelace}
 // use cardano/crytpo.{VerificationKeyHash}
 use cardano/transaction.{
-  InlineDatum, Input, NoDatum, Output, Transaction, placeholder,
+  InlineDatum, Input, NoDatum, Output, Transaction, placeholder,OutputReference
 }
+use aiken/crypto
 use mocktail/virgin_address.{mock_pub_key_address}
 use mocktail/virgin_key_hash.{mock_policy_id, mock_pub_key_hash}
 use mocktail/virgin_output_reference.{mock_utxo_ref}
@@ -378,4 +379,21 @@ test must_send_nft_and_datum_to_script_output_another_datum() fail {
   let policy_id1 = mock_policy_id(0)
 
   function.must_send_nft_and_datum_to_script(output, policy_id1)
+}
+
+
+test name_oref_pass(){
+// let  campaign_nonce = mock_utxo_ref(0, 0)
+
+  let oref = OutputReference("123",0)
+  function.token_name_oref(oref) == crypto.blake2b_224("1230")
+
+}
+
+test name_oref_fail(){
+// let  campaign_nonce = mock_utxo_ref(0, 0)
+
+  let oref = OutputReference("1234",0)
+  function.token_name_oref(oref) == crypto.blake2b_224("1230")
+
 }
