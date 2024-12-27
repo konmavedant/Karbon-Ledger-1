@@ -5,13 +5,16 @@ use cardano/transaction.{
   InlineDatum, Output, OutputReference, Transaction, find_input,
 }
 use modules/functions.{
-  atleast_signedby, correct_asset_name_in_datum, find_ref_input_with_config_nft,
-  funds_sent_to_developer, is_category_from_supported_categories,
-  must_burn_less_than_0, must_mint_exactly_one, must_mint_tokens,
+  atleast_signedby, correct_asset_name_in_datum,
+  find_ref_config_datum_with_config_nft, funds_sent_to_developer,
+  is_category_from_supported_categories, must_burn_less_than_0,
+  must_have_asset_and_burn, must_mint_exactly_one, must_mint_tokens,
   must_send_fees_to_address, must_send_nft_and_datum_to_script,
-  must_spend_script_input,
 }
-use modules/types.{Accept, ConfigDatum, KarbonDatum, KarbonRedeemer, Reject}
+use modules/types.{
+  Accept, Burn, ConfigDatum, KarbonDatum, KarbonRedeemerMint,
+  KarbonRedeemerSpend, Mint, Reject,
+}
 
 // separate the spend and mint handlers
 validator validator_contract(
@@ -20,7 +23,7 @@ validator validator_contract(
 ) {
   spend(
     datum: Option<KarbonDatum>,
-    redeemer: KarbonRedeemer,
+    redeemer: KarbonRedeemerSpend,
     oref: OutputReference,
     tx: Transaction,
   ) {
@@ -35,9 +38,8 @@ validator validator_contract(
     } = tx
     expect Some(script_input) = find_input(inputs, oref)
     expect Script(script_hash) = script_input.output.address.payment_credential
-    let ref_input = find_ref_input_with_config_nft(reference_inputs, config_nft)
-    expect InlineDatum(ref_input_datum) = ref_input.output.datum
-    expect ref_datum: ConfigDatum = ref_input_datum
+    let ref_datum =
+      find_ref_config_datum_with_config_nft(reference_inputs, config_nft)
 
     // expect must_burn_less_than_0(mint, validator_contract_mint)
     // expect
@@ -54,28 +56,42 @@ validator validator_contract(
     }
   }
 
-  mint(redeemer: KarbonRedeemer, policy_id: PolicyId, tx: Transaction) {
-    let Transaction { inputs, mint, .. } = tx
-    let script_address = from_script(policy_id)
+  mint(redeemer: KarbonRedeemerMint, policy_id: PolicyId, tx: Transaction) {
+    let Transaction { inputs, mint, reference_inputs, extra_signatories, .. } =
+      tx
+
+    // let script_address = from_script(policy_id)
+    expect Some(oref_input) = find_input(inputs, redeemer.oref)
+    expect InlineDatum(oref_input_datum) = oref_input.output.datum
+    expect script_datum: KarbonDatum = oref_input_datum
+    let ref_datum =
+      find_ref_config_datum_with_config_nft(reference_inputs, config_nft)
     // 
-    // atleast_signedby(extra_signatories, ref_datum.multisig_validator_group)
-    and {
-      must_mint_tokens(mint, policy_id, redeemer),
-      must_spend_script_input(inputs, script_address),
+    when redeemer.action is {
+      Mint -> and {
+          must_have_asset_and_burn(
+            oref_input.output.value,
+            validator_contract_mint,
+          ),
+          must_mint_tokens(mint, policy_id, redeemer),
+          atleast_signedby(
+            extra_signatories,
+            ref_datum.multisig_validator_group,
+          ),
+        }
+      Burn -> False
     }
   }
 
   // About rules of Minting policy "C" (Note that it could be part of single script if one likes via CIP - 69)
-  // * redeemer takes the output reference that is being spent along with the carbon credit amount.
-
-  // * Goes through inputs to find given reference, let it be I.
-  // * Parse the datum of input I.
-  // * Make sure it has the required NFT.
-  // * Check that this NFT is being burnt.
-  // * Multi-sig is satisfied where multi-sig is obtained from reference configuration UTxO.
-  // * The asset name of minted carbon credit is hash of output reference. Of course, require that only one
-  //   asset name is being minted under this minting policy of given credit amount.
-  // * All minted tokens are being sent to owner's address.
+  // DONE * redeemer takes the output reference that is being spent along with the carbon credit amount.
+  // DONE * Goes through inputs to find given reference, let it be I.
+  // DONE * Parse the datum of input I.
+  // DONE * Make sure it has the required NFT.
+  // DONE * Check that this NFT is being burnt.
+  // DONE * Multi-sig is satisfied where multi-sig is obtained from reference configuration UTxO.
+  // DONE * The asset name of minted carbon credit is hash of output reference. Of course, require that only one asset name is being minted under this minting policy of given credit amount.
+  // DONE (spend)* All minted tokens are being sent to owner's address.
 
   else(_) {
     fail

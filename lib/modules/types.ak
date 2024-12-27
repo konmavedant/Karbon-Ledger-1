@@ -8,8 +8,10 @@ pub type AssetClass {
   asset_name: AssetName,
 }
 
-pub type Action =
-  Int
+pub type Action {
+  Mint
+  Burn
+}
 
 pub type AcceptRejectAction {
   Accept
@@ -44,8 +46,14 @@ pub type KarbonDatum {
   fees_asset_class: AssetClass,
 }
 
-pub type KarbonRedeemer {
+pub type KarbonRedeemerSpend {
   action: AcceptRejectAction,
   amount: Int,
   oref: OutputReference,
+}
+
+pub type KarbonRedeemerMint {
+  action: Action,
+  oref: OutputReference,
+  amount: Int,
 }

@@ -3,7 +3,7 @@ use cardano/transaction.{OutputReference, Transaction}
 use modules/functions.{
   must_burn_exactly_one, must_consume_utxo, must_mint_exactly_one,
 }
-use modules/types.{Action}
+use modules/types.{Action, Burn, Mint}
 
 // TODO:  separate spend and mint handler
 validator identification_nft(o_ref: OutputReference) {
@@ -11,13 +11,12 @@ validator identification_nft(o_ref: OutputReference) {
     let Transaction { inputs, mint, .. } = tx
     when redeemer is {
       // 1 = minting
-      1 -> and {
+      Mint -> and {
           must_consume_utxo(inputs, o_ref)?,
           must_mint_exactly_one(mint, policy_id)?,
         }
       // 0 = burning
-      0 -> must_burn_exactly_one(mint, policy_id)?
-      _ -> fail
+      Burn -> must_burn_exactly_one(mint, policy_id)?
     }
   }
 
