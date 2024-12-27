@@ -2,9 +2,6 @@ use aiken/cbor
 use aiken/collection/dict
 use aiken/collection/list
 use aiken/crypto.{VerificationKeyHash}
-use aiken/primitive/bytearray
-use aiken/primitive/int
-use aiken/primitive/string
 use cardano/address.{Address}
 use cardano/assets.{AssetName, PolicyId, Value}
 use cardano/transaction.{InlineDatum,
@@ -27,12 +24,12 @@ pub fn must_mint_exactly_one(mint: Value, policy_id: PolicyId) -> Bool {
   (qty == 1)?
 }
 
-pub fn must_burn_exactly_one(mint: Value, policy_id: PolicyId) -> Bool {
+pub fn must_burn_token(mint: Value, policy_id: PolicyId) -> Bool {
   expect [Pair(_, qty)] =
     mint
       |> assets.tokens(policy_id)
       |> dict.to_pairs()
-  (qty == -1)?
+  (qty <= 0)?
 }
 
 pub fn must_burn_less_than_0(mint: Value, policy_id: PolicyId) -> Bool {
@@ -162,5 +159,5 @@ pub fn correct_asset_name_in_datum(
 
 pub fn must_have_asset_and_burn(value: Value, policy_id: PolicyId) -> Bool {
   // expect [Pair(_, -1)] = assets.tokens(value, policy_id) |> dict.to_pairs
-  must_burn_exactly_one(value, policy_id)
+  must_burn_token(value, policy_id)
 }
