@@ -7,9 +7,9 @@ use cardano/transaction.{
 use modules/functions.{
   atleast_signedby, correct_asset_name_in_datum,
   find_ref_config_datum_with_config_nft, funds_sent_to_developer,
-  is_category_from_supported_categories, must_burn_less_than_0,
+  is_category_from_supported_categories, must_burn_less_than_0, must_burn_token,
   must_have_asset_and_burn, must_mint_exactly_one, must_mint_tokens,
-  must_send_fees_to_address, must_send_nft_and_datum_to_script, must_burn_token
+  must_send_fees_to_address, must_send_nft_and_datum_to_script,
 }
 use modules/types.{
   Accept, Burn, ConfigDatum, KarbonDatum, KarbonRedeemerMint,
@@ -57,19 +57,18 @@ validator validator_contract(
   }
 
   mint(redeemer: KarbonRedeemerMint, policy_id: PolicyId, tx: Transaction) {
-    let Transaction { inputs, mint, reference_inputs, extra_signatories, .. } = tx
-    
+    let Transaction { inputs, mint, reference_inputs, extra_signatories, .. } =
+      tx
     let ref_datum =
       find_ref_config_datum_with_config_nft(reference_inputs, config_nft)
 
-
     when redeemer.action is {
-      Mint ->{
+      Mint -> {
         expect Some(oref_input) = find_input(inputs, redeemer.oref)
-    expect InlineDatum(oref_input_datum) = oref_input.output.datum
-    expect _: KarbonDatum = oref_input_datum
+        expect InlineDatum(oref_input_datum) = oref_input.output.datum
+        expect _: KarbonDatum = oref_input_datum
 
-         and {
+        and {
           must_have_asset_and_burn(
             oref_input.output.value,
             validator_contract_mint,
@@ -79,11 +78,15 @@ validator validator_contract(
             extra_signatories,
             ref_datum.multisig_validator_group,
           ),
-        }}
-      Burn -> and{atleast_signedby(
+        }
+      }
+      Burn -> and {
+          atleast_signedby(
             extra_signatories,
             ref_datum.multisig_validator_group,
-          ), must_burn_token(mint, policy_id)}
+          ),
+          must_burn_token(mint, policy_id),
+        }
     }
   }
 
@@ -97,9 +100,9 @@ validator validator_contract(
   // DONE * The asset name of minted carbon credit is hash of output reference. Of course, require that only one asset name is being minted under this minting policy of given credit amount.
   // DONE (spend)* All minted tokens are being sent to owner's address.
 
-// BURN
-// to burn: check multiSig is exercised optional(inclduing the hash of the document in redeemer)
-// one particular assets class/name
+  // BURN
+  // to burn: check multiSig is exercised optional(inclduing the hash of the document in redeemer)
+  // one particular assets class/name
   else(_) {
     fail
   }

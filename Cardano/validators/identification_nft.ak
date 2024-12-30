@@ -1,8 +1,7 @@
 use cardano/assets.{PolicyId}
 use cardano/transaction.{OutputReference, Transaction}
-use modules/functions.{
-  must_burn_token, must_consume_utxo, must_mint_exactly_one,
-}
+use modules/functions.{must_burn_token,
+  must_consume_utxo, must_mint_exactly_one}
 use modules/types.{Action, Burn, Mint}
 
 // TODO:  separate spend and mint handler
