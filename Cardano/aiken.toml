@@ -1,0 +1,28 @@
+name = "KonmaORG/Karbon-Ledger"
+version = "0.0.0"
+compiler = "v1.1.9"
+plutus = "v3"
+license = "Apache-2.0"
+description = "Aiken contracts for project 'KonmaORG/Karbon-Ledger'"
+
+[repository]
+user = "KonmaORG"
+project = "Karbon-Ledger"
+platform = "github"
+
+[[dependencies]]
+name = "aiken-lang/stdlib"
+version = "0f88f8ffce60b91ae3e4b3a3f40bab153e494760"  
+source = "github"
+
+[[dependencies]]
+name = "sidan-lab/vodka"
+version = "0.1.6"
+source = "github"
+
+[[dependencies]]
+name = "aiken-extra/tx_util"
+version = "1.215.202411"
+source = "github"
+
+[config]
