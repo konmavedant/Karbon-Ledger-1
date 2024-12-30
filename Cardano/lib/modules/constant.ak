@@ -22,6 +22,8 @@ pub const in_datum =
     developer: mock_pub_key_address(0, None),
     document: "doc_hash",
     fees_amount: 0,
+    category: "water",
+    asset_name: "projectTokenName",
     fees_asset_class: AssetClass {
       policy_id: mock_policy_id(0),
       asset_name: "token",
@@ -36,6 +38,7 @@ pub const config_d =
       policy_id: mock_policy_id(0),
       asset_name: "Token",
     },
+    categories: [],
     spend_address: mock_pub_key_address(0, None),
     multisig_validator_group: Multisig {
       required: 3,

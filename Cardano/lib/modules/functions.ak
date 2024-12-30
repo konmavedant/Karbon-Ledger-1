@@ -1,3 +1,4 @@
+use aiken/cbor
 use aiken/collection/dict
 use aiken/collection/list
 use aiken/crypto.{VerificationKeyHash}
@@ -6,7 +7,8 @@ use cardano/assets.{AssetName, PolicyId, Value}
 use cardano/transaction.{InlineDatum,
   Input, Output, OutputReference, find_input}
 use modules/types.{
-  AssetClass, ConfigDatum, KarbonDatum, KarbonRedeemer, Multisig,
+  AssetClass, ConfigDatum, KarbonDatum, KarbonRedeemerMint, KarbonRedeemerSpend,
+  Multisig,
 }
 
 pub fn must_consume_utxo(inputs: List<Input>, o_ref: OutputReference) {
@@ -22,14 +24,12 @@ pub fn must_mint_exactly_one(mint: Value, policy_id: PolicyId) -> Bool {
   (qty == 1)?
 }
 
-pub fn must_burn_exactly_one(mint: Value, policy_id: PolicyId) -> Bool {
+pub fn must_burn_token(mint: Value, policy_id: PolicyId) -> Bool {
   expect [Pair(_, qty)] =
     mint
       |> assets.tokens(policy_id)
       |> dict.to_pairs()
-  trace @"policy_id": policy_id
-  trace @"qty": qty
-  (qty == -1)?
+  (qty <= 0)?
 }
 
 pub fn must_burn_less_than_0(mint: Value, policy_id: PolicyId) -> Bool {
@@ -42,16 +42,22 @@ pub fn must_burn_less_than_0(mint: Value, policy_id: PolicyId) -> Bool {
   list.all(values, fn(Pair(_, amount)) { amount < 0 })
 }
 
-pub fn find_ref_input_with_config_nft(
+pub fn find_ref_config_datum_with_config_nft(
   inputs: List<Input>,
   nft: PolicyId,
-) -> Input {
+) -> ConfigDatum {
   expect Some(ref_input) =
     list.find(
       inputs,
       fn(input) { list.has(input.output.value |> assets.policies, nft) },
     )
-  ref_input
+  find_ref_datum_from_utxo(ref_input.output)
+}
+
+pub fn find_ref_datum_from_utxo(output: Output) -> ConfigDatum {
+  expect InlineDatum(ref_input_datum) = output.datum
+  expect ref_datum: ConfigDatum = ref_input_datum
+  ref_datum
 }
 
 pub fn must_send_fees_to_address(
@@ -88,26 +94,26 @@ pub fn atleast_signedby(
 pub fn funds_sent_to_developer(
   outputs: List<Output>,
   datum: KarbonDatum,
-  redeemer: KarbonRedeemer,
+  redeemer: KarbonRedeemerSpend,
   policy_id: PolicyId,
 ) -> Bool {
   let KarbonDatum { developer, .. } = datum
-  let KarbonRedeemer { amount, asset_name, .. } = redeemer
+  let KarbonRedeemerSpend { amount, oref, .. } = redeemer
   expect Some(output) =
     list.find(outputs, fn(output) { output.address == developer })
-  (assets.quantity_of(output.value, policy_id, asset_name) == amount)?
+  (assets.quantity_of(output.value, policy_id, token_name_oref(oref)) == amount)?
 }
 
 pub fn must_mint_tokens(
   mint: Value,
   policy_id: PolicyId,
-  redeemer: KarbonRedeemer,
+  redeemer: KarbonRedeemerMint,
 ) {
-  let KarbonRedeemer { amount, asset_name, .. } = redeemer
+  let KarbonRedeemerMint { amount, oref, .. } = redeemer
   expect [Pair(mint_assetname, qty)] =
     assets.tokens(mint, policy_id) |> dict.to_pairs
   and {
-    mint_assetname == asset_name,
+    mint_assetname == token_name_oref(oref),
     qty == amount,
   }
 }
@@ -115,4 +121,43 @@ pub fn must_mint_tokens(
 pub fn must_spend_script_input(inputs: List<Input>, address: Address) {
   let input <- list.any(inputs)
   input.output.address == address
+}
+
+//fucntion for oref transaction_id + output_index == name of asset
+
+pub fn token_name_oref(oref: OutputReference) {
+  // let OutputReference { transaction_id, output_index } = oref
+
+  // let hashed =
+  //   crypto.blake2b_224(
+  //     bytearray.concat(
+  //       transaction_id,
+  //       bytearray.from_int_little_endian(output_index, 2),
+  //     ),
+  //   )
+  let hashed = oref |> cbor.serialise |> crypto.blake2b_224
+  hashed
+}
+
+pub fn is_category_from_supported_categories(
+  categories: List<ByteArray>,
+  category: ByteArray,
+) -> Bool {
+  list.has(categories, category)
+}
+
+pub fn correct_asset_name_in_datum(
+  value: Value,
+  policy_id: PolicyId,
+  asset_name: ByteArray,
+) -> Bool {
+  expect [Pair(mint_assetname, 1)] =
+    assets.tokens(value, policy_id) |> dict.to_pairs
+
+  mint_assetname == asset_name
+}
+
+pub fn must_have_asset_and_burn(value: Value, policy_id: PolicyId) -> Bool {
+  // expect [Pair(_, -1)] = assets.tokens(value, policy_id) |> dict.to_pairs
+  must_burn_token(value, policy_id)
 }
