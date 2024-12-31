@@ -6,8 +6,9 @@ import {
     validator_contract_validator_contract_mint_mint
 
 } from "./plutus";
+import { getPolicyId } from "@/libs/utils";
 
-export const identificationPolicyid: Data = "81af3501c07b580374baaf26dd08bc862554869e0d4d9cfff7d04219"
+export const identificationPolicyid: Data = "08e1fb8bf9ecd17d218856066e5205c6aaf9119b7ff02353488bf41a"
 //------------------------------------------------------------------
 const identificationNFT_Mint = applyDoubleCborEncoding(
     identification_nft_identification_nft_mint
@@ -37,10 +38,11 @@ export function ConfigDatumHolderValidator(): Validator {
 const ValidatorContractScript = applyDoubleCborEncoding(
     validator_contract_validator_contract_mint
 );
-export function ValidatorContract(params: any[]): Validator { //config_nft : PolicyId; validator_contract_mint: PolicyId
+export function ValidatorContract(): Validator { //config_nft : PolicyId; validator_contract_mint: PolicyId
+    const validatorMinterParam = getPolicyId(ValidatorMinter);
     return {
         type: "PlutusV3",
-        script: applyParamsToScript(ValidatorContractScript, params),
+        script: applyParamsToScript(ValidatorContractScript, [identificationPolicyid, validatorMinterParam]),
     }
 };
 
@@ -49,9 +51,9 @@ export function ValidatorContract(params: any[]): Validator { //config_nft : Pol
 const ValidatorMinterScript = applyDoubleCborEncoding(
     validator_contract_validator_contract_mint_mint
 );
-export function ValidatorMinter(params: any[]): Validator { //config_nft : PolicyId;
+export function ValidatorMinter(): Validator { //config_nft : PolicyId;
     return {
         type: "PlutusV3",
-        script: applyParamsToScript(ValidatorMinterScript, params),
+        script: applyParamsToScript(ValidatorMinterScript, [identificationPolicyid]),
     }
 };

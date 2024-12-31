@@ -34,6 +34,7 @@ export default function Identification() {
         const redeemer = Data.to(mint);
         const tx = await lucid
             .newTx()
+            .collectFrom([utxos[0]])
             .mintAssets(mintedAssets, redeemer)
             .attach.MintingPolicy(mintingValidator)
             .complete();

@@ -113,6 +113,7 @@ validator validator_contract_mint(config_nft: PolicyId) {
     let Transaction { mint, reference_inputs, outputs, .. } = tx
     when redeemer is {
       0 -> {
+        trace @"start"
         let ref_datum =
           find_ref_config_datum_with_config_nft(reference_inputs, config_nft)
 

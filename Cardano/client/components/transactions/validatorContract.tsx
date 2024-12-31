@@ -6,31 +6,50 @@ import {
   Data,
   fromText,
   mintingPolicyToId,
+  paymentCredentialOf,
   Validator,
 } from "@lucid-evolution/lucid";
 import React from "react";
 import { Button } from "@/components/ui/button";
+import { getAddress, refUtxo } from "@/libs/utils";
+import { Project } from "next/dist/build/swc/types";
+import { AssetClass, KarbonDatum } from "@/types/cardano";
+import { get } from "http";
 
-export default function Identification() {
+export default function ProjectLister() {
   const [WalletConnection] = useWallet();
 
   const { lucid, address } = WalletConnection;
-  async function mint() {
+  async function listProject() {
     if (!lucid || !address) throw "Uninitialized Lucid!!!";
 
-    const utxos = await lucid.utxosAt(address);
 
-    const orefHash = String(utxos[0].txHash);
-    const orefIndex = BigInt(utxos[0].outputIndex);
-    const oref = new Constr(0, [orefHash, orefIndex]);
-
-    const mintingValidator: Validator = ValidatorMinter([oref]);
+    const validatorContractAddress = getAddress(ValidatorContract);
+    const mintingValidator: Validator = ValidatorMinter();
     const policyID = mintingPolicyToId(mintingValidator);
-    const ref_assetName = "KarbonIdentificationNFT";
-    const mintedAssets = { [policyID + fromText(ref_assetName)]: 1n };
-    const redeemer = Data.void();
+    const projectAssetName = "ProjectTitle";
+    const mintedAssets = { [policyID + fromText(projectAssetName)]: 1n };
+    const refutxo = await refUtxo(lucid);
+
+    const redeemer = Data.to(0n);
+    const assestClass: AssetClass = {
+      policyid: "",
+      asset_name: fromText(""),
+    }
+    const datum: KarbonDatum = {
+      developer: fromText(address),
+      document: fromText("documentHash"),
+      categories: fromText("forest"),
+      asset_name: fromText(projectAssetName),
+      fees_amount: 100_000_000n,
+      fees_asset_class: assestClass,
+    }
+
     const tx = await lucid
       .newTx()
+      .readFrom(refutxo)
+      .pay.ToAddressWithData(validatorContractAddress, { kind: "inline", value: Data.to(0n) }, { lovelace: 5_000_000n, ...mintedAssets })
+      .pay.ToAddress(address, { lovelace: 100_000_000n })
       .mintAssets(mintedAssets, redeemer)
       .attach.MintingPolicy(mintingValidator)
       .complete();
@@ -42,15 +61,7 @@ export default function Identification() {
 
   return (
     <>
-      <Button onClick={mint}>mint</Button>;
-
-      {/*  
-      mint tx 
-       redeemer: 0 or 1
-       collectfrom() refutxo from @libs/utils 
-       correct ProjectDatum to ValidatorContract Address not ValidatorMinter
-      
-      */}
+      <Button onClick={listProject}>List Project</Button>
     </>
   )
 }

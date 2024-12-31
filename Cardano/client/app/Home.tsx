@@ -1,4 +1,6 @@
+import ConfigDatumHolder from "@/components/transactions/configDatumHolder";
 import Identification from "@/components/transactions/identificationnft";
+import ProjectLister from "@/components/transactions/validatorContract";
 import WalletConnector from "@/components/WalletConnector/client";
 import DisconnectButton from "@/components/WalletConnector/disconnect";
 import { useWallet } from "@/context/walletContext";
@@ -18,6 +20,8 @@ export default function Home() {
     <div className="space-y-6 mx-auto max-w-2xl flex flex-col min-h-screen items-center">
       <DisconnectButton />
       <Identification />
+      <ConfigDatumHolder />
+      <ProjectLister />
     </div>
   );
 }

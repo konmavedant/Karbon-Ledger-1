@@ -51,12 +51,15 @@ pub fn find_ref_config_datum_with_config_nft(
       inputs,
       fn(input) { list.has(input.output.value |> assets.policies, nft) },
     )
+  trace @"found ref Input"
   find_ref_datum_from_utxo(ref_input.output)
 }
 
 pub fn find_ref_datum_from_utxo(output: Output) -> ConfigDatum {
   expect InlineDatum(ref_input_datum) = output.datum
+  trace @"inlinedatum": ref_input_datum
   expect ref_datum: ConfigDatum = ref_input_datum
+  trace @"configDatum": ref_datum
   ref_datum
 }
 
