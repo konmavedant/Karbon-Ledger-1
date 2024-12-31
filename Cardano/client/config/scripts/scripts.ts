@@ -1,6 +1,7 @@
 import { applyDoubleCborEncoding, applyParamsToScript, Data, Validator } from "@lucid-evolution/lucid";
 import {
     identification_nft_identification_nft_mint,
+    config_datum_holder_config_datum_holder_spend,
     validator_contract_validator_contract_mint,
     validator_contract_validator_contract_mint_mint
 
@@ -12,10 +13,23 @@ const identificationNFT_Mint = applyDoubleCborEncoding(
     identification_nft_identification_nft_mint
 );
 
+
 export function IdentificationNFT_MintValidator(params: any[]): Validator {
     return {
         type: "PlutusV3",
         script: applyParamsToScript(identificationNFT_Mint, params),
+    }
+};
+
+//------------------------------------------------------------------
+const configdatumholderscript = applyDoubleCborEncoding(
+    config_datum_holder_config_datum_holder_spend
+);
+
+export function ConfigDatumHolderValidator(): Validator {
+    return {
+        type: "PlutusV3",
+        script: configdatumholderscript,
     }
 };
 

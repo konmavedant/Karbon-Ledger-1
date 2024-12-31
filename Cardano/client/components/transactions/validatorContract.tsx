@@ -1,5 +1,5 @@
 "use client";
-import { ValidatorContract } from "@/config/scripts/scripts";
+import { ValidatorContract, ValidatorMinter } from "@/config/scripts/scripts";
 import { useWallet } from "@/context/walletContext";
 import {
   Constr,
@@ -24,7 +24,7 @@ export default function Identification() {
     const orefIndex = BigInt(utxos[0].outputIndex);
     const oref = new Constr(0, [orefHash, orefIndex]);
 
-    const mintingValidator: Validator = ValidatorContract([oref]);
+    const mintingValidator: Validator = ValidatorMinter([oref]);
     const policyID = mintingPolicyToId(mintingValidator);
     const ref_assetName = "KarbonIdentificationNFT";
     const mintedAssets = { [policyID + fromText(ref_assetName)]: 1n };
@@ -40,5 +40,17 @@ export default function Identification() {
     console.log("txHash: ", txHash);
   }
 
-  return <Button onClick={mint}>mint</Button>;
+  return (
+    <>
+      <Button onClick={mint}>mint</Button>;
+
+      {/*  
+      mint tx 
+       redeemer: 0 or 1
+       collectfrom() refutxo from @libs/utils 
+       correct ProjectDatum to ValidatorContract Address not ValidatorMinter
+      
+      */}
+    </>
+  )
 }
