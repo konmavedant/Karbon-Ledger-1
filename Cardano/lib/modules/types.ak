@@ -38,7 +38,7 @@ pub type ConfigDatum {
 }
 
 pub type KarbonDatum {
-  developer: Address,
+  developer: VerificationKeyHash,
   document: ByteArray,
   category: ByteArray,
   asset_name: ByteArray,

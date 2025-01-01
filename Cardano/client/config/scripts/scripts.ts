@@ -8,7 +8,7 @@ import {
 } from "./plutus";
 import { getPolicyId } from "@/libs/utils";
 
-export const identificationPolicyid: Data = "7047ab3d6b00570a44f7363008e0464556a3fc969ef42eb74c250ab4"
+export const identificationPolicyid: Data = "bfe8d93cd78ecef16f4c9c104a12b64ea785257b6bf736c0389f6641"
 //------------------------------------------------------------------
 const identificationNFT_Mint = applyDoubleCborEncoding(
     identification_nft_identification_nft_mint

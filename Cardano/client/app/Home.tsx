@@ -3,6 +3,7 @@ import Identification from "@/components/transactions/identificationnft";
 import ProjectLister from "@/components/transactions/projectLister";
 import WalletConnector from "@/components/WalletConnector/client";
 import DisconnectButton from "@/components/WalletConnector/disconnect";
+import EmulatorConnector from "@/components/WalletConnector/emulatorClient";
 import { useWallet } from "@/context/walletContext";
 
 export default function Home() {
@@ -12,7 +13,8 @@ export default function Home() {
   if (!address) {
     return (
       <div className="space-y-6 mx-auto max-w-2xl flex flex-col min-h-screen items-center">
-        <WalletConnector />
+        {/* <WalletConnector /> */}
+        <EmulatorConnector />
       </div>
     )
   }

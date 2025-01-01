@@ -1,7 +1,7 @@
 import { NETWORK } from '@/config/lucid';
 import { useWallet } from '@/context/walletContext'
 import { AssetClass, ConfigDatum, Multisig } from '@/types/cardano';
-import { Data, fromText, mintingPolicyToId, paymentCredentialOf, Script, SpendingValidator, Validator, validatorToAddress, validatorToScriptHash } from '@lucid-evolution/lucid';
+import { Data, fromText, mintingPolicyToId, paymentCredentialOf, Script, scriptHashToCredential, SpendingValidator, Validator, validatorToAddress, validatorToScriptHash } from '@lucid-evolution/lucid';
 import React from 'react'
 import { Button } from '../ui/button';
 import { ConfigDatumHolderValidator, identificationPolicyid, ValidatorContract } from '@/config/scripts/scripts';
@@ -31,7 +31,6 @@ export default function ConfigDatumHolder() {
             const contractAddress = validatorToAddress(NETWORK, validator);
             const validatorContract: SpendingValidator = ValidatorContract();
             const validatorContractAddress = validatorToAddress(NETWORK, validatorContract);
-            console.log('validatorContractAddress', validatorContractAddress)
 
             const assestClass: AssetClass = {
                 policyid: "",
@@ -44,11 +43,13 @@ export default function ConfigDatumHolder() {
                     paymentCredentialOf(address).hash,
                 ],
             }
+            // scriptHashToCredential
+            console.log("validatorhash", paymentCredentialOf(validatorContractAddress).hash)
             const datum: ConfigDatum = {
-                fees_address: fromText(address),
+                fees_address: paymentCredentialOf(address).hash,
                 fees_amount: 100_000_000n,
                 fees_asset_class: assestClass, // need verification form sourabh
-                spend_address: fromText(validatorContractAddress), // need verification form sourabh (how to pass address directly?)
+                spend_address: paymentCredentialOf(validatorContractAddress).hash, // need verification form sourabh (how to pass address directly?)
                 categories: [fromText("forest"), fromText("water")],
                 multisig_validator_group: signer,
                 multisig_refutxoupdate: signer,

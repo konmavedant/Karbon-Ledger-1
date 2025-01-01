@@ -19,7 +19,7 @@ use modules/types.{AssetClass, ConfigDatum, KarbonDatum, Multisig}
 
 pub const in_datum =
   KarbonDatum {
-    developer: mock_pub_key_address(0, None),
+    developer: mock_pub_key_hash(0),
     document: "doc_hash",
     fees_amount: 0,
     category: "water",

@@ -36,20 +36,19 @@ export default function ProjectLister() {
       asset_name: fromText(""),
     };
     const datum: KarbonDatum = {
-      developer: fromText(address),
+      developer: paymentCredentialOf(address).hash,
       document: fromText("documentHash"),
       categories: fromText("forest"),
       asset_name: fromText(projectAssetName),
       fees_amount: 100_000_000n,
       fees_asset_class: assestClass,
     };
-    console.log(paymentCredentialOf(validatorContractAddress));
     const tx = await lucid
       .newTx()
       .readFrom(refutxo)
       .pay.ToAddressWithData(
         validatorContractAddress,
-        { kind: "inline", value: Data.to(0n) },
+        { kind: "inline", value: Data.to(datum, KarbonDatum) },
         { lovelace: 5_000_000n, ...mintedAssets }
       )
       .pay.ToAddress(address, { lovelace: 100_000_000n })

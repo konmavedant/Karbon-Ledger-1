@@ -2,7 +2,7 @@ use aiken/cbor
 use aiken/collection/dict
 use aiken/collection/list
 use aiken/crypto.{VerificationKeyHash}
-use cardano/address.{Address, from_verification_key}
+use cardano/address.{Address, from_verification_key, VerificationKey}
 use cardano/assets.{AssetName, PolicyId, Value}
 use cardano/transaction.{InlineDatum,
   Input, Output, OutputReference, find_input}
@@ -101,7 +101,12 @@ pub fn funds_sent_to_developer(
   let KarbonDatum { developer, .. } = datum
   let KarbonRedeemerSpend { amount, oref, .. } = redeemer
   expect Some(output) =
-    list.find(outputs, fn(output) { output.address == developer })
+    list.find(outputs, fn(output) { 
+      when output.address.payment_credential is {
+                VerificationKey(vkh) -> {
+                  vkh == developer}
+                _ -> False
+              } })
   (assets.quantity_of(output.value, policy_id, token_name_oref(oref)) == amount)?
 }
 

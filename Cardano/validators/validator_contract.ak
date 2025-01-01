@@ -1,5 +1,5 @@
 use aiken/collection/list
-use cardano/address.{Script, from_verification_key}
+use cardano/address.{Script, from_verification_key, VerificationKey}
 use cardano/assets.{PolicyId}
 use cardano/transaction.{
   InlineDatum, Output, OutputReference, Transaction, find_input,
@@ -120,9 +120,14 @@ validator validator_contract_mint(config_nft: PolicyId) {
           list.filter(
             outputs,
             fn(output) { 
-              trace @"output vk": output.address.payment_credential
-              trace @"output address": output.address
-              output.address == from_verification_key(ref_datum.spend_address) },
+              when output.address.payment_credential is {
+                Script(vkh) -> {
+                  vkh == ref_datum.spend_address}
+                _ -> False
+              }
+              // got error while doing this
+              // output.address == from_verification_key(ref_datum.spend_address)
+              },
           )
         expect InlineDatum(script_data) = script_output.datum
         expect script_datum: KarbonDatum = script_data
