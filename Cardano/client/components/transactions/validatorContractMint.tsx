@@ -21,11 +21,11 @@ import {
 } from "@/types/cardano";
 import { get } from "http";
 
-export default function ProjectLister() {
+export default function Validator_contract() {
   const [WalletConnection] = useWallet();
 
   const { lucid, address } = WalletConnection;
-  async function listProject() {
+  async function validatormint() {
     if (!lucid || !address) throw "Uninitialized Lucid!!!";
     //----------minter validtor--------------------
     const validatorContractAddress = getAddress(ValidatorContract);
@@ -36,6 +36,9 @@ export default function ProjectLister() {
     const validatorminter: Validator = ValidatorContract();
     const contractPolicyId = mintingPolicyToId(validatorminter);
     //--------------------------------------------------------
+
+    console.log("policyID", policyID);
+    console.log("contractPolicyId", contractPolicyId);
 
     const projectAssetName = "ProjectTitle";
     const mintedAssets = { [policyID + fromText(projectAssetName)]: -1n };
@@ -51,6 +54,18 @@ export default function ProjectLister() {
       oref: fromText("abc"),
       amount: 100n,
     };
+    const assestClass: AssetClass = {
+      policyid: "",
+      asset_name: fromText(""),
+    };
+    const karbondatum: KarbonDatum = {
+      developer: paymentCredentialOf(address).hash,
+      document: fromText("documentHash"),
+      categories: fromText("forest"),
+      asset_name: fromText(projectAssetName),
+      fees_amount: 100_000_000n,
+      fees_asset_class: assestClass,
+    };
 
     const actionConstr = new Constr(0, []);
     const redeemeraction = Data.to(actionConstr);
@@ -63,14 +78,25 @@ export default function ProjectLister() {
       //     { kind: "inline", value: Data.to(0n) },
       //     { lovelace: 5_000_000n, ...mintedAssets }
       //   )
-      .pay.ToAddress(address, { lovelace: 100_000_000n, ...tokenmintedAssets })
+      .pay.ToAddressWithData(
+        address,
+        { kind: "inline", value: Data.to(karbondatum, KarbonDatum) },
+        { lovelace: 100_000_000n, ...tokenmintedAssets }
+      )
       .mintAssets(mintedAssets, redeemeraction)
       .mintAssets(tokenmintedAssets, redeemeraction)
-      .attach.MintingPolicy(mintingValidator)
+      .attach.MintingPolicy(validatorminter)
       .complete();
 
     const signed = await tx.sign.withWallet().complete();
     const txHash = await signed.submit();
     console.log("txHash: ", txHash);
   }
+
+  return (
+    <>
+      <Button onClick={validatormint}>Validator minter</Button>
+      {/* <Button onClick={delistProect}>Delist Project</Button> */}
+    </>
+  );
 }
