@@ -23,7 +23,6 @@ export default function ProjectLister() {
   async function listProject() {
     if (!lucid || !address) throw "Uninitialized Lucid!!!";
 
-
     const validatorContractAddress = getAddress(ValidatorContract);
     const mintingValidator: Validator = ValidatorMinter();
     const policyID = mintingPolicyToId(mintingValidator);
@@ -35,7 +34,7 @@ export default function ProjectLister() {
     const assestClass: AssetClass = {
       policyid: "",
       asset_name: fromText(""),
-    }
+    };
     const datum: KarbonDatum = {
       developer: fromText(address),
       document: fromText("documentHash"),
@@ -43,14 +42,43 @@ export default function ProjectLister() {
       asset_name: fromText(projectAssetName),
       fees_amount: 100_000_000n,
       fees_asset_class: assestClass,
-    }
+    };
 
     const tx = await lucid
       .newTx()
       .readFrom(refutxo)
-      .pay.ToAddressWithData(validatorContractAddress, { kind: "inline", value: Data.to(0n) }, { lovelace: 5_000_000n, ...mintedAssets })
+      .pay.ToAddressWithData(
+        validatorContractAddress,
+        { kind: "inline", value: Data.to(0n) },
+        { lovelace: 5_000_000n, ...mintedAssets }
+      )
       .pay.ToAddress(address, { lovelace: 100_000_000n })
       .mintAssets(mintedAssets, redeemer)
+      .attach.MintingPolicy(mintingValidator)
+      .complete();
+
+    const signed = await tx.sign.withWallet().complete();
+    const txHash = await signed.submit();
+    console.log("txHash: ", txHash);
+  }
+
+  async function delistProect() {
+    if (!lucid || !address) throw "Uninitialized Lucid!!!";
+
+    const utxos = await lucid.utxosAt(address);
+    const projectAssetName = "ProjectTitle";
+
+    const mintingValidator: Validator = ValidatorMinter();
+    const policyID = mintingPolicyToId(mintingValidator);
+    const assetUnit = `${policyID}${fromText(projectAssetName)}`;
+    const burnedAssets = { [assetUnit]: -1n };
+    const utxos1 = await lucid.utxosAtWithUnit(address, assetUnit);
+    const redeemer = Data.to(1n);
+
+    const tx = await lucid
+      .newTx()
+      .collectFrom(utxos1)
+      .mintAssets(burnedAssets, redeemer)
       .attach.MintingPolicy(mintingValidator)
       .complete();
 
@@ -62,6 +90,7 @@ export default function ProjectLister() {
   return (
     <>
       <Button onClick={listProject}>List Project</Button>
+      <Button onClick={delistProect}>Delist Project</Button>
     </>
-  )
+  );
 }
