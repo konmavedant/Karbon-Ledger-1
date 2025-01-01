@@ -2,7 +2,7 @@ use aiken/cbor
 use aiken/collection/dict
 use aiken/collection/list
 use aiken/crypto.{VerificationKeyHash}
-use cardano/address.{Address, from_verification_key, VerificationKey}
+use cardano/address.{Address, from_verification_key, VerificationKey, Script}
 use cardano/assets.{AssetName, PolicyId, Value}
 use cardano/transaction.{InlineDatum,
   Input, Output, OutputReference, find_input}
@@ -70,7 +70,10 @@ pub fn must_send_fees_to_address(
     outputs,
     fn(output) {
       and {
-        (output.address == from_verification_key(ref_datum.fees_address))?,
+        (when output.address.payment_credential is {
+                Script(vkh) | VerificationKey(vkh) -> {
+                  vkh == ref_datum.fees_address}
+              })?,
         (assets.quantity_of(output.value, policy_id, asset_name) == ref_datum.fees_amount)?,
       }
     },
@@ -80,7 +83,6 @@ pub fn must_send_fees_to_address(
 pub fn must_send_nft_and_datum_to_script(output: Output, policy_id: PolicyId) {
   expect InlineDatum(output_datum) = output.datum
   expect _: KarbonDatum = output_datum
-  // output_datum.fee == configDatum.fee (should be check)
   list.has(output.value |> assets.policies, policy_id)?
 }
 

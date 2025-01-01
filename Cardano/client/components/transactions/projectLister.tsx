@@ -15,6 +15,7 @@ import { getAddress, refUtxo } from "@/libs/utils";
 import { Project } from "next/dist/build/swc/types";
 import { AssetClass, KarbonDatum } from "@/types/cardano";
 import { get } from "http";
+import { accountA } from "@/config/emulator";
 
 export default function ProjectLister() {
   const [WalletConnection] = useWallet();
@@ -51,7 +52,7 @@ export default function ProjectLister() {
         { kind: "inline", value: Data.to(datum, KarbonDatum) },
         { lovelace: 5_000_000n, ...mintedAssets }
       )
-      .pay.ToAddress(address, { lovelace: 100_000_000n })
+      .pay.ToAddress(accountA.address, { lovelace: 100_000_000n })//address should be fee address
       .mintAssets(mintedAssets, redeemer)
       .attach.MintingPolicy(mintingValidator)
       .complete();
