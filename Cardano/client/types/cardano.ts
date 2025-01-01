@@ -44,8 +44,8 @@ export const KarbonRedeemerSpend =
 //----------------------------------------------
 export const KarbonRedeemerMintSchema = Data.Object({
   action: IdentificationRedeemerSchema,
-  amount: Data.Bytes(),
-  oref: Data.Integer(),
+  oref: Data.Bytes(),
+  amount: Data.Integer(),
 });
 
 export type KarbonRedeemerMint = Data.Static<typeof KarbonRedeemerMintSchema>;
