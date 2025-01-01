@@ -1,6 +1,6 @@
 import ConfigDatumHolder from "@/components/transactions/configDatumHolder";
 import Identification from "@/components/transactions/identificationnft";
-import ProjectLister from "@/components/transactions/validatorContract";
+import ProjectLister from "@/components/transactions/projectLister";
 import WalletConnector from "@/components/WalletConnector/client";
 import DisconnectButton from "@/components/WalletConnector/disconnect";
 import { useWallet } from "@/context/walletContext";

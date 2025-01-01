@@ -31,7 +31,7 @@ export default function ConfigDatumHolder() {
             const contractAddress = validatorToAddress(NETWORK, validator);
             const validatorContract: SpendingValidator = ValidatorContract();
             const validatorContractAddress = validatorToAddress(NETWORK, validatorContract);
-
+            console.log('validatorContractAddress', validatorContractAddress)
 
             const assestClass: AssetClass = {
                 policyid: "",
@@ -45,15 +45,14 @@ export default function ConfigDatumHolder() {
                 ],
             }
             const datum: ConfigDatum = {
-                fees_address: paymentCredentialOf(address).hash,
+                fees_address: fromText(address),
                 fees_amount: 100_000_000n,
                 fees_asset_class: assestClass, // need verification form sourabh
-                spend_address: paymentCredentialOf(validatorContractAddress).hash, // need verification form sourabh (how to pass address directly?)
+                spend_address: fromText(validatorContractAddress), // need verification form sourabh (how to pass address directly?)
                 categories: [fromText("forest"), fromText("water")],
                 multisig_validator_group: signer,
                 multisig_refutxoupdate: signer,
             };
-
             const tx = await lucid
                 .newTx()
                 .pay.ToAddressWithData(
@@ -61,7 +60,7 @@ export default function ConfigDatumHolder() {
                     { kind: "inline", value: Data.to(datum, ConfigDatum) },
                     { lovelace: 5_000_000n, ...configNFT }
                 )
-                .complete({ localUPLCEval: false });
+                .complete();
 
 
             const signed = await tx.sign.withWallet().complete();
@@ -79,3 +78,5 @@ export default function ConfigDatumHolder() {
         </div>
     )
 }
+
+

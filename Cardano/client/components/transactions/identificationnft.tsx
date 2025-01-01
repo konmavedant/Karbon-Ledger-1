@@ -32,6 +32,7 @@ export default function Identification() {
         // const redeemer = Data.to("Mint", IdentificationRedeemer);
         const mint = new Constr(0, []);
         const redeemer = Data.to(mint);
+        console.log(policyID);
         const tx = await lucid
             .newTx()
             .collectFrom([utxos[0]])
@@ -57,7 +58,6 @@ export default function Identification() {
             const assets = utxo.assets;
             return Object.keys(assets).includes(ref_assetName);
         });
-        console.log(oref);
 
         const mintingValidator: Validator = IdentificationNFT_MintValidator([oref]); // pass the oref to the validator as hardcoded from scripts.ts
         const policyID = mintingPolicyToId(mintingValidator);
@@ -66,6 +66,7 @@ export default function Identification() {
         const utxos1 = await lucid.utxosAtWithUnit(address, assetUnit);
         const mint = new Constr(1, []);
         const redeemer = Data.to(mint);
+        console.log(policyID);
         const tx = await lucid
             .newTx()
             .collectFrom(utxos1)

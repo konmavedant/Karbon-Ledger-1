@@ -2,7 +2,7 @@ use aiken/cbor
 use aiken/collection/dict
 use aiken/collection/list
 use aiken/crypto.{VerificationKeyHash}
-use cardano/address.{Address}
+use cardano/address.{Address, from_verification_key}
 use cardano/assets.{AssetName, PolicyId, Value}
 use cardano/transaction.{InlineDatum,
   Input, Output, OutputReference, find_input}
@@ -51,15 +51,13 @@ pub fn find_ref_config_datum_with_config_nft(
       inputs,
       fn(input) { list.has(input.output.value |> assets.policies, nft) },
     )
-  trace @"found ref Input"
   find_ref_datum_from_utxo(ref_input.output)
 }
 
 pub fn find_ref_datum_from_utxo(output: Output) -> ConfigDatum {
   expect InlineDatum(ref_input_datum) = output.datum
-  trace @"inlinedatum": ref_input_datum
   expect ref_datum: ConfigDatum = ref_input_datum
-  trace @"configDatum": ref_datum
+
   ref_datum
 }
 
@@ -72,7 +70,7 @@ pub fn must_send_fees_to_address(
     outputs,
     fn(output) {
       and {
-        (output.address == ref_datum.fees_address)?,
+        (output.address == from_verification_key(ref_datum.fees_address))?,
         (assets.quantity_of(output.value, policy_id, asset_name) == ref_datum.fees_amount)?,
       }
     },

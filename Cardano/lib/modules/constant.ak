@@ -32,14 +32,14 @@ pub const in_datum =
 
 pub const config_d =
   ConfigDatum {
-    fees_address: mock_pub_key_address(0, None),
+    fees_address: mock_pub_key_hash(0),
     fees_amount: 2_000_000,
     fees_asset_class: AssetClass {
       policy_id: mock_policy_id(0),
       asset_name: "Token",
     },
     categories: [],
-    spend_address: mock_pub_key_address(0, None),
+    spend_address: mock_pub_key_hash(0),
     multisig_validator_group: Multisig {
       required: 3,
       signers: [

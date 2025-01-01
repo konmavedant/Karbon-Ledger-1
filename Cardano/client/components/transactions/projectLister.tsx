@@ -43,7 +43,7 @@ export default function ProjectLister() {
       fees_amount: 100_000_000n,
       fees_asset_class: assestClass,
     };
-
+    console.log(paymentCredentialOf(validatorContractAddress));
     const tx = await lucid
       .newTx()
       .readFrom(refutxo)
