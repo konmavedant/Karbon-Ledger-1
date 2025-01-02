@@ -13,7 +13,8 @@ import {
 import { getPolicyId } from "@/libs/utils";
 
 export const identificationPolicyid: Data =
-  "7dcb293a93419344d6e072898ca669ac1c1379babaae0abff5c7286e";
+  "bfe8d93cd78ecef16f4c9c104a12b64ea785257b6bf736c0389f6641";
+  
 //------------------------------------------------------------------
 const identificationNFT_Mint = applyDoubleCborEncoding(
   identification_nft_identification_nft_mint

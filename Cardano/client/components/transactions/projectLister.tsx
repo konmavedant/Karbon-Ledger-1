@@ -5,9 +5,11 @@ import {
   Constr,
   Data,
   fromText,
+  generatePrivateKey,
   mintingPolicyToId,
   OutRef,
   paymentCredentialOf,
+  TxSignBuilder,
   Validator,
 } from "@lucid-evolution/lucid";
 import React from "react";
@@ -16,7 +18,7 @@ import { getAddress, refUtxo } from "@/libs/utils";
 import { Project } from "next/dist/build/swc/types";
 import { AssetClass, KarbonDatum, KarbonRedeemerSpend } from "@/types/cardano";
 import { get } from "http";
-import { accountA } from "@/config/emulator";
+import { accountA, accountC, accountD } from "@/config/emulator";
 
 export default function ProjectLister() {
   const [WalletConnection] = useWallet();
@@ -77,6 +79,8 @@ export default function ProjectLister() {
     const assetUnit = `${policyID}${fromText(projectAssetName)}`;
     const burnedAssets = { [assetUnit]: -1n };
     const utxosValidator = await lucid.utxosAtWithUnit(validatorContractAddress, assetUnit);
+    const refutxo = await refUtxo(lucid);
+
 
     const redeemerValidator: KarbonRedeemerSpend = {
       action: "Reject",
@@ -85,19 +89,36 @@ export default function ProjectLister() {
     }
     const redeemer = Data.to(1n); // Burn
 
-    console.log(redeemerValidator)
-    console.log(Data.to(redeemerValidator, KarbonRedeemerSpend))
     const tx = await lucid
       .newTx()
+      .readFrom(refutxo)
       .collectFrom(utxosValidator, Data.to(redeemerValidator, KarbonRedeemerSpend))
       .attach.SpendingValidator(validatorContract)
       .mintAssets(burnedAssets, redeemer)
       .attach.MintingPolicy(mintingValidator)
+      .addSigner("addr_test1vzuutq4g88kqshaexh8y06pmasz6njjf7nnadlau9hqyd9ce9yug6")
       .complete();
 
-    const signed = await tx.sign.withWallet().complete();
-    const txHash = await signed.submit();
+    lucid.selectWallet.fromSeed(accountC.seedPhrase);
+    // const signed = await tx.sign.withWallet().complete();
+    // const signed = await tx.sign.withWallet();
+
+    const signedd = await signBY(tx)
+    const txHash = await signedd.submit();
     console.log("txHash: ", txHash);
+
+  }
+
+  async function signBY(tx: TxSignBuilder) {
+    const p1 = "ed25519_sk1c8k4pg4xrhhzks2vtjhp6ur5v7dle8j9h0uk4aafxuy3ryezalqq4h7efx"
+    const a1 = "addr_test1vzuutq4g88kqshaexh8y06pmasz6njjf7nnadlau9hqyd9ce9yug6"
+    const p2 = "ed25519_sk1x00twfzxx355x8wchng0k94aamf4sgjhjj7k9y3qm0sxwg972c8qfq8wkm"
+    const a2 = "addr_test1vr4wvwxytjnp4c569es5a3yethaxxf2y3j5kxyw30hv978q2xmcx2"
+    if (!lucid) throw "Uninitialized Lucid!!!";
+    lucid.selectWallet.fromPrivateKey(p1)
+    const signed = await tx.sign.withPrivateKey(p1).complete();
+    // const signed = await tx.sign.withWallet().complete();
+    return signed
   }
 
   return (

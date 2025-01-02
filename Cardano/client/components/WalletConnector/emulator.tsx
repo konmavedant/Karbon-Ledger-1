@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Spinner } from "@nextui-org/spinner";
 import { Snippet } from "@nextui-org/snippet";
-import { EmulatorAccount, Lucid } from "@lucid-evolution/lucid";
+import { EmulatorAccount, Lucid, paymentCredentialOf } from "@lucid-evolution/lucid";
 import { Skeleton } from "@nextui-org/skeleton";
 import { handleError } from "@/libs/utils";
 import { useWallet } from "@/context/walletContext";
@@ -79,6 +79,7 @@ export default function EmulatorConnectors() {
                             >
                                 {`${wallet.address.slice(0, 30)}...${wallet.address.slice(-5)}`}
                             </Button>
+                            {paymentCredentialOf(wallet.address).hash}
                         </Skeleton>
                     </>
                 )

@@ -73,10 +73,7 @@ export const AcceptRedeemer = AcceptRedeemerSchema as unknown as AcceptRedeemer;
 
 //----------------------------------------------
 export const KarbonRedeemerMintSchema = Data.Object({
-  action: Data.Enum([
-    IdentificationRedeemerSchema.Mint.Schema,
-    IdentificationRedeemerSchema.Burn.Schema,
-  ]),
+  action: IdentificationRedeemerSchema,
   oref: Data.Bytes(),
   amount: Data.Integer(),
 });

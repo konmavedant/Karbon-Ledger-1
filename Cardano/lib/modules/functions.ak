@@ -91,6 +91,8 @@ pub fn atleast_signedby(
   atleast_signatories: Multisig,
 ) -> Bool {
   let Multisig { required, signers } = atleast_signatories
+  trace @"signers": signers
+  trace @"extra_signatories": signatories
   (required <= list.count(signers, fn(signer) { list.has(signatories, signer) }))?
 }
 

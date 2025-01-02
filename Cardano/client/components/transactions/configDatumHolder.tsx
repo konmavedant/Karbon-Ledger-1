@@ -6,21 +6,11 @@ import React from 'react'
 import { Button } from '../ui/button';
 import { ConfigDatumHolderValidator, identificationPolicyid, ValidatorContract } from '@/config/scripts/scripts';
 import { handleError } from '@/libs/utils';
+import { accountB, accountC } from '@/config/emulator';
 
 export default function ConfigDatumHolder() {
     const [WalletConnection] = useWallet()
     const { lucid, address } = WalletConnection
-
-    function getAddress(validatorFunction: { (): Validator; (): Script; }) {
-        const validator: Validator = validatorFunction();
-        const address = validatorToAddress(NETWORK, validator);
-        return address
-    }
-    function getPolicyId(validatorFunction: { (): Validator; (): Script; }) {
-        const validator: Validator = validatorFunction();
-        const policyID = mintingPolicyToId(validator);
-        return policyID
-    }
 
     async function deposit() {
         if (!lucid || !address) throw "Uninitialized Lucid!!!";
@@ -39,8 +29,8 @@ export default function ConfigDatumHolder() {
             const signer: Multisig = {
                 required: 1n,
                 signers: [
-                    paymentCredentialOf(address).hash,
-                    paymentCredentialOf(address).hash,
+                    paymentCredentialOf("addr_test1vzuutq4g88kqshaexh8y06pmasz6njjf7nnadlau9hqyd9ce9yug6").hash,
+                    paymentCredentialOf("addr_test1vr4wvwxytjnp4c569es5a3yethaxxf2y3j5kxyw30hv978q2xmcx2").hash,
                 ],
             }
             // scriptHashToCredential
