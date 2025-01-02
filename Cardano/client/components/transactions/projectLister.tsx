@@ -6,6 +6,7 @@ import {
   Data,
   fromText,
   mintingPolicyToId,
+  OutRef,
   paymentCredentialOf,
   Validator,
 } from "@lucid-evolution/lucid";
@@ -13,7 +14,7 @@ import React from "react";
 import { Button } from "@/components/ui/button";
 import { getAddress, refUtxo } from "@/libs/utils";
 import { Project } from "next/dist/build/swc/types";
-import { AssetClass, KarbonDatum } from "@/types/cardano";
+import { AssetClass, KarbonDatum, KarbonRedeemerSpend } from "@/types/cardano";
 import { get } from "http";
 import { accountA } from "@/config/emulator";
 
@@ -62,22 +63,34 @@ export default function ProjectLister() {
     console.log("txHash: ", txHash);
   }
 
-  async function delistProect() {
-    if (!lucid || !address) throw "Uninitialized Lucid!!!";
+  async function projectReject() {
+    if (!lucid) throw "Uninitialized Lucid!!!";
+    if (!address) throw "Wallet Not Connected";
 
-    const utxos = await lucid.utxosAt(address);
     const projectAssetName = "ProjectTitle";
 
     const mintingValidator: Validator = ValidatorMinter();
     const policyID = mintingPolicyToId(mintingValidator);
+    const validatorContract = ValidatorContract();
+    const validatorContractAddress = getAddress(ValidatorContract)
+
     const assetUnit = `${policyID}${fromText(projectAssetName)}`;
     const burnedAssets = { [assetUnit]: -1n };
-    const utxos1 = await lucid.utxosAtWithUnit(address, assetUnit);
-    const redeemer = Data.to(1n);
+    const utxosValidator = await lucid.utxosAtWithUnit(validatorContractAddress, assetUnit);
 
+    const redeemerValidator: KarbonRedeemerSpend = {
+      action: "Reject",
+      amount: 0n,
+      oref: { transaction_id: utxosValidator[0].txHash, output_index: BigInt(utxosValidator[0].outputIndex) },
+    }
+    const redeemer = Data.to(1n); // Burn
+
+    console.log(redeemerValidator)
+    console.log(Data.to(redeemerValidator, KarbonRedeemerSpend))
     const tx = await lucid
       .newTx()
-      .collectFrom(utxos1)
+      .collectFrom(utxosValidator, Data.to(redeemerValidator, KarbonRedeemerSpend))
+      .attach.SpendingValidator(validatorContract)
       .mintAssets(burnedAssets, redeemer)
       .attach.MintingPolicy(mintingValidator)
       .complete();
@@ -88,9 +101,9 @@ export default function ProjectLister() {
   }
 
   return (
-    <>
+    <div className="flex space-x-4">
       <Button onClick={listProject}>List Project</Button>
-      <Button onClick={delistProect}>Delist Project</Button>
-    </>
+      <Button onClick={projectReject}>Project Reject</Button>
+    </div>
   );
 }

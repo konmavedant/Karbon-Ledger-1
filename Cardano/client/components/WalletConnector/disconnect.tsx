@@ -19,7 +19,6 @@ export default function DisconnectButton() {
         });
     }
 
-
     async function logContracts() {
         if (!lucid) throw new Error("Lucid not initialized")
         const configValidatorAddress = getAddress(ConfigDatumHolderValidator)
@@ -41,8 +40,8 @@ export default function DisconnectButton() {
     }
 
     async function awaitemulator() {
-        emulator.awaitBlock(5);
-
+        emulator.awaitBlock(1);
+        console.log("Emulator Block Height", emulator.blockHeight)
     }
     return (
         <div className="flex space-x-4">

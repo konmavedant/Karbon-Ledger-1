@@ -1,4 +1,4 @@
-import { Data, WalletApi } from "@lucid-evolution/lucid";
+import { Constr, Data, TLiteral, WalletApi } from "@lucid-evolution/lucid";
 import { Exo } from "next/font/google";
 
 /**
@@ -12,7 +12,45 @@ export type Wallet = {
   isEnabled(): Promise<boolean>;
 };
 
+
+export const OrefSchema = Data.Object({
+  transaction_id: Data.Bytes(),
+  output_index: Data.Integer(),
+});
+
+
+//#region Enum
+export type AcceptRejectAction = "Accept" | "Reject";
+export const AcceptRejectAction = {
+  Accept: {
+    Title: "Accept",
+    Schema: Data.Literal("Accept"),
+    Constr: new Constr(0, []),
+  },
+  Reject: {
+    Title: "Reject",
+    Schema: Data.Literal("Reject"),
+    Constr: new Constr(1, []),
+  },
+};
+export const AcceptRejectActionSchema = Data.Enum([
+  AcceptRejectAction.Accept.Schema,
+  AcceptRejectAction.Reject.Schema,
+]);
+//#endregion
 //#region Redeemer
+
+export const KarbonRedeemerSpendSchema = Data.Object({
+  action: AcceptRejectActionSchema,
+  amount: Data.Integer(),
+  oref: OrefSchema,
+});
+export type KarbonRedeemerSpend = Data.Static<typeof KarbonRedeemerSpendSchema>;
+export const KarbonRedeemerSpend =
+  KarbonRedeemerSpendSchema as unknown as KarbonRedeemerSpend;
+
+
+// ...........................
 
 export const IdentificationRedeemerSchema = Data.Enum([
   Data.Literal("Mint"),
@@ -33,14 +71,7 @@ export const AcceptRedeemerSchema = Data.Enum([
 export type AcceptRedeemer = Data.Static<typeof AcceptRedeemerSchema>;
 export const AcceptRedeemer = AcceptRedeemerSchema as unknown as AcceptRedeemer;
 //----------------------------------------
-export const KarbonRedeemerSpendSchema = Data.Object({
-  action: AcceptRedeemerSchema,
-  amount: Data.Integer(),
-  oref: Data.Bytes(),
-});
-export type KarbonRedeemerSpend = Data.Static<typeof KarbonRedeemerSpendSchema>;
-export const KarbonRedeemerSpend =
-  KarbonRedeemerSpendSchema as unknown as KarbonRedeemerSpend;
+
 //----------------------------------------------
 export const KarbonRedeemerMintSchema = Data.Object({
   action: IdentificationRedeemerSchema,

@@ -48,11 +48,6 @@ export default function EmulatorConnectors() {
         }
     }
 
-    async function emulatorlog() {
-        emulator.awaitBlock(5);
-        emulator.log()
-    }
-
     if (!wallets)
         return (
             <Snippet hideCopyButton hideSymbol variant="bordered">
@@ -88,7 +83,6 @@ export default function EmulatorConnectors() {
                     </>
                 )
             })}
-            <Button onClick={emulatorlog} className="w-fit">Emulator Log</Button>
         </div>
     );
 }
