@@ -46,18 +46,19 @@ export default function Validator_contract() {
 
     const token_name = "water";
     const tokenmintedAssets = {
-      [contractPolicyId + fromText(token_name)]: 100n,
+      [policyID + fromText(token_name)]: 100n,
     };
 
-    const datum: KarbonRedeemerMint = {
-      action: IdentificationRedeemerSchema.Mint,
-      oref: fromText("abc"),
-      amount: 100n,
-    };
+    // const datum: KarbonRedeemerMint = {
+    //   action: IdentificationRedeemerSchema,
+    //   oref: fromText("abc"),
+    //   amount: 100n,
+    // };
     const assestClass: AssetClass = {
       policyid: "",
       asset_name: fromText(""),
     };
+
     const karbondatum: KarbonDatum = {
       developer: paymentCredentialOf(address).hash,
       document: fromText("documentHash"),
@@ -67,8 +68,14 @@ export default function Validator_contract() {
       fees_asset_class: assestClass,
     };
 
+    const Redeemer = {
+      Mint: Data.to(new Constr(0, [])),
+      Burn: Data.to(new Constr(1, [])),
+    };
     const actionConstr = new Constr(0, []);
     const redeemeraction = Data.to(actionConstr);
+
+    console.log("done till setup");
 
     const tx = await lucid
       .newTx()
@@ -83,10 +90,18 @@ export default function Validator_contract() {
         { kind: "inline", value: Data.to(karbondatum, KarbonDatum) },
         { lovelace: 100_000_000n, ...tokenmintedAssets }
       )
-      .mintAssets(mintedAssets, redeemeraction)
-      .mintAssets(tokenmintedAssets, redeemeraction)
+      .mintAssets(
+        mintedAssets,
+        Data.to(IdentificationRedeemerSchema.Mint.Constr)
+      )
+      .mintAssets(
+        tokenmintedAssets,
+        Data.to(IdentificationRedeemerSchema.Mint.Constr)
+      )
       .attach.MintingPolicy(validatorminter)
       .complete();
+
+    console.log("done with tx build");
 
     const signed = await tx.sign.withWallet().complete();
     const txHash = await signed.submit();

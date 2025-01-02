@@ -1,4 +1,4 @@
-import { Data, WalletApi } from "@lucid-evolution/lucid";
+import { Constr, Data, TLiteral, WalletApi } from "@lucid-evolution/lucid";
 import { Exo } from "next/font/google";
 
 /**
@@ -13,17 +13,49 @@ export type Wallet = {
 };
 
 //#region Redeemer
+// export const CampaignActionRedeemer = {
+//   Cancel: Data.to(new Constr(0, [])),
+//   Finish: Data.to(new Constr(1, [])),
+//   Refund: Data.to(new Constr(2, [])),
+// };
 
-export const IdentificationRedeemerSchema = Data.Enum([
-  Data.Literal("Mint"),
-  Data.Literal("Burn"),
-]);
-export type IdentificationRedeemer = Data.Static<
-  typeof IdentificationRedeemerSchema
->;
-export const IdentificationRedeemer =
-  IdentificationRedeemerSchema as unknown as IdentificationRedeemer;
-//------------------------------------------------
+// export const IdentificationRedeemerSchema = {
+//   Mint: Data.to(new Constr(0, [])),
+//   Burn: Data.to(new Constr(1, [])),
+// };
+
+export type IdentificationAction = "Mint" | "Burn";
+
+export const IdentificationRedeemerSchema: Record<
+  IdentificationAction,
+  {
+    Title: IdentificationAction;
+    Schema: TLiteral<IdentificationAction>;
+    Constr: Constr<[]>;
+  }
+> = {
+  Mint: {
+    Title: "Mint",
+    Schema: Data.Literal("Mint"),
+    Constr: new Constr(0, []),
+  },
+  Burn: {
+    Title: "Burn",
+    Schema: Data.Literal("Burn"),
+    Constr: new Constr(1, []),
+  },
+};
+
+// export const IdentificationRedeemerSchema = Data.Enum([
+//   Data.Literal("Mint"),
+//   Data.Literal("Burn"),
+// ]);
+// export type IdentificationRedeemer = Data.Static<
+//   typeof IdentificationRedeemerSchema
+// >;
+// export const IdentificationRedeemer =
+//   IdentificationRedeemerSchema as unknown as IdentificationRedeemer;
+// //------------------------------------------------
 
 export const AcceptRedeemerSchema = Data.Enum([
   Data.Literal("Accept"),
@@ -43,7 +75,10 @@ export const KarbonRedeemerSpend =
   KarbonRedeemerSpendSchema as unknown as KarbonRedeemerSpend;
 //----------------------------------------------
 export const KarbonRedeemerMintSchema = Data.Object({
-  action: IdentificationRedeemerSchema,
+  action: Data.Enum([
+    IdentificationRedeemerSchema.Mint.Schema,
+    IdentificationRedeemerSchema.Burn.Schema,
+  ]),
   oref: Data.Bytes(),
   amount: Data.Integer(),
 });
@@ -97,3 +132,42 @@ export const KarbonDatumSchema = Data.Object({
 export type KarbonDatum = Data.Static<typeof KarbonDatumSchema>;
 export const KarbonDatum = KarbonDatumSchema as unknown as KarbonDatum;
 //----------------------------------------------
+
+///ARIDAY EXPORTS
+// export type CampaignState = "Running" | "Cancelled" | "Finished";
+// export const CampaignState: Record<
+//   CampaignState,
+//   { Title: CampaignState; Schema: TLiteral<CampaignState>; Constr: Constr<[]> }
+// > = {
+//   Running: {
+//     Title: "Running",
+//     Schema: Data.Literal("Running"),
+//     Constr: new Constr(0, []),
+//   },
+//   Cancelled: {
+//     Title: "Cancelled",
+//     Schema: Data.Literal("Cancelled"),
+//     Constr: new Constr(1, []),
+//   },
+//   Finished: {
+//     Title: "Finished",
+//     Schema: Data.Literal("Finished"),
+//     Constr: new Constr(2, []),
+//   },
+// };
+// export const CampaignStateSchema = Data.Enum([
+//   CampaignState.Running.Schema,
+//   CampaignState.Cancelled.Schema,
+//   CampaignState.Finished.Schema,
+// ]);
+
+// export const IdentificationRedeemerSchema = Data.Enum([
+//   Data.Literal("Mint"),
+//   Data.Literal("Burn"),
+// ]);
+
+// export const KarbonRedeemerMintSchema = Data.Object({
+//   action: IdentificationRedeemerSchema,
+//   oref: Data.Bytes(),
+//   amount: Data.Integer(),
+// });
