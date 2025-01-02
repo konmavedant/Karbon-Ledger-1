@@ -1,6 +1,7 @@
 import ConfigDatumHolder from "@/components/transactions/configDatumHolder";
 import Identification from "@/components/transactions/identificationnft";
 import ProjectLister from "@/components/transactions/projectLister";
+import Validator_contract from "@/components/transactions/validatorContractMint";
 import WalletConnector from "@/components/WalletConnector/client";
 import DisconnectButton from "@/components/WalletConnector/disconnect";
 import EmulatorConnector from "@/components/WalletConnector/emulatorClient";
@@ -8,7 +9,7 @@ import { useWallet } from "@/context/walletContext";
 
 export default function Home() {
   const [walletConnection, setWalletConnection] = useWallet();
-  const { address } = walletConnection
+  const { address } = walletConnection;
 
   // if (!address) {
   //   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <Identification />
       <ConfigDatumHolder />
       <ProjectLister />
+      <Validator_contract />
     </div>
   );
 }

@@ -1,5 +1,4 @@
-import { Constr, Data, TLiteral, WalletApi } from "@lucid-evolution/lucid";
-import { Exo } from "next/font/google";
+import { Constr, Data, WalletApi } from "@lucid-evolution/lucid";
 
 /**
  * Wallet type definition
@@ -74,7 +73,10 @@ export const AcceptRedeemer = AcceptRedeemerSchema as unknown as AcceptRedeemer;
 
 //----------------------------------------------
 export const KarbonRedeemerMintSchema = Data.Object({
-  action: IdentificationRedeemerSchema,
+  action: Data.Enum([
+    IdentificationRedeemerSchema.Mint.Schema,
+    IdentificationRedeemerSchema.Burn.Schema,
+  ]),
   oref: Data.Bytes(),
   amount: Data.Integer(),
 });

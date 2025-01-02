@@ -10,7 +10,7 @@ import {
 } from "@lucid-evolution/lucid";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { IdentificationRedeemer } from "@/types/cardano";
+import { IdentificationRedeemerSchema } from "@/types/cardano";
 
 export default function Identification() {
   const [WalletConnection] = useWallet();
@@ -32,7 +32,7 @@ export default function Identification() {
     // const redeemer = Data.to("Mint", IdentificationRedeemer);
     const mint = new Constr(0, []);
     const redeemer = Data.to(mint);
-    console.log(policyID);
+    console.log("policyId: ", policyID);
     const tx = await lucid
       .newTx()
       .collectFrom([utxos[0]])
