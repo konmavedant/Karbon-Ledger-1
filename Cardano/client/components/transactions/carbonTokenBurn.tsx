@@ -2,27 +2,15 @@
 import { ValidatorContract, ValidatorMinter } from "@/config/scripts/scripts";
 import { useWallet } from "@/context/walletContext";
 import {
-  Constr,
   Data,
-  fromHex,
-  fromText,
   mintingPolicyToId,
-  paymentCredentialOf,
-  UTxO,
-  Validator,
 } from "@lucid-evolution/lucid";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { getAddress, multiSignwithPrivateKey, privateKeytoAddress, refUtxo } from "@/libs/utils";
-import { Project } from "next/dist/build/swc/types";
+import { multiSignwithPrivateKey, privateKeytoAddress, refUtxo } from "@/libs/utils";
 import {
-  AssetClass,
-  IdentificationRedeemerSchema,
-  KarbonDatum,
   KarbonRedeemerMint,
 } from "@/types/cardano";
-import { get } from "http";
-import { blake2bHex } from "blakejs";
 
 export default function Validator_contract() {
   const [WalletConnection] = useWallet();
@@ -47,10 +35,7 @@ export default function Validator_contract() {
       return Object.keys(utxo.assets).some(asset => asset.startsWith(policyIDCarbon));
     });
 
-
-
     const refutxo = await refUtxo(lucid);
-
 
     const redeemerValidatorMint: KarbonRedeemerMint = {
       action: "Burn",
@@ -66,7 +51,6 @@ export default function Validator_contract() {
       return acc;
     }, {});
 
-    console.log(carbonBurnAssets);
 
     const tx = await lucid
       .newTx()
@@ -86,7 +70,6 @@ export default function Validator_contract() {
   return (
     <>
       <Button onClick={Burn}>Burn Carbon Tokens</Button>
-      {/* <Button onClick={delistProect}>Delist Project</Button> */}
     </>
   );
 }

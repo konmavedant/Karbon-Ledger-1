@@ -5,8 +5,9 @@ import { Data, fromText, paymentCredentialOf, Script, scriptHashToCredential, Sp
 import React from 'react'
 import { Button } from '../ui/button';
 import { ConfigDatumHolderValidator, identificationPolicyid, ValidatorContract } from '@/config/scripts/scripts';
-import { handleError, privateKeytoAddress } from '@/libs/utils';
+import { getAddress, handleError, multiSignwithPrivateKey, privateKeytoAddress } from '@/libs/utils';
 import { accountB, accountC } from '@/config/emulator';
+import { get } from 'http';
 
 export default function ConfigDatumHolder() {
     const [WalletConnection] = useWallet()
@@ -67,10 +68,33 @@ export default function ConfigDatumHolder() {
         }
     }
 
+    async function withdraw() {
+        if (!lucid) throw new Error("Uninitialized Lucid!!!")
+
+        const configDatumHolder = ConfigDatumHolderValidator();
+        const configDatumHolderAddress = getAddress(ConfigDatumHolderValidator);
+
+        const utxos = await lucid.utxosAt(configDatumHolderAddress)
+        console.log("utxos: ", utxos)
+
+        const tx = await lucid
+            .newTx()
+            .collectFrom(utxos, Data.void())
+            .attach.SpendingValidator(configDatumHolder)
+            .addSigner(await privateKeytoAddress(signer1))
+            .addSigner(await privateKeytoAddress(signer2))
+            .complete();
+
+        const signed = await multiSignwithPrivateKey(tx, [signer1, signer2])
+        const signedd = await signed.sign.withWallet().complete();
+        const txHash = await signedd.submit();
+        console.log("txHash: ", txHash);
+    }
+
     return (
         <div className='flex gap-4'>
             <Button onClick={deposit}>send configDatum</Button>
-            <Button disabled>modify configDatum</Button>
+            <Button onClick={withdraw}>modify configDatum</Button>
         </div>
     )
 }
