@@ -23,7 +23,7 @@ import { accountA, accountC, accountD } from "@/config/emulator";
 export default function ProjectLister() {
   const [WalletConnection] = useWallet();
 
-  const { lucid, address } = WalletConnection;
+  const { lucid, address, wallet } = WalletConnection;
   async function listProject() {
     if (!lucid || !address) throw "Uninitialized Lucid!!!";
 
@@ -47,6 +47,7 @@ export default function ProjectLister() {
       fees_amount: 100_000_000n,
       fees_asset_class: assestClass,
     };
+    console.log(await lucid.wallet().address())
     const tx = await lucid
       .newTx()
       .readFrom(refutxo)
@@ -88,6 +89,7 @@ export default function ProjectLister() {
       oref: { transaction_id: utxosValidator[0].txHash, output_index: BigInt(utxosValidator[0].outputIndex) },
     }
     const redeemer = Data.to(1n); // Burn
+    console.log(await lucid.wallet().address())
 
     const tx = await lucid
       .newTx()
@@ -99,11 +101,13 @@ export default function ProjectLister() {
       .addSigner("addr_test1vzuutq4g88kqshaexh8y06pmasz6njjf7nnadlau9hqyd9ce9yug6")
       .complete();
 
-    lucid.selectWallet.fromSeed(accountC.seedPhrase);
+    // const api = await wallet?.enable();
+    // const sig = await api?.signTx(tx as unknown as string, true);
+    // const txhash = api?.submitTx(sig as string);
     // const signed = await tx.sign.withWallet().complete();
-    // const signed = await tx.sign.withWallet();
 
-    const signedd = await signBY(tx)
+    const signed = await tx.sign.withWallet();
+    const signedd = await signBY(signed)
     const txHash = await signedd.submit();
     console.log("txHash: ", txHash);
 
@@ -114,10 +118,7 @@ export default function ProjectLister() {
     const a1 = "addr_test1vzuutq4g88kqshaexh8y06pmasz6njjf7nnadlau9hqyd9ce9yug6"
     const p2 = "ed25519_sk1x00twfzxx355x8wchng0k94aamf4sgjhjj7k9y3qm0sxwg972c8qfq8wkm"
     const a2 = "addr_test1vr4wvwxytjnp4c569es5a3yethaxxf2y3j5kxyw30hv978q2xmcx2"
-    if (!lucid) throw "Uninitialized Lucid!!!";
-    lucid.selectWallet.fromPrivateKey(p1)
     const signed = await tx.sign.withPrivateKey(p1).complete();
-    // const signed = await tx.sign.withWallet().complete();
     return signed
   }
 
