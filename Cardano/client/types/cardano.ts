@@ -19,6 +19,27 @@ export const OrefSchema = Data.Object({
 
 
 //#region Enum
+export type Action = "Mint" | "Burn";
+export const Action = {
+  Mint: {
+    Title: "Mint",
+    Schema: Data.Literal("Mint"),
+    Constr: new Constr(0, []),
+  },
+  Burn: {
+    Title: "Burn",
+    Schema: Data.Literal("Burn"),
+    Constr: new Constr(1, []),
+  },
+};
+export const ActionSchema = Data.Enum([
+  Action.Mint.Schema,
+  Action.Burn.Schema,
+]);
+
+
+
+
 export type AcceptRejectAction = "Accept" | "Reject";
 export const AcceptRejectAction = {
   Accept: {
@@ -49,6 +70,16 @@ export const KarbonRedeemerSpend =
   KarbonRedeemerSpendSchema as unknown as KarbonRedeemerSpend;
 
 
+
+
+export const KarbonRedeemerMintSchema = Data.Object({
+  action: ActionSchema,
+  amount: Data.Integer(),
+  oref: OrefSchema,
+});
+export type KarbonRedeemerMint = Data.Static<typeof KarbonRedeemerMintSchema>;
+export const KarbonRedeemerMint =
+  KarbonRedeemerMintSchema as unknown as KarbonRedeemerMint;
 // ...........................
 
 export const IdentificationRedeemerSchema = Data.Enum([
@@ -72,15 +103,7 @@ export const AcceptRedeemer = AcceptRedeemerSchema as unknown as AcceptRedeemer;
 //----------------------------------------
 
 //----------------------------------------------
-export const KarbonRedeemerMintSchema = Data.Object({
-  action: IdentificationRedeemerSchema,
-  oref: Data.Bytes(),
-  amount: Data.Integer(),
-});
 
-export type KarbonRedeemerMint = Data.Static<typeof KarbonRedeemerMintSchema>;
-export const KarbonRedeemerMint =
-  KarbonRedeemerMintSchema as unknown as KarbonRedeemerMint;
 //#endregion
 
 //#region Datum

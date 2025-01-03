@@ -2,6 +2,7 @@
 import { ValidatorContract, ValidatorMinter } from "@/config/scripts/scripts";
 import { useWallet } from "@/context/walletContext";
 import {
+  Constr,
   Data,
   fromText,
   mintingPolicyToId,
@@ -11,12 +12,12 @@ import {
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { getAddress, multiSignwithPrivateKey, privateKeytoAddress, refUtxo } from "@/libs/utils";
-import { AssetClass, KarbonDatum, KarbonRedeemerSpend } from "@/types/cardano";
-import { accountA } from "@/config/emulator";
+import { AssetClass, KarbonDatum, KarbonRedeemerMint, KarbonRedeemerSpend } from "@/types/cardano";
 
 export default function ProjectLister() {
   const [WalletConnection] = useWallet();
-  const { lucid, address, wallet } = WalletConnection;
+  const { lucid, address } = WalletConnection;
+
   let signer1 = process.env.NEXT_PUBLIC_SIGNER_1 as string;
   let signer2 = process.env.NEXT_PUBLIC_SIGNER_2 as string;
   let signer3 = process.env.NEXT_PUBLIC_SIGNER_3 as string;
@@ -96,21 +97,90 @@ export default function ProjectLister() {
       .addSigner(await privateKeytoAddress(signer2))
       .complete();
 
-    // const api = await wallet?.enable();
-    // const sig = await api?.signTx(tx as unknown as string, true);
-    // const txhash = api?.submitTx(sig as string);
-    // const signed = await tx.sign.withWallet().complete();
-
     const signed = await multiSignwithPrivateKey(tx, [signer1, signer2])
     const signedd = await signed.sign.withWallet().complete();
     const txHash = await signedd.submit();
     console.log("txHash: ", txHash);
   }
 
+
+  async function ProjectAccept() {
+    if (!lucid) throw "Uninitialized Lucid!!!";
+    if (!address) throw "Wallet Not Connected";
+
+    const projectAssetName = "ProjectTitle";
+
+    const mintingValidator: Validator = ValidatorMinter();
+    const policyIDMinter = mintingPolicyToId(mintingValidator);
+
+    const validatorContract = ValidatorContract();
+    const validatorContractAddress = getAddress(ValidatorContract)
+    const policyIDCarbon = mintingPolicyToId(validatorContract);
+
+    const assetUnit = `${policyIDMinter}${fromText(projectAssetName)}`;
+    const burnedAssets = { [assetUnit]: -1n };
+
+    // const carbonAssetUnit = `${policyIDCarbon}${fromText(projectAssetName)}`;
+    const carbonMintAssets = { [policyIDCarbon + fromText(projectAssetName)]: 1n };
+
+
+    const utxosValidator = await lucid.utxosAtWithUnit(validatorContractAddress, assetUnit);
+    const refutxo = await refUtxo(lucid);
+
+
+    const redeemer = {
+      amount: 100n,
+      oref: { transaction_id: utxosValidator[0].txHash, output_index: BigInt(utxosValidator[0].outputIndex) },
+    }
+    const redeemerValidatorSpend: KarbonRedeemerSpend = {
+      action: "Accept",
+      ...redeemer
+    }
+    const redeemerValidatorMint: KarbonRedeemerMint = {
+      action: "Mint",
+      ...redeemer
+    }
+    const validatorMinterRedeemer = Data.to(1n); // Burn
+
+    // mint carbon tokens
+    // minted token to developer
+    // DONE: burn validatorMinter NFT
+    // DONE: multisig sign
+    // DONE: mintredeemer.action = Mint
+    // DONE: mintredeemer.oref = utxo from script
+    // DONE: spendredeemer.action = Mint
+    // DONE: spendredeemer.oref = utxo from script
+    const tx = await lucid
+      .newTx()
+      .readFrom(refutxo) // correct
+      .collectFrom(utxosValidator, Data.to(redeemerValidatorSpend, KarbonRedeemerSpend))
+      // .pay.ToAddress(address, { ...carbonMintAssets, lovelace: 100n })
+      .attach.SpendingValidator(validatorContract) //correct
+      // .mintAssets(carbonMintAssets, Data.to(redeemerValidatorMint, KarbonRedeemerMint))
+      .attach.MintingPolicy(validatorContract) //correct
+      .mintAssets(burnedAssets, validatorMinterRedeemer) //correct
+      .attach.MintingPolicy(mintingValidator) //correct
+      .addSigner(await privateKeytoAddress(signer1)) //correct
+      .addSigner(await privateKeytoAddress(signer2)) //correct
+      .complete();
+
+    const signed = await multiSignwithPrivateKey(tx, [signer1, signer2])
+    const signedd = await signed.sign.withWallet().complete();
+    const txHash = await signedd.submit();
+    console.log("txHash: ", txHash);
+
+    const oRef = new Constr(0, [String(utxosValidator[0].txHash), BigInt(utxosValidator[0].outputIndex)]);
+    const oRefCBOR = Data.to(oRef);
+
+    // const assetName = blake2bHex(fromHex(oRefCBOR), undefined, 32);
+
+
+  }
   return (
     <div className="flex space-x-4">
       <Button onClick={listProject}>List Project</Button>
       <Button onClick={projectReject}>Project Reject</Button>
+      <Button onClick={ProjectAccept}>Project Accept</Button>
     </div>
   );
 }
