@@ -2,7 +2,7 @@ use aiken/cbor
 use aiken/collection/dict
 use aiken/collection/list
 use aiken/crypto.{VerificationKeyHash}
-use cardano/address.{Address, from_verification_key, VerificationKey, Script}
+use cardano/address.{Address, Script, VerificationKey, from_verification_key}
 use cardano/assets.{AssetName, PolicyId, Value}
 use cardano/transaction.{InlineDatum,
   Input, Output, OutputReference, find_input}
@@ -29,7 +29,7 @@ pub fn must_burn_token(mint: Value, policy_id: PolicyId) -> Bool {
     mint
       |> assets.tokens(policy_id)
       |> dict.to_pairs()
-  (qty <= 0)?
+  (qty < 0)?
 }
 
 pub fn must_burn_less_than_0(mint: Value, policy_id: PolicyId) -> Bool {
@@ -39,7 +39,13 @@ pub fn must_burn_less_than_0(mint: Value, policy_id: PolicyId) -> Bool {
       |> assets.tokens(policy_id)
       |> dict.to_pairs()
 
-  list.all(values, fn(Pair(_, amount)) { amount < 0 })
+  list.all(
+    values,
+    fn(Pair(_, amount)) {
+      trace @"amount": amount
+      amount < 0
+    },
+  )
 }
 
 pub fn find_ref_config_datum_with_config_nft(
@@ -70,10 +76,9 @@ pub fn must_send_fees_to_address(
     outputs,
     fn(output) {
       and {
-        (when output.address.payment_credential is {
-                Script(vkh) | VerificationKey(vkh) -> {
-                  vkh == ref_datum.fees_address}
-              })?,
+        when output.address.payment_credential is {
+          Script(vkh) | VerificationKey(vkh) -> vkh == ref_datum.fees_address
+        }?,
         (assets.quantity_of(output.value, policy_id, asset_name) == ref_datum.fees_amount)?,
       }
     },
@@ -105,13 +110,18 @@ pub fn funds_sent_to_developer(
   let KarbonDatum { developer, .. } = datum
   let KarbonRedeemerSpend { amount, oref, .. } = redeemer
   expect Some(output) =
-    list.find(outputs, fn(output) { 
-      when output.address.payment_credential is {
-                VerificationKey(vkh) -> {
-                  vkh == developer}
-                _ -> False
-              } })
-  (assets.quantity_of(output.value, policy_id, token_name_oref(oref)) == amount)?
+    list.find(
+      outputs,
+      fn(output) {
+        when output.address.payment_credential is {
+          VerificationKey(vkh) -> vkh == developer
+          _ -> False
+        }
+      },
+    )
+
+  let temp = assets.quantity_of(output.value, policy_id, token_name_oref(oref))
+  (temp == amount)?
 }
 
 pub fn must_mint_tokens(

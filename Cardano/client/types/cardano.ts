@@ -93,13 +93,13 @@ export const IdentificationRedeemer =
   IdentificationRedeemerSchema as unknown as IdentificationRedeemer;
 //------------------------------------------------
 
-export const AcceptRedeemerSchema = Data.Enum([
-  Data.Literal("Accept"),
-  Data.Literal("Reject"),
-]);
+// export const AcceptRedeemerSchema = Data.Enum([
+//   Data.Literal("Accept"),
+//   Data.Literal("Reject"),
+// ]);
 
-export type AcceptRedeemer = Data.Static<typeof AcceptRedeemerSchema>;
-export const AcceptRedeemer = AcceptRedeemerSchema as unknown as AcceptRedeemer;
+// export type AcceptRedeemer = Data.Static<typeof AcceptRedeemerSchema>;
+// export const AcceptRedeemer = AcceptRedeemerSchema as unknown as AcceptRedeemer;
 //----------------------------------------
 
 //----------------------------------------------

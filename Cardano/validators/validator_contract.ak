@@ -1,5 +1,5 @@
 use aiken/collection/list
-use cardano/address.{Script, from_verification_key, VerificationKey}
+use cardano/address.{Script, VerificationKey, from_verification_key}
 use cardano/assets.{PolicyId}
 use cardano/transaction.{
   InlineDatum, Output, OutputReference, Transaction, find_input,
@@ -70,7 +70,7 @@ validator validator_contract(
 
         and {
           must_have_asset_and_burn(
-            oref_input.output.value,
+            mint,
             validator_contract_mint,
           ),
           must_mint_tokens(mint, policy_id, redeemer),
@@ -85,7 +85,7 @@ validator validator_contract(
             extra_signatories,
             ref_datum.multisig_validator_group,
           ),
-          must_burn_token(mint, policy_id),
+          must_burn_less_than_0(mint, policy_id),
         }
     }
   }
@@ -118,16 +118,15 @@ validator validator_contract_mint(config_nft: PolicyId) {
         expect [script_output] =
           list.filter(
             outputs,
-            fn(output) { 
+            fn(output) {
               when output.address.payment_credential is {
-                Script(vkh) -> {
-                  vkh == ref_datum.spend_address}
+                Script(vkh) -> vkh == ref_datum.spend_address
                 _ -> False
               }
-              // got error while doing this
-              // output.address == from_verification_key(ref_datum.spend_address)
-              },
+            },
           )
+        // got error while doing this
+        // output.address == from_verification_key(ref_datum.spend_address)
         expect InlineDatum(script_data) = script_output.datum
         expect script_datum: KarbonDatum = script_data
 

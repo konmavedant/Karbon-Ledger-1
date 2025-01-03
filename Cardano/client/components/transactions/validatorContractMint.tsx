@@ -4,14 +4,16 @@ import { useWallet } from "@/context/walletContext";
 import {
   Constr,
   Data,
+  fromHex,
   fromText,
   mintingPolicyToId,
   paymentCredentialOf,
+  UTxO,
   Validator,
 } from "@lucid-evolution/lucid";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { getAddress, refUtxo } from "@/libs/utils";
+import { getAddress, multiSignwithPrivateKey, privateKeytoAddress, refUtxo } from "@/libs/utils";
 import { Project } from "next/dist/build/swc/types";
 import {
   AssetClass,
@@ -20,97 +22,70 @@ import {
   KarbonRedeemerMint,
 } from "@/types/cardano";
 import { get } from "http";
+import { blake2bHex } from "blakejs";
 
 export default function Validator_contract() {
   const [WalletConnection] = useWallet();
-
   const { lucid, address } = WalletConnection;
-  async function validatormint() {
-    if (!lucid || !address) throw "Uninitialized Lucid!!!";
-    //----------minter validtor--------------------
-    const validatorContractAddress = getAddress(ValidatorContract);
-    const mintingValidator: Validator = ValidatorMinter();
-    const policyID = mintingPolicyToId(mintingValidator);
-    //------------------------------------------------------
-    //-------------------validator contract------------------------------
-    const validatorminter: Validator = ValidatorContract();
-    const contractPolicyId = mintingPolicyToId(validatorminter);
-    //--------------------------------------------------------
 
-    console.log("policyID", policyID);
-    console.log("contractPolicyId", contractPolicyId);
 
-    const projectAssetName = "ProjectTitle";
-    const mintedAssets = { [policyID + fromText(projectAssetName)]: -1n };
+  let signer1 = process.env.NEXT_PUBLIC_SIGNER_1 as string;
+  let signer2 = process.env.NEXT_PUBLIC_SIGNER_2 as string;
+  let signer3 = process.env.NEXT_PUBLIC_SIGNER_3 as string;
+
+  async function Burn() {
+    if (!lucid) throw "Uninitialized Lucid!!!";
+    if (!address) throw "Wallet Not Connected";
+
+
+
+    const validatorContract = ValidatorContract();
+    const policyIDCarbon = mintingPolicyToId(validatorContract);
+
+    const utxos = await lucid.utxosAt(address)
+    const utxosWithToken = utxos.filter(utxo => {
+      return Object.keys(utxo.assets).some(asset => asset.startsWith(policyIDCarbon));
+    });
+
+
+
     const refutxo = await refUtxo(lucid);
 
-    const token_name = "water";
-    const tokenmintedAssets = {
-      [policyID + fromText(token_name)]: 100n,
-    };
 
-    // const datum: KarbonRedeemerMint = {
-    //   action: IdentificationRedeemerSchema,
-    //   oref: fromText("abc"),
-    //   amount: 100n,
-    // };
-    const assestClass: AssetClass = {
-      policyid: "",
-      asset_name: fromText(""),
-    };
+    const redeemerValidatorMint: KarbonRedeemerMint = {
+      action: "Burn",
+      amount: 0n,
+      oref: { transaction_id: utxosWithToken[0].txHash, output_index: BigInt(utxosWithToken[0].outputIndex) },
+    }
+    const carbonBurnAssets: { [key: string]: bigint } = utxosWithToken.reduce((acc: { [key: string]: bigint }, utxo) => {
+      Object.entries(utxo.assets).forEach(([key, qty]) => {
+        if (key.startsWith(policyIDCarbon)) {
+          acc[key] = -qty;
+        }
+      });
+      return acc;
+    }, {});
 
-    const karbondatum: KarbonDatum = {
-      developer: paymentCredentialOf(address).hash,
-      document: fromText("documentHash"),
-      categories: fromText("forest"),
-      asset_name: fromText(projectAssetName),
-      fees_amount: 100_000_000n,
-      fees_asset_class: assestClass,
-    };
-
-    const Redeemer = {
-      Mint: Data.to(new Constr(0, [])),
-      Burn: Data.to(new Constr(1, [])),
-    };
-    const actionConstr = new Constr(0, []);
-    const redeemeraction = Data.to(actionConstr);
-
-    console.log("done till setup");
+    console.log(carbonBurnAssets);
 
     const tx = await lucid
       .newTx()
-      .readFrom(refutxo)
-      //   .pay.ToAddressWithData(
-      //     validatorContractAddress,
-      //     { kind: "inline", value: Data.to(0n) },
-      //     { lovelace: 5_000_000n, ...mintedAssets }
-      //   )
-      .pay.ToAddressWithData(
-        address,
-        { kind: "inline", value: Data.to(karbondatum, KarbonDatum) },
-        { lovelace: 100_000_000n, ...tokenmintedAssets }
-      )
-      .mintAssets(
-        mintedAssets,
-        Data.to(IdentificationRedeemerSchema.Mint.Constr)
-      )
-      .mintAssets(
-        tokenmintedAssets,
-        Data.to(IdentificationRedeemerSchema.Mint.Constr)
-      )
-      .attach.MintingPolicy(validatorminter)
+      .readFrom(refutxo) // correct
+      .mintAssets(carbonBurnAssets, Data.to(redeemerValidatorMint, KarbonRedeemerMint))
+      .attach.MintingPolicy(validatorContract) //correct
+      .addSigner(await privateKeytoAddress(signer1)) //correct
+      .addSigner(await privateKeytoAddress(signer2)) //correct
       .complete();
 
-    console.log("done with tx build");
-
-    const signed = await tx.sign.withWallet().complete();
-    const txHash = await signed.submit();
+    const signed = await multiSignwithPrivateKey(tx, [signer1, signer2])
+    const signedd = await signed.sign.withWallet().complete();
+    const txHash = await signedd.submit();
     console.log("txHash: ", txHash);
   }
 
   return (
     <>
-      <Button onClick={validatormint}>Validator minter</Button>
+      <Button onClick={Burn}>Burn Carbon Tokens</Button>
       {/* <Button onClick={delistProect}>Delist Project</Button> */}
     </>
   );
