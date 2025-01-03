@@ -1,8 +1,8 @@
 // import { toast } from "react-toastify";
 
-import { NETWORK } from "@/config/lucid";
+import { NETWORK, provider } from "@/config/lucid";
 import { ConfigDatumHolderValidator, identificationPolicyid } from "@/config/scripts/scripts";
-import { fromText, LucidEvolution, mintingPolicyToId, Script, Validator, validatorToAddress } from "@lucid-evolution/lucid";
+import { fromText, LucidEvolution, makeWalletFromPrivateKey, mintingPolicyToId, Script, TxSignBuilder, Validator, validatorToAddress } from "@lucid-evolution/lucid";
 
 export async function req(path: string, req?: RequestInit) {
     const rsp = await fetch(path, { ...req, cache: "no-cache" });
@@ -84,4 +84,15 @@ export async function refUtxo(lucid: LucidEvolution) {
     }); // replace with lucid.findUtxowithUnit()
 
     return utxoWithIdentificationToken;
+}
+
+
+export async function privateKeytoAddress(privateKey: string) {
+    const privateeyAddress = await makeWalletFromPrivateKey(provider, NETWORK, privateKey).address();
+    return privateeyAddress;
+}
+
+async function signwithprivatekey(tx: TxSignBuilder, privateKey: string) {
+    const signed = await tx.sign.withPrivateKey(privateKey);
+    return signed
 }

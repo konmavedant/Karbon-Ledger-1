@@ -1,11 +1,11 @@
 import { NETWORK } from '@/config/lucid';
 import { useWallet } from '@/context/walletContext'
 import { AssetClass, ConfigDatum, Multisig } from '@/types/cardano';
-import { Data, fromText, mintingPolicyToId, paymentCredentialOf, Script, scriptHashToCredential, SpendingValidator, Validator, validatorToAddress, validatorToScriptHash } from '@lucid-evolution/lucid';
+import { Data, fromText, paymentCredentialOf, Script, scriptHashToCredential, SpendingValidator, Validator, validatorToAddress, validatorToScriptHash } from '@lucid-evolution/lucid';
 import React from 'react'
 import { Button } from '../ui/button';
 import { ConfigDatumHolderValidator, identificationPolicyid, ValidatorContract } from '@/config/scripts/scripts';
-import { handleError } from '@/libs/utils';
+import { handleError, privateKeytoAddress } from '@/libs/utils';
 import { accountB, accountC } from '@/config/emulator';
 
 export default function ConfigDatumHolder() {
@@ -27,10 +27,11 @@ export default function ConfigDatumHolder() {
                 asset_name: fromText(""),
             }
             const signer: Multisig = {
-                required: 1n,
+                required: 2n,
                 signers: [
-                    paymentCredentialOf("addr_test1vzuutq4g88kqshaexh8y06pmasz6njjf7nnadlau9hqyd9ce9yug6").hash,
-                    paymentCredentialOf("addr_test1vr4wvwxytjnp4c569es5a3yethaxxf2y3j5kxyw30hv978q2xmcx2").hash,
+                    paymentCredentialOf(await privateKeytoAddress(process.env.NEXT_PUBLIC_SIGNER_1 as string)).hash,
+                    paymentCredentialOf(await privateKeytoAddress(process.env.NEXT_PUBLIC_SIGNER_2 as string)).hash,
+                    paymentCredentialOf(await privateKeytoAddress(process.env.NEXT_PUBLIC_SIGNER_3 as string)).hash,
                 ],
             }
             // scriptHashToCredential

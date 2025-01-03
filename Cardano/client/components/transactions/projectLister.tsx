@@ -6,6 +6,7 @@ import {
   Data,
   fromText,
   generatePrivateKey,
+  makeWalletFromPrivateKey,
   mintingPolicyToId,
   OutRef,
   paymentCredentialOf,
@@ -14,11 +15,12 @@ import {
 } from "@lucid-evolution/lucid";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { getAddress, refUtxo } from "@/libs/utils";
+import { getAddress, privateKeytoAddress, refUtxo } from "@/libs/utils";
 import { Project } from "next/dist/build/swc/types";
 import { AssetClass, KarbonDatum, KarbonRedeemerSpend } from "@/types/cardano";
 import { get } from "http";
 import { accountA, accountC, accountD } from "@/config/emulator";
+import { NETWORK, provider } from "@/config/lucid";
 
 export default function ProjectLister() {
   const [WalletConnection] = useWallet();
@@ -26,7 +28,6 @@ export default function ProjectLister() {
   const { lucid, address, wallet } = WalletConnection;
   async function listProject() {
     if (!lucid || !address) throw "Uninitialized Lucid!!!";
-
     const validatorContractAddress = getAddress(ValidatorContract);
     const mintingValidator: Validator = ValidatorMinter();
     const policyID = mintingPolicyToId(mintingValidator);
@@ -47,7 +48,7 @@ export default function ProjectLister() {
       fees_amount: 100_000_000n,
       fees_asset_class: assestClass,
     };
-    console.log(await lucid.wallet().address())
+
     const tx = await lucid
       .newTx()
       .readFrom(refutxo)
@@ -89,7 +90,6 @@ export default function ProjectLister() {
       oref: { transaction_id: utxosValidator[0].txHash, output_index: BigInt(utxosValidator[0].outputIndex) },
     }
     const redeemer = Data.to(1n); // Burn
-    console.log(await lucid.wallet().address())
 
     const tx = await lucid
       .newTx()
@@ -98,7 +98,7 @@ export default function ProjectLister() {
       .attach.SpendingValidator(validatorContract)
       .mintAssets(burnedAssets, redeemer)
       .attach.MintingPolicy(mintingValidator)
-      .addSigner("addr_test1vzuutq4g88kqshaexh8y06pmasz6njjf7nnadlau9hqyd9ce9yug6")
+      .addSigner(await privateKeytoAddress(process.env.NEXT_PUBLIC_SIGNER_1 as string))
       .complete();
 
     // const api = await wallet?.enable();
@@ -106,19 +106,16 @@ export default function ProjectLister() {
     // const txhash = api?.submitTx(sig as string);
     // const signed = await tx.sign.withWallet().complete();
 
-    const signed = await tx.sign.withWallet();
-    const signedd = await signBY(signed)
+    const signed = await signBY(tx)
+    const signedd = await signed.sign.withWallet().complete();
     const txHash = await signedd.submit();
     console.log("txHash: ", txHash);
-
   }
 
   async function signBY(tx: TxSignBuilder) {
-    const p1 = "ed25519_sk1c8k4pg4xrhhzks2vtjhp6ur5v7dle8j9h0uk4aafxuy3ryezalqq4h7efx"
-    const a1 = "addr_test1vzuutq4g88kqshaexh8y06pmasz6njjf7nnadlau9hqyd9ce9yug6"
-    const p2 = "ed25519_sk1x00twfzxx355x8wchng0k94aamf4sgjhjj7k9y3qm0sxwg972c8qfq8wkm"
-    const a2 = "addr_test1vr4wvwxytjnp4c569es5a3yethaxxf2y3j5kxyw30hv978q2xmcx2"
-    const signed = await tx.sign.withPrivateKey(p1).complete();
+    const p1 = process.env.NEXT_PUBLIC_SIGNER_1 as string
+    console.log(p1)
+    const signed = await tx.sign.withPrivateKey(p1);
     return signed
   }
 
