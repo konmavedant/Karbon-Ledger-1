@@ -2,30 +2,24 @@
 import { ValidatorContract, ValidatorMinter } from "@/config/scripts/scripts";
 import { useWallet } from "@/context/walletContext";
 import {
-  Constr,
   Data,
   fromText,
-  generatePrivateKey,
-  makeWalletFromPrivateKey,
   mintingPolicyToId,
-  OutRef,
   paymentCredentialOf,
-  TxSignBuilder,
   Validator,
 } from "@lucid-evolution/lucid";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { getAddress, privateKeytoAddress, refUtxo } from "@/libs/utils";
-import { Project } from "next/dist/build/swc/types";
+import { getAddress, multiSignwithPrivateKey, privateKeytoAddress, refUtxo } from "@/libs/utils";
 import { AssetClass, KarbonDatum, KarbonRedeemerSpend } from "@/types/cardano";
-import { get } from "http";
-import { accountA, accountC, accountD } from "@/config/emulator";
-import { NETWORK, provider } from "@/config/lucid";
+import { accountA } from "@/config/emulator";
 
 export default function ProjectLister() {
   const [WalletConnection] = useWallet();
-
   const { lucid, address, wallet } = WalletConnection;
+  let signer1 = process.env.NEXT_PUBLIC_SIGNER_1 as string;
+  let signer2 = process.env.NEXT_PUBLIC_SIGNER_2 as string;
+  let signer3 = process.env.NEXT_PUBLIC_SIGNER_3 as string;
   async function listProject() {
     if (!lucid || !address) throw "Uninitialized Lucid!!!";
     const validatorContractAddress = getAddress(ValidatorContract);
@@ -57,7 +51,7 @@ export default function ProjectLister() {
         { kind: "inline", value: Data.to(datum, KarbonDatum) },
         { lovelace: 5_000_000n, ...mintedAssets }
       )
-      .pay.ToAddress(accountA.address, { lovelace: 100_000_000n }) //address should be fee address
+      .pay.ToAddress(await privateKeytoAddress(signer3), { lovelace: 100_000_000n }) //address should be fee address
       .mintAssets(mintedAssets, redeemer)
       .attach.MintingPolicy(mintingValidator)
       .complete();
@@ -98,7 +92,8 @@ export default function ProjectLister() {
       .attach.SpendingValidator(validatorContract)
       .mintAssets(burnedAssets, redeemer)
       .attach.MintingPolicy(mintingValidator)
-      .addSigner(await privateKeytoAddress(process.env.NEXT_PUBLIC_SIGNER_1 as string))
+      .addSigner(await privateKeytoAddress(signer1))
+      .addSigner(await privateKeytoAddress(signer2))
       .complete();
 
     // const api = await wallet?.enable();
@@ -106,17 +101,10 @@ export default function ProjectLister() {
     // const txhash = api?.submitTx(sig as string);
     // const signed = await tx.sign.withWallet().complete();
 
-    const signed = await signBY(tx)
+    const signed = await multiSignwithPrivateKey(tx, [signer1, signer2])
     const signedd = await signed.sign.withWallet().complete();
     const txHash = await signedd.submit();
     console.log("txHash: ", txHash);
-  }
-
-  async function signBY(tx: TxSignBuilder) {
-    const p1 = process.env.NEXT_PUBLIC_SIGNER_1 as string
-    console.log(p1)
-    const signed = await tx.sign.withPrivateKey(p1);
-    return signed
   }
 
   return (

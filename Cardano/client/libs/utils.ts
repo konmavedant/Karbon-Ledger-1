@@ -92,7 +92,15 @@ export async function privateKeytoAddress(privateKey: string) {
     return privateeyAddress;
 }
 
-async function signwithprivatekey(tx: TxSignBuilder, privateKey: string) {
+export async function multiSignwithPrivateKey(tx: TxSignBuilder, privateKeys: string[]) {
+    let signed = tx;
+    for (const privateKey of privateKeys) {
+        signed = await signWithPrivateKey(signed, privateKey);
+    }
+    return signed
+
+}
+export async function signWithPrivateKey(tx: TxSignBuilder, privateKey: string) {
     const signed = await tx.sign.withPrivateKey(privateKey);
     return signed
 }

@@ -12,6 +12,10 @@ export default function ConfigDatumHolder() {
     const [WalletConnection] = useWallet()
     const { lucid, address } = WalletConnection
 
+    let signer1 = process.env.NEXT_PUBLIC_SIGNER_1 as string;
+    let signer2 = process.env.NEXT_PUBLIC_SIGNER_2 as string;
+    let signer3 = process.env.NEXT_PUBLIC_SIGNER_3 as string;
+
     async function deposit() {
         if (!lucid || !address) throw "Uninitialized Lucid!!!";
         try {
@@ -29,15 +33,15 @@ export default function ConfigDatumHolder() {
             const signer: Multisig = {
                 required: 2n,
                 signers: [
-                    paymentCredentialOf(await privateKeytoAddress(process.env.NEXT_PUBLIC_SIGNER_1 as string)).hash,
-                    paymentCredentialOf(await privateKeytoAddress(process.env.NEXT_PUBLIC_SIGNER_2 as string)).hash,
-                    paymentCredentialOf(await privateKeytoAddress(process.env.NEXT_PUBLIC_SIGNER_3 as string)).hash,
+                    paymentCredentialOf(await privateKeytoAddress(signer1)).hash,
+                    paymentCredentialOf(await privateKeytoAddress(signer2)).hash,
+                    paymentCredentialOf(await privateKeytoAddress(signer3)).hash,
                 ],
             }
             // scriptHashToCredential
             console.log("validatorhash", paymentCredentialOf(validatorContractAddress).hash)
             const datum: ConfigDatum = {
-                fees_address: paymentCredentialOf(address).hash,
+                fees_address: paymentCredentialOf(await privateKeytoAddress(signer3)).hash,
                 fees_amount: 100_000_000n,
                 fees_asset_class: assestClass, // need verification form sourabh
                 spend_address: paymentCredentialOf(validatorContractAddress).hash, // need verification form sourabh (how to pass address directly?)
