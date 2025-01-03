@@ -5,7 +5,6 @@ import {
   Constr,
   Data,
   fromHex,
-  fromHex,
   fromText,
   mintingPolicyToId,
   paymentCredentialOf,
