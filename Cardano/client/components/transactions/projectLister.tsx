@@ -12,8 +12,18 @@ import {
 } from "@lucid-evolution/lucid";
 import React from "react";
 import { Button } from "@/components/ui/button";
-import { getAddress, multiSignwithPrivateKey, privateKeytoAddress, refUtxo } from "@/libs/utils";
-import { AssetClass, KarbonDatum, KarbonRedeemerMint, KarbonRedeemerSpend } from "@/types/cardano";
+import {
+  getAddress,
+  multiSignwithPrivateKey,
+  privateKeytoAddress,
+  refUtxo,
+} from "@/libs/utils";
+import {
+  AssetClass,
+  KarbonDatum,
+  KarbonRedeemerMint,
+  KarbonRedeemerSpend,
+} from "@/types/cardano";
 import { blake2bHex } from "blakejs";
 
 export default function ProjectLister() {
@@ -63,7 +73,10 @@ export default function ProjectLister() {
 
     const signed = await tx.sign.withWallet().complete();
     const txHash = await signed.submit();
+    console.log("-----------ProjectLister---------");
     console.log("txHash: ", txHash);
+    console.log("assetname: ", projectAssetName);
+    console.log("policyID+AssetName: ", mintedAssets);
   }
 
   async function projectReject() {
@@ -112,7 +125,11 @@ export default function ProjectLister() {
     const signed = await multiSignwithPrivateKey(tx, [signer1, signer2]);
     const signedd = await signed.sign.withWallet().complete();
     const txHash = await signedd.submit();
+
+    console.log("-----------ProjectReject---------");
     console.log("txHash: ", txHash);
+    console.log("assetname: ", projectAssetName);
+    console.log("policyID+AssetName: ", burnedAssets);
   }
 
   async function ProjectAccept() {
@@ -130,7 +147,6 @@ export default function ProjectLister() {
 
     const assetUnit = `${policyIDMinter}${fromText(projectAssetName)}`;
     const burnedAssets = { [assetUnit]: -1n };
-
 
     const utxosValidator = await lucid.utxosAtWithUnit(
       validatorContractAddress,
@@ -153,11 +169,17 @@ export default function ProjectLister() {
     const redeemerValidatorMint: KarbonRedeemerMint = {
       action: "Mint",
       amount: 100n,
-      oref: { transaction_id: utxosValidator[0].txHash, output_index: BigInt(utxosValidator[0].outputIndex) },
-    }
+      oref: {
+        transaction_id: utxosValidator[0].txHash,
+        output_index: BigInt(utxosValidator[0].outputIndex),
+      },
+    };
     const validatorMinterRedeemer = Data.to(1n); // Burn
 
-    const oRef = new Constr(0, [String(utxosValidator[0].txHash), BigInt(utxosValidator[0].outputIndex)]);
+    const oRef = new Constr(0, [
+      String(utxosValidator[0].txHash),
+      BigInt(utxosValidator[0].outputIndex),
+    ]);
     const oRefCBOR = Data.to(oRef);
     const assetName = blake2bHex(fromHex(oRefCBOR), undefined, 28);
     const carbonMintAssets = { [policyIDCarbon + assetName]: redeemer.amount };
@@ -165,12 +187,18 @@ export default function ProjectLister() {
     const tx = await lucid
       .newTx()
       .readFrom(refutxo) // correct
-      .collectFrom([utxosValidator[0]], Data.to(redeemerValidatorSpend, KarbonRedeemerSpend))
+      .collectFrom(
+        [utxosValidator[0]],
+        Data.to(redeemerValidatorSpend, KarbonRedeemerSpend)
+      )
       .pay.ToAddress(address, { ...carbonMintAssets, lovelace: 100n })
       .attach.SpendingValidator(validatorContract) //correct
       .mintAssets(burnedAssets, validatorMinterRedeemer) //correct
       .attach.MintingPolicy(mintingValidator) //correct
-      .mintAssets(carbonMintAssets, Data.to(redeemerValidatorMint, KarbonRedeemerMint))
+      .mintAssets(
+        carbonMintAssets,
+        Data.to(redeemerValidatorMint, KarbonRedeemerMint)
+      )
       .attach.MintingPolicy(validatorContract) //correct
       .addSigner(await privateKeytoAddress(signer1)) //correct
       .addSigner(await privateKeytoAddress(signer2)) //correct
@@ -179,11 +207,12 @@ export default function ProjectLister() {
     const signed = await multiSignwithPrivateKey(tx, [signer1, signer2]);
     const signedd = await signed.sign.withWallet().complete();
     const txHash = await signedd.submit();
+    console.log("-----------ProjectAccept---------");
     console.log("txHash: ", txHash);
-
-
-
-
+    console.log("burende-assetname: ", projectAssetName);
+    console.log("minted-assetname: ", assetName);
+    console.log("burned-policyID+AssetName: ", burnedAssets);
+    console.log("minted-policyID+AssetName: ", carbonMintAssets);
   }
   return (
     <div className="flex space-x-4">

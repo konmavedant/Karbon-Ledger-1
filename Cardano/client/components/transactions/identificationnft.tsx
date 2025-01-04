@@ -32,7 +32,7 @@ export default function Identification() {
     // const redeemer = Data.to("Mint", IdentificationRedeemer);
     const mint = new Constr(0, []);
     const redeemer = Data.to(mint);
-    console.log("policyId: ", policyID);
+
     const tx = await lucid
       .newTx()
       .collectFrom([utxos[0]])
@@ -42,7 +42,10 @@ export default function Identification() {
 
     const signed = await tx.sign.withWallet().complete();
     const txHash = await signed.submit();
+    console.log("-----------IdentificationNFT__Mint---------");
+    console.log("policyId: ", policyID);
     console.log("txHash: ", txHash);
+    console.log("assetname", ref_assetName);
   }
 
   async function burn() {
@@ -66,7 +69,6 @@ export default function Identification() {
     const utxos1 = await lucid.utxosAtWithUnit(address, assetUnit);
     const mint = new Constr(1, []);
     const redeemer = Data.to(mint);
-    console.log(policyID);
     const tx = await lucid
       .newTx()
       .collectFrom(utxos1)
@@ -76,7 +78,11 @@ export default function Identification() {
 
     const signed = await tx.sign.withWallet().complete();
     const txHash = await signed.submit();
+    console.log("-----------IdentificationNFT__Burn---------");
+    console.log("policyID", policyID);
     console.log("txHash: ", txHash);
+    console.log("assetname", ref_assetName);
+    console.log("policyID+AssetName", assetUnit);
   }
 
   return (
