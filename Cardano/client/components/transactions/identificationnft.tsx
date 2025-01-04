@@ -1,5 +1,5 @@
 "use client";
-import { IdentificationNFT_MintValidator } from "@/config/scripts/scripts";
+import { ConfigDatumHolderValidator, IdentificationNFT_MintValidator, identificationPolicyid } from "@/config/scripts/scripts";
 import { useWallet } from "@/context/walletContext";
 import {
   Constr,
@@ -11,21 +11,29 @@ import {
 import React from "react";
 import { Button } from "@/components/ui/button";
 import { IdentificationRedeemerSchema } from "@/types/cardano";
+import { getAddress, multiSignwithPrivateKey, privateKeytoAddress } from "@/libs/utils";
 
 export default function Identification() {
   const [WalletConnection] = useWallet();
-
   const { lucid, address } = WalletConnection;
+  const [oRef, setORef] = React.useState<Data>(new Constr(0, ["0000000000000000000000000000000000000000000000000000000000000000", 0n]));
+
+
+
+  let signer1 = process.env.NEXT_PUBLIC_SIGNER_1 as string;
+  let signer2 = process.env.NEXT_PUBLIC_SIGNER_2 as string;
+  let signer3 = process.env.NEXT_PUBLIC_SIGNER_3 as string;
   async function mint() {
     if (!lucid || !address) throw "Uninitialized Lucid!!!";
 
     const utxos = await lucid.utxosAt(address);
 
-    const orefHash = String(utxos[0].txHash);
-    const orefIndex = BigInt(utxos[0].outputIndex);
-    const oref = new Constr(0, [orefHash, orefIndex]);
-
-    const mintingValidator: Validator = IdentificationNFT_MintValidator([oref]);
+    // const orefHash = String(utxos[0].txHash);
+    // const orefIndex = BigInt(utxos[0].outputIndex);
+    // const oref = new Constr(0, [orefHash, orefIndex]);
+    // setORef(oref);
+    // console.log(oref)
+    const mintingValidator: Validator = IdentificationNFT_MintValidator([oRef]);
     const policyID = mintingPolicyToId(mintingValidator);
     const ref_assetName = "KarbonIdentificationNFT";
     const mintedAssets = { [policyID + fromText(ref_assetName)]: 1n };
@@ -51,35 +59,33 @@ export default function Identification() {
   async function burn() {
     if (!lucid || !address) throw "Uninitialized Lucid!!!";
 
-    const utxos = await lucid.utxosAt(address);
     const ref_assetName = "KarbonIdentificationNFT";
-    // const orefHash = String(utxos[0].txHash);
-    // const orefIndex = BigInt(utxos[0].outputIndex);
-    // const oref = new Constr(0, [orefHash, orefIndex]);
-
-    const oref = utxos.filter((utxo) => {
-      const assets = utxo.assets;
-      return Object.keys(assets).includes(ref_assetName);
-    });
-
-    const mintingValidator: Validator = IdentificationNFT_MintValidator([oref]); // pass the oref to the validator as hardcoded from scripts.ts
-    const policyID = mintingPolicyToId(mintingValidator);
-    const assetUnit = `${policyID}${fromText(ref_assetName)}`;
+    const assetUnit = `${identificationPolicyid}${fromText(ref_assetName)}`;
     const burnedAssets = { [assetUnit]: -1n };
-    const utxos1 = await lucid.utxosAtWithUnit(address, assetUnit);
+
+    const mintingValidator: Validator = IdentificationNFT_MintValidator([oRef]); // pass the oref to the validator as hardcoded from scripts.ts
+    const configDatumHolderAddress = getAddress(ConfigDatumHolderValidator)
+    const utxos = await lucid.utxosAtWithUnit(configDatumHolderAddress, assetUnit);
+
+
+
     const mint = new Constr(1, []);
     const redeemer = Data.to(mint);
+    console.log(oRef)
     const tx = await lucid
       .newTx()
-      .collectFrom(utxos1)
+      .collectFrom(utxos, Data.void())
+      .attach.SpendingValidator((ConfigDatumHolderValidator()))
       .mintAssets(burnedAssets, redeemer)
       .attach.MintingPolicy(mintingValidator)
+      .addSigner(await privateKeytoAddress(signer1))
+      .addSigner(await privateKeytoAddress(signer2))
       .complete();
 
-    const signed = await tx.sign.withWallet().complete();
+    const multisig = await multiSignwithPrivateKey(tx, [signer1, signer2])
+    const signed = await multisig.sign.withWallet().complete();
     const txHash = await signed.submit();
     console.log("-----------IdentificationNFT__Burn---------");
-    console.log("policyID", policyID);
     console.log("txHash: ", txHash);
     console.log("assetname", ref_assetName);
     console.log("policyID+AssetName", assetUnit);

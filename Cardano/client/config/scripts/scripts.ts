@@ -12,8 +12,7 @@ import {
 } from "./plutus";
 import { getPolicyId } from "@/libs/utils";
 
-export const identificationPolicyid: Data =
-  "a15e965d2bd9bd7d736eec08be5e8044e6bb983681e623b3461896b3";
+export const identificationPolicyid: Data = process.env.NEXT_PUBLIC_IDENTIFICATION_PID as string;
 
 //------------------------------------------------------------------
 const identificationNFT_Mint = applyDoubleCborEncoding(
