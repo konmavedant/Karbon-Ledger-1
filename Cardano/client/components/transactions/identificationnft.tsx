@@ -16,7 +16,7 @@ import { getAddress, multiSignwithPrivateKey, privateKeytoAddress } from "@/libs
 export default function Identification() {
   const [WalletConnection] = useWallet();
   const { lucid, address } = WalletConnection;
-  const [oRef, setORef] = React.useState<Data>(new Constr(0, ["0000000000000000000000000000000000000000000000000000000000000000", 0n]));
+  const [oRef, setORef] = React.useState<Data>(new Constr(0, ["056798e7e1c0884c05ecca2d22f44cabe36f96fd5be81050b89d2d5b41a14dfa", 1n]));
 
 
 
