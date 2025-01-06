@@ -25,6 +25,7 @@ import {
   KarbonRedeemerSpend,
 } from "@/types/cardano";
 import { blake2bHex } from "blakejs";
+import ProjectSubmit from "../projectSubmit";
 
 export default function ProjectLister() {
   const [WalletConnection] = useWallet();
@@ -216,7 +217,8 @@ export default function ProjectLister() {
   }
   return (
     <div className="flex space-x-4">
-      <Button onClick={listProject}>List Project</Button>
+      {/* <Button onClick={listProject}>List Project</Button> */}
+      <ProjectSubmit />
       <Button onClick={projectReject}>Project Reject</Button>
       <Button onClick={ProjectAccept}>Project Accept</Button>
     </div>
