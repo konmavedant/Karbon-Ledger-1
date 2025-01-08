@@ -74,10 +74,10 @@ export default function ProjectSubmit() {
     }
 
     return (
-        <Dialog>
-            <DialogTrigger asChild>
+        <Dialog defaultOpen>
+            {/* <DialogTrigger asChild>
                 <Button >Submit Project</Button>
-            </DialogTrigger>
+            </DialogTrigger> */}
             <DialogContent className="sm:max-w-[425px]" aria-describedby="project submit dialog">
                 <DialogHeader>
                     <DialogTitle>Submit New Project</DialogTitle>

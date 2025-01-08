@@ -16,7 +16,9 @@ import { getAddress, multiSignwithPrivateKey, privateKeytoAddress } from "@/libs
 export default function Identification() {
   const [WalletConnection] = useWallet();
   const { lucid, address } = WalletConnection;
-  const [oRef, setORef] = React.useState<Data>(new Constr(0, ["056798e7e1c0884c05ecca2d22f44cabe36f96fd5be81050b89d2d5b41a14dfa", 1n]));
+  // const [oRef, setORef] = React.useState<Data>(new Constr(0, ["056798e7e1c0884c05ecca2d22f44cabe36f96fd5be81050b89d2d5b41a14dfa", 1n]));
+  const [oRef, setORef] = React.useState<Data>(new Constr(0, ["0000000000000000000000000000000000000000000000000000000000000000", 0n]));
+  // const [oRef, setORef] = React.useState<Data>(new Constr(0, ["8e5d32d440ce6c3f12f89641399b9627c1ab84b9675622b5d6bb0f3555461199", 0n]));
 
 
 
@@ -27,12 +29,11 @@ export default function Identification() {
     if (!lucid || !address) throw "Uninitialized Lucid!!!";
 
     const utxos = await lucid.utxosAt(address);
-
     // const orefHash = String(utxos[0].txHash);
     // const orefIndex = BigInt(utxos[0].outputIndex);
     // const oref = new Constr(0, [orefHash, orefIndex]);
     // setORef(oref);
-    // console.log(oref)
+    // console.log(utxos)
     const mintingValidator: Validator = IdentificationNFT_MintValidator([oRef]);
     const policyID = mintingPolicyToId(mintingValidator);
     const ref_assetName = "KarbonIdentificationNFT";
