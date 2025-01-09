@@ -1,9 +1,8 @@
 "use client";
 
 import dynamic from "next/dynamic";
+const Home = dynamic(() => import("./Home"), { ssr: false });
 
-const Home = dynamic(() => import("@/app/Home"), { ssr: false });
-
-export default function Client() {
-  return <Home />;
+export default function HomeClient() {
+    return <Home />;
 }

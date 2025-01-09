@@ -1,8 +1,8 @@
 import React from 'react'
-import HomeClient from './client'
+import ProjectsClient from './client'
 
 export default function Page() {
     return (
-        <HomeClient />
+        <ProjectsClient />
     )
 }

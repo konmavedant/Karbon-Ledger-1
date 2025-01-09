@@ -1,7 +1,7 @@
 export type SiteConfig = typeof siteConfig;
 
 export const siteConfig = {
-  name: "Karbon-Ledger",
+  name: "Next.js + NextUI",
   description: "Make beautiful websites regardless of your design experience.",
   navItems: [
     {
@@ -9,54 +9,30 @@ export const siteConfig = {
       href: "/",
     },
     {
-      label: "Contract",
-      href: "/contract",
-    },
-    {
-      label: "Blog",
-      href: "/blog",
-    },
-    {
-      label: "About",
-      href: "/about",
-    },
-  ],
-  navMenuItems: [
-    {
-      label: "Profile",
-      href: "/profile",
-    },
-    {
-      label: "Dashboard",
-      href: "/dashboard",
+      label: "Submit",
+      href: "/submitproject",
     },
     {
       label: "Projects",
       href: "/projects",
     },
+  ],
+  navMenuItems: [
     {
-      label: "Team",
-      href: "/team",
+      label: "Home",
+      href: "/",
     },
     {
-      label: "Calendar",
-      href: "/calendar",
+      label: "Submit",
+      href: "/submitproject",
     },
     {
-      label: "Settings",
-      href: "/settings",
-    },
-    {
-      label: "Help & Feedback",
-      href: "/help-feedback",
-    },
-    {
-      label: "Logout",
-      href: "/logout",
+      label: "Projects",
+      href: "/projects",
     },
   ],
   links: {
-    github: "https://github.com/KonmaORG/Karbon-Ledger",
+    github: "https://github.com/nextui-org/nextui",
     twitter: "https://twitter.com/getnextui",
     docs: "https://nextui.org",
     discord: "https://discord.gg/9b6yyZKmH4",

@@ -1,28 +1,29 @@
-import { Button } from "@nextui-org/button";
-import Link from "next/link";
-import dynamic from 'next/dynamic';
-const ReadmeContent = dynamic(() => import('./README.mdx'));
-export default function Home() {
+import ConfigDatumHolder from "@/components/transactions/configDatumHolder";
+import Identification from "@/components/transactions/identificationnft";
+import Validator_contract from "@/components/transactions/carbonTokenBurn";
+import WalletConnector from "@/components/WalletConnector/client";
+import DisconnectButton from "@/components/WalletConnector/disconnect";
+import EmulatorConnector from "@/components/WalletConnector/emulatorClient";
+import { useWallet } from "@/context/walletContext";
 
+export default function Home() {
+  const [walletConnection, setWalletConnection] = useWallet();
+  const { address } = walletConnection;
+
+  // if (!address) {
+  //   return (
+  //     <div className="space-y-6 mx-auto max-w-2xl flex flex-col min-h-screen items-center">
+  //       <WalletConnector />
+  //     </div>
+  //   )
+  // }
   return (
-    <>
-      <div className="flex justify-center overflow-hidden min-w-full">
-        <div className="flex flex-col gap-2 overflow-hidden">
-        <Button className="bg-blue-600 mx-auto py-2">
-            <Link
-              className=""
-              color="foreground"
-              href="./contract"
-            >
-              Example Contract
-            </Link>
-          </Button>
-      <div className="prose prose-invert px-2 dark:prose">
-          
-          <ReadmeContent />
-        </div>
-        </div>
-      </div>
-    </>
+    <div className="space-y-6 mx-auto max-w-2xl flex flex-col min-h-screen items-center">
+      <EmulatorConnector />
+      <DisconnectButton />
+      <Identification />
+      <ConfigDatumHolder />
+      <Validator_contract />
+    </div>
   );
 }
