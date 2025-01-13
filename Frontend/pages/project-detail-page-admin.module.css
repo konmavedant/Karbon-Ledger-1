@@ -1,3 +1,30 @@
+.projectsPageUser {
+  width: 100%;
+  height: 1024px;
+  position: relative;
+  background-color: var(--dashboard-bg);
+  overflow: hidden;
+  line-height: normal;
+  letter-spacing: normal;
+}
+
+.accountHeader {
+  /* width: 880px;
+   */
+  position: absolute;
+  align-items: flex-end;
+  flex-direction: column;
+  top: 146px;
+  left: 365px;
+  width: 956px;
+  height: 763px;
+  /* gap: var(--gap-mini); */
+  /* text-align: left; */
+  /* font-size: var(--graph-text-size); */
+  /* color: var(--table-list-color); */
+  /* font-family: var(--table-title-text); */
+}
+
 .frameChild {
   position: absolute;
   top: 0;
@@ -7,6 +34,7 @@
   height: 100%;
   display: none;
 }
+
 .homeIcon {
   position: absolute;
   top: 5px;
@@ -16,6 +44,7 @@
   overflow: hidden;
   z-index: 1;
 }
+
 .vectorParent {
   height: 30px;
   width: 30px;
@@ -23,10 +52,12 @@
   border-radius: var(--br-xs);
   background-color: var(--icon-color);
 }
+
 .dashboard {
   position: relative;
   line-height: 150%;
 }
+
 .dashboardWrapper,
 .frameDiv,
 .frameWrapper {
@@ -34,20 +65,25 @@
   align-items: flex-start;
   justify-content: flex-start;
 }
+
 .dashboardWrapper {
   flex-direction: column;
   padding: var(--padding-7xs) 0 0;
 }
+
 .frameDiv,
 .frameWrapper {
   flex-direction: row;
 }
+
 .frameDiv {
   gap: var(--gap-5xs);
 }
+
 .frameWrapper {
   padding: 0 var(--padding-base);
 }
+
 .frameItem {
   height: 54px;
   width: 219.5px;
@@ -57,6 +93,7 @@
   background-color: var(--gradient-form-text);
   display: none;
 }
+
 .projectsIconChild {
   position: absolute;
   top: 0;
@@ -67,6 +104,7 @@
   height: 100%;
   display: none;
 }
+
 .leafIcon {
   position: absolute;
   top: 6px;
@@ -76,33 +114,39 @@
   overflow: hidden;
   z-index: 2;
 }
+
 .projects,
 .projectsIcon {
   position: relative;
   z-index: 1;
 }
+
 .projectsIcon {
   height: 30px;
   width: 30px;
   border-radius: var(--br-xs);
   background-color: var(--icon-color);
 }
+
 .projects {
   align-self: stretch;
   line-height: 150%;
 }
+
 .projectsWrapper,
 .rectangleParent {
   display: flex;
   align-items: flex-start;
   justify-content: flex-start;
 }
+
 .projectsWrapper {
   width: 63px;
   flex-direction: column;
   padding: var(--padding-7xs) 0 0;
   box-sizing: border-box;
 }
+
 .rectangleParent {
   align-self: stretch;
   box-shadow: 0 3.5px 5.5px rgba(0, 0, 0, 0.02);
@@ -112,6 +156,7 @@
   padding: var(--padding-smi) var(--padding-base) var(--padding-2xs);
   gap: var(--gap-xs);
 }
+
 .newspaperIcon {
   position: absolute;
   top: 5px;
@@ -121,11 +166,13 @@
   overflow: hidden;
   z-index: 1;
 }
+
 .certificates {
   align-self: stretch;
   position: relative;
   line-height: 150%;
 }
+
 .certificatesWrapper,
 .leftMenu1,
 .leftMenu1Wrapper {
@@ -133,41 +180,49 @@
   align-items: flex-start;
   justify-content: flex-start;
 }
+
 .certificatesWrapper {
   flex: 1;
   flex-direction: column;
   padding: var(--padding-7xs) 0 0;
 }
+
 .leftMenu1,
 .leftMenu1Wrapper {
   flex-direction: row;
 }
+
 .leftMenu1 {
   flex: 1;
   gap: var(--gap-xs);
   cursor: pointer;
 }
+
 .leftMenu1Wrapper {
   width: 175px;
   padding: 0 var(--padding-base);
   box-sizing: border-box;
 }
+
 .frameContainer,
 .frameGroup {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
 }
+
 .frameContainer {
   width: 219.5px;
   align-items: flex-start;
   gap: var(--gap-17xl);
 }
+
 .frameGroup {
   align-items: flex-end;
   gap: var(--gap-111xl);
   min-width: 229.5px;
 }
+
 .rectangleIcon {
   height: 200px;
   width: 381px;
@@ -177,11 +232,13 @@
   display: none;
   max-width: 100%;
 }
+
 .upload {
   position: relative;
   line-height: 140%;
   z-index: 1;
 }
+
 .uploadWrapper {
   display: flex;
   flex-direction: column;
@@ -189,6 +246,7 @@
   justify-content: flex-start;
   padding: var(--padding-2xs) 0 0;
 }
+
 .editIcon {
   height: 25px;
   width: 26px;
@@ -197,6 +255,7 @@
   flex-shrink: 0;
   z-index: 1;
 }
+
 .rectangleContainer {
   align-self: stretch;
   border-radius: var(--br-xs) var(--br-xs) 0 0;
@@ -212,6 +271,7 @@
   background-position: top;
   max-width: 100%;
 }
+
 .rectangleDiv {
   width: 381px;
   height: 603px;
@@ -221,12 +281,14 @@
   display: none;
   max-width: 100%;
 }
+
 .projectDescription {
   flex: 1;
   position: relative;
   line-height: 140%;
   z-index: 1;
 }
+
 .name,
 .projectTypeInputParent,
 .regionCountry,
@@ -235,18 +297,21 @@
   align-items: flex-start;
   justify-content: flex-start;
 }
+
 .regionInput {
   width: 155px;
   flex-direction: row;
   padding: 0 var(--padding-9xs) 0 var(--padding-8xs);
   box-sizing: border-box;
 }
+
 .name,
 .projectTypeInputParent,
 .regionCountry {
   align-self: stretch;
   flex-direction: column;
 }
+
 .name {
   border: 1px solid var(--color-aliceblue);
   background-color: var(--gradient-form-text);
@@ -263,14 +328,17 @@
   color: var(--table-list-color);
   z-index: 1;
 }
+
 .projectTypeInputParent,
 .regionCountry {
   gap: var(--gap-8xs-5);
 }
+
 .projectTypeInputParent {
   padding: 0 0 var(--padding-5xs);
   gap: var(--gap-2xs);
 }
+
 .rectangleParent1 {
   align-self: stretch;
   border-radius: 0 0 var(--br-xs) var(--br-xs);
@@ -280,6 +348,7 @@
   gap: var(--gap-lg);
   color: var(--header-text-color);
 }
+
 .projectNameContainer,
 .projectNameContainerWrapper,
 .rectangleParent1 {
@@ -289,9 +358,11 @@
   justify-content: flex-start;
   max-width: 100%;
 }
+
 .projectNameContainer {
   align-self: stretch;
 }
+
 .projectNameContainerWrapper {
   flex: 1;
   padding: var(--padding-4xl) 0 0;
@@ -300,6 +371,7 @@
   font-size: var(--table-title-text-size);
   color: var(--form-box);
 }
+
 .frameParent,
 .leftMenuParent {
   display: flex;
@@ -307,17 +379,20 @@
   justify-content: flex-start;
   max-width: 100%;
 }
+
 .frameParent {
   flex: 1;
   align-items: flex-start;
   gap: 48.5px;
   min-width: 428px;
 }
+
 .leftMenuParent {
   width: 1321px;
   align-items: flex-end;
   gap: var(--gap-5xl);
 }
+
 .projectDetailPageAdmin {
   width: 100%;
   position: relative;
@@ -337,15 +412,18 @@
   color: var(--gray-gray-700);
   font-family: var(--table-title-text);
 }
+
 @media screen and (max-width: 1100px) {
   .leftMenuParent {
     flex-wrap: wrap;
   }
 }
+
 @media screen and (max-width: 750px) {
   .frameGroup {
     flex: 1;
   }
+
   .frameParent {
     gap: var(--gap-5xl);
     flex-wrap: wrap;

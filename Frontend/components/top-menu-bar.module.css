@@ -7,11 +7,14 @@
   max-height: 100%;
   width: 150px;
   object-fit: cover;
+  cursor: pointer;
 }
+
 .div,
 .icon {
   align-items: center;
 }
+
 .div {
   width: 11px;
   height: 12px;
@@ -20,6 +23,7 @@
   display: flex;
   justify-content: center;
 }
+
 .icon {
   overflow: hidden;
   display: none;
@@ -27,6 +31,7 @@
   justify-content: flex-start;
   padding: 0 var(--padding-12xs-5);
 }
+
 .text {
   position: relative;
   font-size: var(--font-size-xs);
@@ -34,27 +39,32 @@
   font-family: var(--table-title-text);
   color: var(--gradient-form-text);
 }
+
 .buttonBody,
 .heightStructure {
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
 }
+
 .buttonBody {
   overflow: hidden;
   align-items: flex-start;
   gap: var(--gap-9xs);
 }
+
 .heightStructure {
   flex: 1;
   align-items: center;
 }
+
 .content {
   height: 0;
   width: 0;
   position: relative;
   background-color: var(--table-list-color);
 }
+
 .minwidth {
   height: 0;
   overflow: hidden;
@@ -66,6 +76,7 @@
   padding: 0 var(--padding-13xl);
   box-sizing: border-box;
 }
+
 .connectWallet,
 .widthStructure {
   display: flex;
@@ -73,12 +84,14 @@
   justify-content: center;
   box-sizing: border-box;
 }
+
 .widthStructure {
   height: 24px;
   overflow: hidden;
   flex-direction: column;
   padding: 0 var(--padding-3xl);
 }
+
 .connectWallet {
   position: absolute;
   height: 23.33%;
@@ -95,20 +108,24 @@
   padding: 0 var(--padding-5xs);
   cursor: pointer;
 }
+
 .addons,
 .icon2 {
   position: relative;
 }
+
 .icon2 {
   height: 15px;
   width: 15px;
   overflow: hidden;
   flex-shrink: 0;
 }
+
 .addons {
   line-height: 150%;
   display: none;
 }
+
 .addon,
 .autoAddedFrame {
   overflow: hidden;
@@ -116,15 +133,18 @@
   flex-direction: row;
   align-items: center;
 }
+
 .addon {
   justify-content: flex-start;
   padding: var(--padding-9xs) var(--padding-2xs);
   gap: var(--gap-8xs);
 }
+
 .autoAddedFrame {
   align-self: stretch;
   justify-content: center;
 }
+
 .typeHere {
   width: 63.5px;
   position: relative;
@@ -132,17 +152,20 @@
   display: inline-block;
   white-space: nowrap;
 }
+
 .passwordTextIcon {
   width: 35px;
   height: 3.5px;
   position: relative;
   display: none;
 }
+
 .content1 {
   height: 0;
   width: 0;
   position: relative;
 }
+
 .minwidth1 {
   height: 0;
   flex-shrink: 0;
@@ -152,12 +175,14 @@
   padding: 0 var(--padding-55xl);
   box-sizing: border-box;
 }
+
 .inputfieldtext,
 .minwidth1,
 .searchBar {
   overflow: hidden;
   display: flex;
 }
+
 .inputfieldtext {
   flex-direction: column;
   align-items: flex-start;
@@ -165,6 +190,7 @@
   font-size: var(--table-title-text-size);
   color: var(--form-box);
 }
+
 .searchBar {
   position: absolute;
   height: 100%;
@@ -182,6 +208,7 @@
   justify-content: flex-start;
   padding: 0 var(--padding-xs) 0 0;
 }
+
 .ioniconnnotificationsdefaul,
 .ioniconssettingssharp,
 .topRightMenuBar {
@@ -191,10 +218,12 @@
   width: 12px;
   height: 12px;
 }
+
 .ioniconnnotificationsdefaul,
 .topRightMenuBar {
   left: 323px;
 }
+
 .topRightMenuBar {
   height: 26.33%;
   width: 24.4%;
@@ -206,6 +235,7 @@
   font-size: var(--font-size-6xs);
   font-family: var(--table-title-text);
 }
+
 .topMenuBar {
   position: absolute;
   top: 8px;

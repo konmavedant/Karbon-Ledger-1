@@ -3,6 +3,7 @@
   border-radius: var(--br-mini);
   background-color: var(--gradient-form-text);
 }
+
 .background,
 .backgroundChild,
 .linesIcon {
@@ -12,17 +13,20 @@
   width: 100%;
   height: 100%;
 }
+
 .linesIcon {
   top: 55px;
   width: 1102px;
   height: 1px;
 }
+
 .area {
   position: absolute;
   top: 14px;
   left: 776px;
   line-height: 140%;
 }
+
 .projectType {
   position: absolute;
   top: 12px;
@@ -31,6 +35,7 @@
   height: 36px;
   text-align: left;
 }
+
 .viewProject {
   position: absolute;
   top: 24px;
@@ -40,6 +45,7 @@
   color: var(--form-box);
   cursor: pointer;
 }
+
 .logoIcon {
   position: absolute;
   top: 0;
@@ -49,6 +55,7 @@
   height: 33px;
   object-fit: cover;
 }
+
 .projectTitle {
   position: absolute;
   top: 4px;
@@ -57,6 +64,7 @@
   height: 38px;
   text-align: left;
 }
+
 .approveButtonChild {
   position: absolute;
   top: 0;
@@ -66,6 +74,7 @@
   width: 100%;
   height: 100%;
 }
+
 .approveButton,
 .rejectButtonChild {
   position: absolute;
@@ -74,12 +83,14 @@
   width: 76px;
   height: 26px;
 }
+
 .rejectButtonChild {
   border-radius: var(--br-xs);
   background-color: var(--reject-button);
   width: 100%;
   height: 100%;
 }
+
 .approverejectButtons,
 .rejectButton {
   position: absolute;
@@ -88,34 +99,58 @@
   width: 76px;
   height: 26px;
 }
+
 .approverejectButtons {
   top: 7px;
   left: 950px;
   width: 156px;
   font-size: var(--graph-text-size);
 }
+
+.hashCode {
+  position: absolute;
+  top: 0;
+  left: 80px;
+  width: 76px;
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hashCode {
+  top: 7px;
+  left: 950px;
+  width: 156px;
+  font-size: var(--graph-text-size);
+}
+
 .div,
 .standardName,
 .yyyy1 {
   position: absolute;
   line-height: 140%;
 }
+
 .div {
   top: 15px;
   left: 587px;
   text-align: left;
 }
+
 .standardName,
 .yyyy1 {
   top: 12px;
   left: 234px;
 }
+
 .standardName {
   top: 13px;
   left: 319px;
   display: inline-block;
   min-width: 96px;
 }
+
 .projectListing6Child {
   position: absolute;
   top: 0;
@@ -124,6 +159,7 @@
   height: 30px;
   object-fit: cover;
 }
+
 .linesIcon1,
 .projectListing6 {
   position: absolute;
@@ -132,25 +168,29 @@
   width: 100%;
   height: 55px;
 }
+
 .linesIcon1 {
   top: 51px;
   width: 1102px;
   height: 1px;
 }
+
 .country,
-.project-type {
+.project_type {
   position: absolute;
   top: 10px;
   left: 776px;
   line-height: 140%;
 }
-.project-type {
+
+.project_type {
   top: 0;
   left: 0;
   display: inline-block;
   width: 100%;
   height: 100%;
 }
+
 .projectType2 {
   position: absolute;
   top: 8px;
@@ -159,12 +199,14 @@
   height: 36px;
   text-align: left;
 }
-.project-title {
+
+.project_title {
   position: absolute;
   top: 3px;
   left: 38px;
   line-height: 140%;
 }
+
 .projectTitle2 {
   position: absolute;
   top: 0;
@@ -173,6 +215,7 @@
   height: 38px;
   text-align: left;
 }
+
 .approverejectButtons1 {
   position: absolute;
   top: 3px;
@@ -181,20 +224,24 @@
   height: 26px;
   font-size: var(--graph-text-size);
 }
+
 .div1,
 .yyyy2 {
   position: absolute;
   line-height: 140%;
 }
+
 .div1 {
   top: 11px;
   left: 587px;
   text-align: left;
 }
+
 .yyyy2 {
   top: 9px;
   left: 137px;
 }
+
 .projectListing5Child {
   position: absolute;
   top: 3px;
@@ -203,6 +250,7 @@
   height: 30px;
   object-fit: cover;
 }
+
 .projectListing5 {
   position: absolute;
   top: 242px;
@@ -210,6 +258,7 @@
   width: 100%;
   height: 51px;
 }
+
 .ada,
 .asiaindia,
 .standard-name,
@@ -219,22 +268,26 @@
   left: 662px;
   line-height: 140%;
 }
+
 .ada,
 .standard-name,
 .yyyy {
   left: 853px;
 }
+
 .standard-name,
 .yyyy {
   top: 8px;
   left: 234px;
 }
+
 .standard-name {
   top: 9px;
   left: 319px;
   display: inline-block;
   min-width: 96px;
 }
+
 .projectListing4Child {
   position: absolute;
   top: 2px;
@@ -243,6 +296,7 @@
   height: 30px;
   object-fit: cover;
 }
+
 .projectListing4 {
   position: absolute;
   top: 182px;
@@ -250,6 +304,7 @@
   width: 100%;
   height: 51px;
 }
+
 .approve {
   position: absolute;
   top: 8px;
@@ -260,6 +315,7 @@
   color: var(--table-list-color);
   text-align: center;
 }
+
 .approveButton3 {
   cursor: pointer;
   border: 0;
@@ -271,6 +327,7 @@
   width: 76px;
   height: 26px;
 }
+
 .projectListing3Child {
   position: absolute;
   top: 1px;
@@ -279,6 +336,7 @@
   height: 30px;
   object-fit: cover;
 }
+
 .projectListing3 {
   position: absolute;
   top: 122px;
@@ -286,6 +344,7 @@
   width: 100%;
   height: 51px;
 }
+
 .projectListing2Child {
   position: absolute;
   top: 0;
@@ -294,6 +353,7 @@
   height: 30px;
   object-fit: cover;
 }
+
 .linesIcon5,
 .projectListing2 {
   position: absolute;
@@ -302,12 +362,14 @@
   width: 100%;
   height: 51px;
 }
+
 .linesIcon5 {
   top: 53px;
   left: 0;
   width: 1102px;
   height: 1px;
 }
+
 .ada2,
 .asiaindia2,
 .location {
@@ -316,13 +378,16 @@
   left: 662px;
   line-height: 140%;
 }
+
 .ada2,
 .location {
   left: 776px;
 }
+
 .ada2 {
   left: 853px;
 }
+
 .projectTitle6,
 .projectType6 {
   position: absolute;
@@ -332,12 +397,14 @@
   height: 36px;
   text-align: left;
 }
+
 .projectTitle6 {
   top: 2px;
   left: 0;
   width: 169px;
   height: 38px;
 }
+
 .approverejectButtons5 {
   position: absolute;
   top: 5px;
@@ -346,6 +413,7 @@
   height: 26px;
   font-size: var(--graph-text-size);
 }
+
 .div2 {
   position: absolute;
   top: 13px;
@@ -353,6 +421,7 @@
   line-height: 140%;
   text-align: left;
 }
+
 .standardName2,
 .yyyy4,
 .yyyy5 {
@@ -361,17 +430,20 @@
   left: 137px;
   line-height: 140%;
 }
+
 .standardName2,
 .yyyy5 {
   top: 10px;
   left: 234px;
 }
+
 .standardName2 {
   top: 11px;
   left: 319px;
   display: inline-block;
   min-width: 96px;
 }
+
 .projectListing1Child {
   position: absolute;
   top: 0;
@@ -380,6 +452,7 @@
   height: 30px;
   object-fit: cover;
 }
+
 .projectListing1 {
   position: absolute;
   top: 0;
@@ -387,6 +460,7 @@
   width: 100%;
   height: 53px;
 }
+
 .projectListing {
   position: absolute;
   width: calc(100% - 16px);
@@ -396,6 +470,7 @@
   height: 353px;
   text-align: center;
 }
+
 .linesIcon6 {
   position: absolute;
   top: 27.5px;
@@ -403,11 +478,13 @@
   width: 1100.2px;
   height: 1px;
 }
+
 .acceptReject {
   left: 988px;
   display: inline-block;
   min-width: 75px;
 }
+
 .acceptReject,
 .pricePerUnit,
 .qty,
@@ -416,23 +493,28 @@
   top: 0.5px;
   line-height: 150%;
 }
+
 .pricePerUnit {
   left: 862.1px;
   display: inline-block;
   min-width: 75px;
 }
+
 .qty,
 .regionCountry {
   left: 797.7px;
 }
+
 .regionCountry {
   left: 683.1px;
   display: inline-block;
   min-width: 80px;
 }
+
 .projectId {
   left: 586.2px;
 }
+
 .projectId,
 .projectType7,
 .standard {
@@ -440,44 +522,53 @@
   top: 0.5px;
   line-height: 150%;
 }
+
 .projectType7 {
   left: 444px;
   text-align: center;
 }
+
 .standard {
   left: 336.4px;
 }
+
 .vintageTo {
   top: 0.5px;
   left: 251.5px;
 }
+
 .project,
 .vintageFrom,
 .vintageTo {
   position: absolute;
   line-height: 150%;
 }
+
 .vintageFrom {
   top: 0.5px;
   left: 154.4px;
   display: inline-block;
   min-width: 75px;
 }
+
 .project {
   top: 0;
   left: 0;
 }
+
 .titles {
   top: 0;
   left: 0;
   width: 1063px;
   height: 15.5px;
 }
+
 .list,
 .project1,
 .titles {
   position: absolute;
 }
+
 .list {
   top: 65.5px;
   left: 16.6px;
@@ -486,6 +577,7 @@
   font-size: var(--graph-text-size);
   color: var(--form-box);
 }
+
 .project1 {
   margin: 0;
   top: 0;
@@ -498,6 +590,7 @@
   width: 100%;
   height: 100%;
 }
+
 .cardTitle,
 .projectListCard {
   position: absolute;
@@ -508,6 +601,7 @@
   font-size: var(--title-text-size);
   color: var(--gray-gray-700);
 }
+
 .projectListCard {
   top: 163px;
   left: 277px;

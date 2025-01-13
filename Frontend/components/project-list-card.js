@@ -31,10 +31,10 @@ const ProjectListCard = ({ className = "" }) => {
           <div className={styles.area}>20,000</div>
           <div className={styles.ada}>20 ADA</div>
           <div className={styles.projectType}>
-            <div className={styles.project - type}>Project Type</div>
+            <div className={styles.project_type}>Project Type</div>
           </div>
           <div className={styles.projectTitle}>
-            <div className={styles.project - title}>Project Title</div>
+            <div className={styles.project_title}>Project Title</div>
             <div
               className={styles.viewProject}
               onClick={onViewProjectTextClick}
@@ -86,10 +86,10 @@ const ProjectListCard = ({ className = "" }) => {
           <div className={styles.country}>20,000</div>
           <div className={styles.ada}>20 ADA</div>
           <div className={styles.projectType2}>
-            <div className={styles.project - type}>Project Type</div>
+            <div className={styles.project_type}>Project Type</div>
           </div>
           <div className={styles.projectTitle2}>
-            <div className={styles.project - title}>Project Title</div>
+            <div className={styles.project_title}>Project Title</div>
             <div
               className={styles.viewProject}
               onClick={onViewProjectTextClick}
@@ -118,7 +118,7 @@ const ProjectListCard = ({ className = "" }) => {
           <div className={styles.div1}>00023</div>
           <div className={styles.yyyy2}>yyyy</div>
           <div className={styles.yyyy}>yyyy</div>
-          <div className={styles.standard - name}>Standard Name</div>
+          <div className={styles.standardName}>Standard Name</div>
           <Image
             className={styles.projectListing5Child}
             loading="lazy"
@@ -140,10 +140,10 @@ const ProjectListCard = ({ className = "" }) => {
           <div className={styles.country}>20,000</div>
           <div className={styles.ada}>20 ADA</div>
           <div className={styles.projectType2}>
-            <div className={styles.project - type}>Project Type</div>
+            <div className={styles.project_type}>Project Type</div>
           </div>
           <div className={styles.projectTitle2}>
-            <div className={styles.project - title}>Project Title</div>
+            <div className={styles.project_title}>Project Title</div>
             <div
               className={styles.viewProject}
               onClick={onViewProjectTextClick}
@@ -172,7 +172,7 @@ const ProjectListCard = ({ className = "" }) => {
           <div className={styles.div1}>00023</div>
           <div className={styles.yyyy2}>yyyy</div>
           <div className={styles.yyyy}>yyyy</div>
-          <div className={styles.standard - name}>Standard Name</div>
+          <div className={styles.standardName}>Standard Name</div>
           <Image
             className={styles.projectListing4Child}
             loading="lazy"
@@ -194,10 +194,10 @@ const ProjectListCard = ({ className = "" }) => {
           <div className={styles.country}>20,000</div>
           <div className={styles.ada}>20 ADA</div>
           <div className={styles.projectType2}>
-            <div className={styles.project - type}>Project Type</div>
+            <div className={styles.project_type}>Project Type</div>
           </div>
           <div className={styles.projectTitle2}>
-            <div className={styles.project - title}>Project Title</div>
+            <div className={styles.project_title}>Project Title</div>
             <div
               className={styles.viewProject}
               onClick={onViewProjectTextClick}
@@ -226,7 +226,7 @@ const ProjectListCard = ({ className = "" }) => {
           <div className={styles.div1}>00023</div>
           <div className={styles.yyyy2}>yyyy</div>
           <div className={styles.yyyy}>yyyy</div>
-          <div className={styles.standard - name}>Standard Name</div>
+          <div className={styles.standardName}>Standard Name</div>
           <Image
             className={styles.projectListing3Child}
             loading="lazy"
@@ -248,10 +248,10 @@ const ProjectListCard = ({ className = "" }) => {
           <div className={styles.country}>20,000</div>
           <div className={styles.ada}>20 ADA</div>
           <div className={styles.projectType2}>
-            <div className={styles.project - type}>Project Type</div>
+            <div className={styles.project_type}>Project Type</div>
           </div>
           <div className={styles.projectTitle2}>
-            <div className={styles.project - title}>Project Title</div>
+            <div className={styles.project_title}>Project Title</div>
             <div
               className={styles.viewProject}
               onClick={onViewProjectTextClick}
@@ -280,7 +280,7 @@ const ProjectListCard = ({ className = "" }) => {
           <div className={styles.div1}>00023</div>
           <div className={styles.yyyy2}>yyyy</div>
           <div className={styles.yyyy}>yyyy</div>
-          <div className={styles.standard - name}>Standard Name</div>
+          <div className={styles.standardName}>Standard Name</div>
           <Image
             className={styles.projectListing2Child}
             loading="lazy"
@@ -302,10 +302,10 @@ const ProjectListCard = ({ className = "" }) => {
           <div className={styles.location}>20,000</div>
           <div className={styles.ada2}>20 ADA</div>
           <div className={styles.projectType6}>
-            <div className={styles.project - type}>Project Type</div>
+            <div className={styles.project_type}>Project Type</div>
           </div>
           <div className={styles.projectTitle6}>
-            <div className={styles.project - title}>Project Title</div>
+            <div className={styles.project_title}>Project Title</div>
             <div
               className={styles.viewProject}
               onClick={onViewProjectTextClick}

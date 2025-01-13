@@ -21,11 +21,11 @@ const Background1 = ({ className = "" }) => {
       accItem?.parentElement?.previousElementSibling;
     const siblingContainerAccItem = accItem?.hasAttribute("data-acc-original")
       ? accItem?.nextElementSibling ||
-        nextOuterSibling?.querySelector("[data-acc-item]") ||
-        nextOuterSibling
+      nextOuterSibling?.querySelector("[data-acc-item]") ||
+      nextOuterSibling
       : accItem?.previousElementSibling ||
-        prevOuterSibling?.querySelector("[data-acc-item]") ||
-        prevOuterSibling;
+      prevOuterSibling?.querySelector("[data-acc-item]") ||
+      prevOuterSibling;
     const siblingAccItem =
       siblingContainerAccItem?.querySelector("[data-acc-item]") ||
       siblingContainerAccItem;
@@ -106,8 +106,9 @@ const Background1 = ({ className = "" }) => {
               <div className={styles.projectTypeHeader}>
                 <div className={styles.vintageTo}>Project Type</div>
               </div>
-              <div className={styles.standard}>Project ID</div>
+
             </div>
+            <div className={styles.standard}>Project ID</div>
             <div className={styles.regionQty}>
               <div className={styles.regionCountry}>Region, Country</div>
               <div className={styles.qty}>Qty</div>

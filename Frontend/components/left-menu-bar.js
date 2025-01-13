@@ -12,9 +12,17 @@ const LeftMenuBar = ({ className = "" }) => {
     router.push("/admin-certificates-page");
   }, [router]);
 
+  const onDashboardClickAdmin = useCallback(() => {
+    router.push("/admin-dashboard")
+  }, [router]);
+
+  const onProjectPageAdmin = useCallback(() => {
+    router.push("/admin-project-page")
+  }, [router])
+
   return (
     <div className={[styles.leftMenuBar, className].join(" ")}>
-      <div className={styles.leftMenu3}>
+      <div className={styles.leftMenu3} onClick={onDashboardClickAdmin}>
         <div className={styles.dashboard}>
           <div className={styles.dashboardBackground} />
           <Image
@@ -35,7 +43,7 @@ const LeftMenuBar = ({ className = "" }) => {
           src="/home.svg"
         />
       </div>
-      <div className={styles.leftMenu2}>
+      <div className={styles.leftMenu2} onClick={onProjectPageAdmin}>
         <div className={styles.dashboard}>
           <div className={styles.menuIconBackground} />
           <div className={styles.projects}>Projects</div>

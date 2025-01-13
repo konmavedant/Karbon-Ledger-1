@@ -1,4 +1,3 @@
-import { Box } from "@mui/material";
 import ProjectListCard from "../components/project-list-card";
 import TopMenuBar from "../components/top-menu-bar";
 import LeftMenuBar from "../components/left-menu-bar";

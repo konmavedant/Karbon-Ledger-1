@@ -3,11 +3,17 @@ import { Box } from "@mui/material";
 import Image from "next/image";
 import PropTypes from "prop-types";
 import styles from "./top-menu-bar.module.css";
+import { useRouter } from "next/router";
 
 const TopMenuBar = ({ className = "" }) => {
+  const router = useRouter();
   const onConnectWalletContainerClick = useCallback(() => {
     // Please sync "Admin Dashboard - Wallet Pop-up" to the project
   }, []);
+  const onLogoClick = useCallback(() => {
+    // Please sync "Admin Dashboard - Wallet Pop-up" to the project
+    router.push("/")
+  }, [router]);
 
   return (
     <header className={[styles.topMenuBar, className].join(" ")}>
@@ -18,6 +24,7 @@ const TopMenuBar = ({ className = "" }) => {
         height={150}
         alt=""
         src="/logo1@2x.png"
+        onClick={onLogoClick}
       />
       <div
         className={styles.connectWallet}

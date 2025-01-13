@@ -13,7 +13,7 @@ const AccountLeftMenu = ({ className = "" }) => {
   }, [router]);
 
   const onSignOutContainerClick = useCallback(() => {
-    router.push("/sign-in-screen-admin");
+    router.push("/sign-up-screen-admin");
   }, [router]);
 
   return (

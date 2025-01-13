@@ -6,6 +6,7 @@ import LeftMenuBar from "../components/left-menu-bar";
 import AccountLeftMenu from "../components/account-left-menu";
 import HelpBox1 from "../components/help-box1";
 import styles from "./index.module.css";
+import AdminDashboardPage from "../components/admin-dashboard";
 
 const ProjectsPageUser = () => {
   const onConnectWalletClick = useCallback(() => {
@@ -32,7 +33,8 @@ const ProjectsPageUser = () => {
           </div>
         </div>
       </button>
-      <ProjectsCluster />
+      {/* <ProjectsCluster /> */}
+      <AdminDashboardPage />
       <TopMenuBar1 />
       <LeftMenuBar />
       <AccountLeftMenu />
