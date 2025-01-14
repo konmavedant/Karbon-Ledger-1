@@ -1,8 +1,15 @@
-import React, { useCallback } from 'react';
+'use client'
+import React, { useCallback, useEffect, useState } from 'react';
 import { Box, Typography, Paper, styled, Button } from '@mui/material';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import styles from "./project-list-card.module.css";
+import { useWallet } from '@/context/walletContext';
+import { Data, UTxO } from '@lucid-evolution/lucid';
+import { PID_MINTER, VALIDATOR_CONTRACT_ADDRESS } from '@/config/constants';
+import { acceptProject, rejectProject } from '@/lib/transactions';
+import { KarbonDatum } from '@/types/cardano';
+import Link from 'next/link';
 
 
 const PROJECTS = [
@@ -61,8 +68,40 @@ const ProjectListCard = () => {
     console.log(`Rejected project ${id}`);
   }, []);
 
+  // ==============================================
+  const [walletConnection] = useWallet()
+  const { lucid } = walletConnection
+  const [projects, setProjects] = useState<UTxO[]>([])
+
+
+  useEffect(() => {
+    if (!lucid) return;
+    const fetchUtxos = async () => {
+      const utxos = await lucid.utxosAt(VALIDATOR_CONTRACT_ADDRESS)
+      const filteredUtxos = utxos.filter((utxo) => {
+        const assets = utxo.assets;
+        return Object.keys(assets).some((key) => key.startsWith(PID_MINTER));
+      });
+
+      const datum = await lucid.datumOf(filteredUtxos[0])
+      const m = Data.castFrom(datum, KarbonDatum)
+      console.log(filteredUtxos, m)
+      setProjects(utxos)
+    }
+    fetchUtxos()
+  }, [lucid])
+
+
   return (
     <div className={styles.projectListCard}>
+      {projects.map((utxo) => {
+        return (
+          <div key={utxo.txHash + utxo.outputIndex} className='space-x-2'>
+            <span>{utxo.txHash}#{utxo.outputIndex}</span>
+
+          </div>
+        )
+      })}
       <StyledPaper elevation={3}>
         <Typography variant="h5" gutterBottom sx={{ position: 'relative', zIndex: 1 }}>Projects</Typography>
         <Box display="flex" fontWeight="bold" py={2} borderBottom="2px solid #000" sx={{ position: 'relative', zIndex: 1 }}>
@@ -78,13 +117,10 @@ const ProjectListCard = () => {
           <HeaderTypography sx={{ width: '10%' }}>Accept/ Reject</HeaderTypography>
         </Box>
         <Box sx={{ position: 'relative', zIndex: 1 }}>
-          {PROJECTS.map((project) => (
+          {projects.map((project, i) => (
             <ProjectItem
-              key={project.id}
-              {...project}
-              onViewProject={onViewProject}
-              onApprove={onApprove}
-              onReject={onReject}
+              key={i}
+              project={project}
             />
           ))}
         </Box>
@@ -98,19 +134,7 @@ export default ProjectListCard;
 
 
 interface ProjectItemProps {
-  id: string;
-  title: string;
-  type: string;
-  location: string;
-  area: string;
-  price: string;
-  vintageFrom: string;
-  vintageTo: string;
-  standard: string;
-  logoSrc: string;
-  onViewProject: (id: string) => void;
-  onApprove: (id: string) => void;
-  onReject: (id: string) => void;
+  project: UTxO;
 }
 
 const ItemTypography = styled(Typography)(({ theme }) => ({
@@ -128,49 +152,65 @@ const ActionButton = styled(Button)(({ theme, color }) => ({
 }));
 
 const ProjectItem: React.FC<ProjectItemProps> = ({
-  id,
-  title,
-  type,
-  location,
-  area,
-  price,
-  vintageFrom,
-  vintageTo,
-  standard,
-  logoSrc,
-  onViewProject,
-  onApprove,
-  onReject,
+  project
 }) => {
+  const [walletConnection] = useWallet()
+  const [rejecting, setRejecting] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  async function handleReject(utxo: UTxO) {
+    setRejecting(true)
+    try {
+      await rejectProject(walletConnection, utxo)
+    } catch (e) {
+      console.log(e)
+    }
+    setRejecting(false)
+  }
+
+  async function handleAccept(utxo: UTxO) {
+    setSubmitting(true)
+    try {
+      await acceptProject(walletConnection, utxo)
+    } catch (e) {
+      console.log(e)
+    }
+    setSubmitting(false)
+  }
   return (
     <Box display="flex" alignItems="center" py={2} borderBottom="1px solid #e0e0e0">
-      <ItemTypography sx={{ width: '10%' }}>{id}</ItemTypography>
+      <Link href={`https://preview.cexplorer.io/tx/${project.txHash}`}
+        target="_blank"
+        rel="noopener noreferrer">
+        <ItemTypography sx={{ width: '10%' }}>{project.txHash.slice(0, 6)}</ItemTypography>
+      </Link>
       <Box sx={{ width: '20%', display: 'flex', alignItems: 'center' }}>
-        <Image src={logoSrc} alt={title} width={30} height={30} style={{ borderRadius: '4px' }} />
-        <ItemTypography ml={1}>{title}</ItemTypography>
+        <Image src={PROJECTS[0].logoSrc} alt={PROJECTS[0].title} width={30} height={30} style={{ borderRadius: '4px' }} />
+        <ItemTypography ml={1}>{PROJECTS[0].title}</ItemTypography>
       </Box>
-      <ItemTypography sx={{ width: '10%' }}>{type}</ItemTypography>
-      <ItemTypography sx={{ width: '10%' }}>{standard}</ItemTypography>
-      <ItemTypography sx={{ width: '10%' }}>{vintageFrom}</ItemTypography>
-      <ItemTypography sx={{ width: '10%' }}>{vintageTo}</ItemTypography>
-      <ItemTypography sx={{ width: '10%' }}>{location}</ItemTypography>
-      <ItemTypography sx={{ width: '5%' }}>{area}</ItemTypography>
-      <ItemTypography sx={{ width: '5%' }}>{price}</ItemTypography>
+      <ItemTypography sx={{ width: '10%' }}>{PROJECTS[0].type}</ItemTypography>
+      <ItemTypography sx={{ width: '10%' }}>{PROJECTS[0].standard}</ItemTypography>
+      <ItemTypography sx={{ width: '10%' }}>{PROJECTS[0].vintageFrom}</ItemTypography>
+      <ItemTypography sx={{ width: '10%' }}>{PROJECTS[0].vintageTo}</ItemTypography>
+      <ItemTypography sx={{ width: '10%' }}>{PROJECTS[0].location}</ItemTypography>
+      <ItemTypography sx={{ width: '5%' }}>{PROJECTS[0].area}</ItemTypography>
+      <ItemTypography sx={{ width: '5%' }}>{PROJECTS[0].price}</ItemTypography>
       <Box sx={{ width: '10%', display: 'flex', justifyContent: 'space-between' }}>
-        <ActionButton
+        <ActionButton variant='contained' onClick={() => handleAccept(project)} disabled={submitting}>{submitting ? "Accepting..." : "Accept"}</ActionButton>
+        <ActionButton variant="outlined" color='error' onClick={() => { handleReject(project) }} disabled={rejecting}>{rejecting ? "Rejecting..." : "Reject"}</ActionButton>
+        {/* <ActionButton
           variant="contained"
           color="primary"
-          onClick={() => onApprove(id)}
+          onClick={() => PROJECTS[0].onApprove(id)}
         >
           Approve
         </ActionButton>
         <ActionButton
           variant="outlined"
           color="secondary"
-          onClick={() => onReject(id)}
+          onClick={() => PROJECTS[0].onReject(id)}
         >
           Reject
-        </ActionButton>
+        </ActionButton> */}
       </Box>
     </Box>
   );

@@ -3,6 +3,7 @@ import { twMerge } from "tailwind-merge"
 import { NETWORK, provider } from "@/config/lucid";
 import { ConfigDatumHolderValidator, identificationPolicyid } from "@/config/scripts/scripts";
 import { fromText, LucidEvolution, makeWalletFromPrivateKey, mintingPolicyToId, Script, TxSignBuilder, Validator, validatorToAddress } from "@lucid-evolution/lucid";
+import { PID_MINTER, VALIDATOR_CONTRACT_ADDRESS } from "@/config/constants";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -109,3 +110,16 @@ export async function signWithPrivateKey(tx: TxSignBuilder, privateKey: string) 
   const signed = await tx.sign.withPrivateKey(privateKey);
   return signed
 }
+
+
+
+// export async function getProjectUtxos(lucid: LucidEvolution) {
+//   const utxos = await lucid.utxosAt(VALIDATOR_CONTRACT_ADDRESS)
+//   console.log(utxos, "utxos")
+//   const filteredUtxos = utxos.filter((utxo) => {
+//     const assets = utxo.assets;
+//     return Object.keys(assets).some((key) => key.startsWith(PID_MINTER));
+//   });
+
+//   return filteredUtxos
+// }
