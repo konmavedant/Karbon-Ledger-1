@@ -1,6 +1,16 @@
-const nextConfig = {
-    reactStrictMode: true,
-    
-  };
+/** @type {import('next').NextConfig} */
 
-  module.exports = nextConfig;
+const nextConfig = {
+    webpack: (config) => {
+        config.experiments = {
+            ...config.experiments,
+            asyncWebAssembly: true,
+            topLevelAwait: true,
+            layers: true,
+        };
+        return config;
+    },
+    pageExtensions: ["js", "jsx", "ts", "tsx"],
+};
+
+module.exports = nextConfig;
