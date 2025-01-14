@@ -10,6 +10,8 @@ import {
 import Image from "next/image";
 import PropTypes from "prop-types";
 import styles from "./top-menu-bar1.module.css";
+import WalletConnector from "./WalletConnector/client";
+
 
 const TopMenuBar1 = ({ className = "" }) => {
   const onConnectWalletClick = useCallback(() => {
@@ -26,24 +28,11 @@ const TopMenuBar1 = ({ className = "" }) => {
         alt=""
         src="/logo1@2x.png"
       />
-      <Button
-        className={styles.connectWallet}
-        disableElevation
-        variant="contained"
-        sx={{
-          textTransform: "none",
-          color: "#fff",
-          fontSize: "12",
-          background: "#0a3834",
-          borderRadius: "34.5px",
-          "&:hover": { background: "#0a3834" },
-          width: 150,
-          height: 35,
-        }}
-        onClick={onConnectWalletClick}
+      <div
+        className="absolute top-[34%] right-[27.31%] bottom-[42.67%] left-[61.76%] connectWallet"
       >
-        Connect Wallet
-      </Button>
+        <WalletConnector />
+      </div>
       <div className={styles.topRightMenuBar}>
         <TextField
           className={styles.searchBar}

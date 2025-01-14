@@ -5,10 +5,10 @@ import { handleError } from "@/lib/utils";
 import { useWallet } from "@/context/walletContext";
 import { mkLucid } from "@/lib/lucid";
 import { SUPPORTEDWALLETS } from "./wallets";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Loader2, LogOut } from 'lucide-react';
-import { Button } from "../ui/button";
+import { LogOut } from 'lucide-react';
 import Image from "next/image";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Grid } from "@mui/material";
+
 export default function WalletComponent() {
     const [walletConnection, setWalletConnection] = useWallet();
     const { lucid, address, balance } = walletConnection;
@@ -64,7 +64,6 @@ export default function WalletComponent() {
         setConnecting(false);
     }
 
-
     function disconnect() {
         setWalletConnection((prev) => {
             return {
@@ -76,41 +75,59 @@ export default function WalletComponent() {
         });
     }
 
-
-
     return (
-        <div className="flex flex-col gap-4 w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/5 2xl:w-1/6">
+        <div >
             {address ? (
-                <Button variant="outline" onClick={disconnect}><LogOut />Disconnect</Button>
-            ) :
-                <Dialog open={isOpen} onOpenChange={setIsOpen}>
-                    <DialogTrigger asChild>
-                        <Button disabled={connecting}>{connecting ? "Connecting..." : "Connect Wallet"}</Button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-
-                        <DialogHeader>
-                            <DialogTitle>Connect Wallet</DialogTitle>
-                            <DialogDescription>
+                <Button variant="outlined" onClick={disconnect} startIcon={<LogOut />}
+                    sx={{
+                        borderColor: '#0a3834',
+                        color: '#0a3834',
+                        borderRadius: '9999px',
+                    }}>
+                    Disconnect</Button>
+            ) : (
+                <>
+                    <Button onClick={() => setIsOpen(true)} disabled={connecting} variant="contained" color="success"
+                        sx={{
+                            backgroundColor: '#0a3834',
+                            '&:hover': {
+                                backgroundColor: '#0c4640',
+                            },
+                            borderRadius: '9999px',
+                        }}>
+                        {connecting ? "Connecting..." : "Connect Wallet"}
+                    </Button>
+                    <Dialog open={isOpen} onClose={() => setIsOpen(false)}>
+                        <DialogTitle>Connect Wallet</DialogTitle>
+                        <DialogContent>
+                            <DialogContentText>
                                 Choose a wallet to connect to your account.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="flex gap-4 py-4 w-full">
-                            {wallets.map((wallet) => (
-                                <Button
-                                    key={wallet.name}
-                                    onClick={() => onConnectWallet(wallet)}
-                                    disabled={!wallet.enable}
-                                    className="w-full"
-                                >
-                                    <Image src={wallet.icon} alt={wallet.name} width={20} height={20} />
-                                    {wallet.name}
-                                </Button>
-                            ))}
-                        </div>
-                    </DialogContent>
-                </Dialog>
-            }
+                            </DialogContentText>
+                            <Grid container spacing={2} style={{ marginTop: '16px' }}>
+                                {wallets.map((wallet) => (
+                                    <Grid item xs={6} key={wallet.name}>
+                                        <Button
+                                            onClick={() => onConnectWallet(wallet)}
+                                            disabled={!wallet.enable}
+                                            fullWidth
+                                            variant="outlined"
+                                            startIcon={
+                                                <Image src={wallet.icon} alt={wallet.name} width={20} height={20} />
+                                            }
+                                        >
+                                            {wallet.name}
+                                        </Button>
+                                    </Grid>
+                                ))}
+                            </Grid>
+                        </DialogContent>
+                        <DialogActions>
+                            <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+                        </DialogActions>
+                    </Dialog>
+                </>
+            )}
         </div>
     );
 }
+
