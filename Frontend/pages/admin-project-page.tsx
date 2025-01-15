@@ -18,3 +18,10 @@ const AdminProjectPage = () => {
 };
 
 export default AdminProjectPage;
+
+// const CertificateListCard = ({ className = "" }) => {
+//   const router = useRouter();
+
+//   const onViewProjectTextClick = useCallback(() => {
+//       router.push("/project-detail-page-admin");
+//   }, [router]);

@@ -6,10 +6,10 @@ import { useRouter } from "next/router";
 import Background1 from "../components/background1";
 import styles from "./admin-certificates-page.module.css";
 import LeftMenuBar from "../components/left-menu-bar";
-import TopMenuBar from "../components/top-menu-bar";
 import AccountLeftMenu from "../components/account-left-menu";
 import HelpBox from "../components/help-box";
 import CertificateListCard from "../components/certificate-list-card";
+import TopMenuBar1 from "@/components/top-menu-bar1";
 
 const AdminCertificatesPage = () => {
   const router = useRouter();
@@ -28,7 +28,11 @@ const AdminCertificatesPage = () => {
 
   return (
     <div className={styles.adminCertificatesPage}>
+<<<<<<< HEAD:Frontend/pages/admin-certificates-page.js
       <TopMenuBar />
+=======
+      <TopMenuBar1 />
+>>>>>>> a070132385d49adb132ff9a23dc12cfb1a7e6246:Frontend/pages/admin-certificates-page.tsx
       <LeftMenuBar />
       <AccountLeftMenu />
       <HelpBox />
