@@ -130,8 +130,11 @@ const Background = ({ className = "" }) => {
         SIGN UP
       </Button>
       <div className={styles.signinPrompt}>
-        <div className={styles.alreadyHaveAn} onClick={onAlreadyHaveAnClick}
-          role="button">
+        <div
+          className={styles.alreadyHaveAn}
+          onClick={onAlreadyHaveAnClick}
+          role="button"
+        >
           Already have an account? Sign in
         </div>
       </div>

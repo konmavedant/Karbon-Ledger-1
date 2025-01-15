@@ -28,11 +28,7 @@ const AdminCertificatesPage = () => {
 
   return (
     <div className={styles.adminCertificatesPage}>
-<<<<<<< HEAD:Frontend/pages/admin-certificates-page.js
-      <TopMenuBar />
-=======
       <TopMenuBar1 />
->>>>>>> a070132385d49adb132ff9a23dc12cfb1a7e6246:Frontend/pages/admin-certificates-page.tsx
       <LeftMenuBar />
       <AccountLeftMenu />
       <HelpBox />

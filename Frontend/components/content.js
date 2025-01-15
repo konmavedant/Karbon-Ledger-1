@@ -68,7 +68,11 @@ const Content = ({ className = "" }) => {
         </div>
       </div>
       <div className={styles.leftMenu}>
-        <div className={styles.leftMenu1} onClick={onLeftMenuClick} role="button">
+        <div
+          className={styles.leftMenu1}
+          onClick={onLeftMenuClick}
+          role="button"
+        >
           <div className={styles.projectsIcon}>
             <div className={styles.projectsIconChild} />
             <Image

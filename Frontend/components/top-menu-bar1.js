@@ -36,7 +36,9 @@ const TopMenuBar1 = ({ className = "" }) => {
           placeholder="Type here..."
           variant="outlined"
           InputProps={{
-            startAdornment: <img width="15px" height="15px" src="/icon.svg" alt="r" />,
+            startAdornment: (
+              <img width="15px" height="15px" src="/icon.svg" alt="r" />
+            ),
           }}
           sx={{
             "& fieldset": { borderColor: "#e2e8f0" },

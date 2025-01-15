@@ -22,9 +22,11 @@ const LeftMenuBar = ({ className = "" }) => {
 
   return (
     <div className={[styles.leftMenuBar, className].join(" ")}>
-      <div className={styles.leftMenu3}
+      <div
+        className={styles.leftMenu3}
         role="button"
-        onClick={onDashboardClickAdmin}>
+        onClick={onDashboardClickAdmin}
+      >
         <div className={styles.dashboard}>
           <div className={styles.dashboardBackground} />
           <Image
@@ -45,9 +47,11 @@ const LeftMenuBar = ({ className = "" }) => {
           src="/home.svg"
         />
       </div>
-      <div className={styles.leftMenu2}
+      <div
+        className={styles.leftMenu2}
         role="button"
-        onClick={onProjectPageAdmin}>
+        onClick={onProjectPageAdmin}
+      >
         <div className={styles.dashboard}>
           <div className={styles.menuIconBackground} />
           <div className={styles.projects}>Projects</div>
@@ -61,9 +65,7 @@ const LeftMenuBar = ({ className = "" }) => {
           src="/leaf.svg"
         />
       </div>
-      <div className={styles.leftMenu1}
-        role="button"
-        onClick={onLeftMenuClick}>
+      <div className={styles.leftMenu1} role="button" onClick={onLeftMenuClick}>
         <div className={styles.dashboard}>
           <div className={styles.menuIconBackground} />
           <div className={styles.projects}>Certificates</div>

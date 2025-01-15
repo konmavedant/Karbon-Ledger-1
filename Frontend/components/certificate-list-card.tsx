@@ -59,7 +59,7 @@ const CertificateListCard = () => {
     (id: string) => {
       router.push("/project-detail-page-admin");
     },
-    [router]
+    [router],
   );
 
   const onApprove = useCallback((id: string) => {

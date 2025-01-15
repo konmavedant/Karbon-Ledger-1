@@ -18,7 +18,11 @@ const AccountLeftMenu = ({ className = "" }) => {
 
   return (
     <div className={[styles.accountLeftMenu, className].join(" ")}>
-      <div className={styles.profile} onClick={onProfileContainerClick} role="button">
+      <div
+        className={styles.profile}
+        onClick={onProfileContainerClick}
+        role="button"
+      >
         <div className={styles.profileBackground} />
         <Image
           className={styles.ioniconppersondefault}
@@ -30,7 +34,11 @@ const AccountLeftMenu = ({ className = "" }) => {
         />
         <div className={styles.profile1}>Profile</div>
       </div>
-      <div className={styles.signOut} onClick={onSignOutContainerClick} role="button">
+      <div
+        className={styles.signOut}
+        onClick={onSignOutContainerClick}
+        role="button"
+      >
         <div className={styles.profileBackground} />
         <div className={styles.signOut1}>Sign Out</div>
         <Image

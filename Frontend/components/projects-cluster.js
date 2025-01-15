@@ -27,9 +27,11 @@ const ProjectsCluster = ({ className = "" }) => {
         projectDescriptionDisplay="unset"
         projectDescriptionMinWidth="unset"
       />
-      <div className={styles.projectCard3}
+      <div
+        className={styles.projectCard3}
         role="button"
-        onClick={onProjectCardClick}>
+        onClick={onProjectCardClick}
+      >
         <div className={styles.backgroundCard} />
         <Image
           className={styles.imageCardIcon}

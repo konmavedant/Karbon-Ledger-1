@@ -53,9 +53,11 @@ const NavigationMenu = ({ className = "" }) => {
         </div>
       </div>
       <div className={styles.menuOptions}>
-        <div className={styles.leftMenu2}
+        <div
+          className={styles.leftMenu2}
           role="button"
-          onClick={onLeftMenuClick}>
+          onClick={onLeftMenuClick}
+        >
           <div className={styles.homeLinkContainer}>
             <div className={styles.nestedMenuItemChild} />
             <Image
@@ -73,9 +75,11 @@ const NavigationMenu = ({ className = "" }) => {
         </div>
       </div>
       <div className={styles.menuOptions1}>
-        <div className={styles.leftMenu2}
+        <div
+          className={styles.leftMenu2}
           role="button"
-          onClick={onLeftMenuClick1}>
+          onClick={onLeftMenuClick1}
+        >
           <div className={styles.homeLinkContainer}>
             <div className={styles.nestedMenuItemChild} />
             <Image

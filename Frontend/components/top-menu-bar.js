@@ -29,7 +29,6 @@ const TopMenuBar = ({ className = "" }) => {
       <div
         className={styles.connectWallet}
         role="button"
-
         onClick={onConnectWalletContainerClick}
       >
         <div className={styles.widthStructure}>
