@@ -33,6 +33,7 @@ const ProjectCard = ({
   return (
     <div
       className={[styles.projectCard6, className].join(" ")}
+      role="button"
       onClick={onProjectCardClick}
       style={projectCard6Style}
     >

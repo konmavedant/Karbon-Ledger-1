@@ -10,27 +10,25 @@ import HelpBox1 from "../components/help-box1";
 import UserDashboardPage from "../components/user-dashboard-page";
 
 const UserDashboard = () => {
-    const router = useRouter();
+  const router = useRouter();
 
-    const onConnectWalletClick = useCallback(() => {
-        // Please sync "Admin Dashboard - Wallet Pop-up" to the project
-    }, []);
+  const onConnectWalletClick = useCallback(() => {
+    // Please sync "Admin Dashboard - Wallet Pop-up" to the project
+  }, []);
 
-    const onViewProjectTextClick = useCallback(() => {
-        router.push("/project-detail-page-admin");
-    }, [router]);
+  const onViewProjectTextClick = useCallback(() => {
+    router.push("/project-detail-page-admin");
+  }, [router]);
 
-    return (
-
-        <div className={styles.projectsPageUser}>
-            <UserDashboardPage />
-            <TopMenuBar1 />
-            <LeftMenuBar />
-            <AccountLeftMenu />
-            <HelpBox1 />
-        </div >
-
-    );
+  return (
+    <div className={styles.projectsPageUser}>
+      <UserDashboardPage />
+      <TopMenuBar1 />
+      <LeftMenuBar />
+      <AccountLeftMenu />
+      <HelpBox1 />
+    </div>
+  );
 };
 
 export default UserDashboard;

@@ -12,7 +12,7 @@ const TopMenuBar = ({ className = "" }) => {
   }, []);
   const onLogoClick = useCallback(() => {
     // Please sync "Admin Dashboard - Wallet Pop-up" to the project
-    router.push("/")
+    router.push("/");
   }, [router]);
 
   return (
@@ -28,6 +28,8 @@ const TopMenuBar = ({ className = "" }) => {
       />
       <div
         className={styles.connectWallet}
+        role="button"
+
         onClick={onConnectWalletContainerClick}
       >
         <div className={styles.widthStructure}>

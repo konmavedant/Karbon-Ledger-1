@@ -59,7 +59,7 @@ const FrameComponent1 = ({ className = "" }) => {
                 variant="outlined"
                 InputProps={{
                   startAdornment: (
-                    <img width="15px" height="15px" src="/icon.svg" />
+                    <img width="15px" height="15px" src="/icon.svg" alt="" />
                   ),
                 }}
                 sx={{

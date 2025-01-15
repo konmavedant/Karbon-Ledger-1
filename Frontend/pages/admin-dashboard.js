@@ -21,7 +21,6 @@ const AdminDashboard = () => {
   }, [router]);
 
   return (
-
     <div className={styles.projectsPageUser}>
       <AdminDashboardPage />
 
@@ -29,8 +28,7 @@ const AdminDashboard = () => {
       <LeftMenuBar />
       <AccountLeftMenu />
       <HelpBox1 />
-    </div >
-
+    </div>
   );
 };
 

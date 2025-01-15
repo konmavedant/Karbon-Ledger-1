@@ -28,18 +28,14 @@ const AdminCertificatesPage = () => {
 
   return (
     <div className={styles.adminCertificatesPage}>
-
-
       <TopMenuBar />
       <LeftMenuBar />
       <AccountLeftMenu />
       <HelpBox />
       {/* <FrameComponent2 /> */}
 
-
       {/* <Background1 /> */}
       <CertificateListCard />
-
     </div>
   );
 };

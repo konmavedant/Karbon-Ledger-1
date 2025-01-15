@@ -7,15 +7,15 @@ import styles from "./user-project-page.module.css";
 import ProjectsCluster from "../components/projects-cluster";
 
 const UserProjectPage = () => {
-    return (
-        <div className={styles.adminProjectPage}>
-            <ProjectsCluster />
-            <TopMenuBar />
-            <LeftMenuBar />
-            <AccountLeftMenu />
-            <HelpBox />
-        </div>
-    );
+  return (
+    <div className={styles.adminProjectPage}>
+      <ProjectsCluster />
+      <TopMenuBar />
+      <LeftMenuBar />
+      <AccountLeftMenu />
+      <HelpBox />
+    </div>
+  );
 };
 
 export default UserProjectPage;

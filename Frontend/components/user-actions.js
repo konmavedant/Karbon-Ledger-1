@@ -36,7 +36,9 @@ const UserActions = ({ className = "" }) => {
         </div>
       </div>
       <div className={styles.signOutDropdown1}>
-        <div className={styles.signOut} onClick={onSignOutContainerClick}>
+        <div className={styles.signOut}
+          role="button"
+          onClick={onSignOutContainerClick}>
           <div className={styles.rectangleParent}>
             <div className={styles.frameChild} />
             <Image

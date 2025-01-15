@@ -27,11 +27,9 @@ const ProjectDetailPageAdmin = () => {
       <HelpBox />
 
       <div className={styles.accountHeader}>
-
         <h3>Project Title</h3>
         <div className={styles.leftMenuParent}>
           <div className={styles.frameParent}>
-
             <div className={styles.projectNameContainerWrapper}>
               <div className={styles.projectNameContainer}>
                 <div className={styles.rectangleContainer}>

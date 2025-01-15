@@ -106,7 +106,6 @@ const Background1 = ({ className = "" }) => {
               <div className={styles.projectTypeHeader}>
                 <div className={styles.vintageTo}>Project Type</div>
               </div>
-
             </div>
             <div className={styles.standard}>Project ID</div>
             <div className={styles.regionQty}>
@@ -135,7 +134,7 @@ const Background1 = ({ className = "" }) => {
           data-acc-header
           data-acc-original
           data-acc-default-open
-          onClick={onAccordionHeaderClick}
+          role="button" onClick={onAccordionHeaderClick}
         >
           <div className={styles.projectListing2}>
             <Image
@@ -170,7 +169,7 @@ const Background1 = ({ className = "" }) => {
                   <div className={styles.projectType2}>Project Type</div>
                   <div
                     className={styles.viewProject}
-                    onClick={onViewProjectTextClick}
+                    role="button" onClick={onViewProjectTextClick}
                   >
                     View Project
                   </div>
@@ -248,7 +247,7 @@ const Background1 = ({ className = "" }) => {
             <div className={styles.link}>
               <div
                 className={styles.viewProject1}
-                onClick={onViewProjectTextClick}
+                role="button" onClick={onViewProjectTextClick}
               >
                 View Project
               </div>
@@ -293,7 +292,7 @@ const Background1 = ({ className = "" }) => {
           className={styles.frame140Close}
           data-acc-item
           data-acc-header
-          onClick={onAccordionHeaderClick}
+          role="button" onClick={onAccordionHeaderClick}
         >
           <div className={styles.projectListing6}>
             <div className={styles.frameParent}>
@@ -301,7 +300,7 @@ const Background1 = ({ className = "" }) => {
                 <div className={styles.projectType3}>Asia/India</div>
                 <div
                   className={styles.viewProject2}
-                  onClick={onViewProjectTextClick}
+                  role="button" onClick={onViewProjectTextClick}
                 >
                   View Project
                 </div>
@@ -391,7 +390,7 @@ const Background1 = ({ className = "" }) => {
           data-acc-item
           data-acc-header
           data-acc-original
-          onClick={onAccordionHeaderClick}
+          role="button" onClick={onAccordionHeaderClick}
         >
           <div className={styles.projectListing3}>
             <div className={styles.projectInfo}>
@@ -399,7 +398,7 @@ const Background1 = ({ className = "" }) => {
                 <div className={styles.projectType4}>Project Type</div>
                 <div
                   className={styles.viewProject2}
-                  onClick={onViewProjectTextClick}
+                  role="button" onClick={onViewProjectTextClick}
                 >
                   View Project
                 </div>
@@ -483,7 +482,7 @@ const Background1 = ({ className = "" }) => {
           data-acc-item
           data-acc-open
           data-acc-header
-          onClick={onAccordionHeaderClick}
+          role="button" onClick={onAccordionHeaderClick}
         >
           <div className={styles.projectListing2}>
             <Image
@@ -515,7 +514,7 @@ const Background1 = ({ className = "" }) => {
                   <div className={styles.projectType2}>Project Type</div>
                   <div
                     className={styles.viewProject}
-                    onClick={onViewProjectTextClick}
+                    role="button" onClick={onViewProjectTextClick}
                   >
                     View Project
                   </div>
@@ -593,7 +592,7 @@ const Background1 = ({ className = "" }) => {
             <div className={styles.link}>
               <div
                 className={styles.viewProject1}
-                onClick={onViewProjectTextClick}
+                role="button" onClick={onViewProjectTextClick}
               >
                 View Project
               </div>
@@ -641,7 +640,7 @@ const Background1 = ({ className = "" }) => {
           data-acc-item
           data-acc-header
           data-acc-original
-          onClick={onAccordionHeaderClick}
+          role="button" onClick={onAccordionHeaderClick}
         >
           <div className={styles.projectListing3}>
             <div className={styles.frameParent7}>
@@ -649,7 +648,7 @@ const Background1 = ({ className = "" }) => {
                 <div className={styles.projectType4}>Project Type</div>
                 <div
                   className={styles.viewProject2}
-                  onClick={onViewProjectTextClick}
+                  role="button" onClick={onViewProjectTextClick}
                 >
                   View Project
                 </div>
@@ -733,7 +732,7 @@ const Background1 = ({ className = "" }) => {
           data-acc-item
           data-acc-open
           data-acc-header
-          onClick={onAccordionHeaderClick}
+          role="button" onClick={onAccordionHeaderClick}
         >
           <div className={styles.projectListing2}>
             <Image
@@ -765,7 +764,7 @@ const Background1 = ({ className = "" }) => {
                   <div className={styles.projectType2}>Project Type</div>
                   <div
                     className={styles.viewProject}
-                    onClick={onViewProjectTextClick}
+                    role="button" onClick={onViewProjectTextClick}
                   >
                     View Project
                   </div>
@@ -843,7 +842,7 @@ const Background1 = ({ className = "" }) => {
             <div className={styles.link}>
               <div
                 className={styles.viewProject1}
-                onClick={onViewProjectTextClick}
+                role="button" onClick={onViewProjectTextClick}
               >
                 View Project
               </div>
@@ -891,7 +890,7 @@ const Background1 = ({ className = "" }) => {
           data-acc-item
           data-acc-header
           data-acc-original
-          onClick={onAccordionHeaderClick}
+          role="button" onClick={onAccordionHeaderClick}
         >
           <div className={styles.projectListing5}>
             <div className={styles.fields}>
@@ -912,7 +911,7 @@ const Background1 = ({ className = "" }) => {
                 <div className={styles.projectType4}>Project Type</div>
                 <div
                   className={styles.viewProject2}
-                  onClick={onViewProjectTextClick}
+                  role="button" onClick={onViewProjectTextClick}
                 >
                   View Project
                 </div>
@@ -981,7 +980,7 @@ const Background1 = ({ className = "" }) => {
           data-acc-item
           data-acc-open
           data-acc-header
-          onClick={onAccordionHeaderClick}
+          role="button" onClick={onAccordionHeaderClick}
         >
           <div className={styles.projectListing2}>
             <Image
@@ -1013,7 +1012,7 @@ const Background1 = ({ className = "" }) => {
                   <div className={styles.projectType2}>Project Type</div>
                   <div
                     className={styles.viewProject}
-                    onClick={onViewProjectTextClick}
+                    role="button" onClick={onViewProjectTextClick}
                   >
                     View Project
                   </div>
@@ -1091,7 +1090,7 @@ const Background1 = ({ className = "" }) => {
             <div className={styles.link}>
               <div
                 className={styles.viewProject1}
-                onClick={onViewProjectTextClick}
+                role="button" onClick={onViewProjectTextClick}
               >
                 View Project
               </div>
@@ -1139,7 +1138,7 @@ const Background1 = ({ className = "" }) => {
           data-acc-item
           data-acc-header
           data-acc-original
-          onClick={onAccordionHeaderClick}
+          role="button" onClick={onAccordionHeaderClick}
         >
           <div className={styles.projectListing6}>
             <div className={styles.frameParent}>
@@ -1147,7 +1146,7 @@ const Background1 = ({ className = "" }) => {
                 <div className={styles.projectType4}>Project Type</div>
                 <div
                   className={styles.viewProject2}
-                  onClick={onViewProjectTextClick}
+                  role="button" onClick={onViewProjectTextClick}
                 >
                   View Project
                 </div>
@@ -1235,7 +1234,7 @@ const Background1 = ({ className = "" }) => {
           data-acc-item
           data-acc-open
           data-acc-header
-          onClick={onAccordionHeaderClick}
+          role="button" onClick={onAccordionHeaderClick}
         >
           <div className={styles.projectListing2}>
             <Image
@@ -1267,7 +1266,7 @@ const Background1 = ({ className = "" }) => {
                   <div className={styles.projectType2}>Project Type</div>
                   <div
                     className={styles.viewProject}
-                    onClick={onViewProjectTextClick}
+                    role="button" onClick={onViewProjectTextClick}
                   >
                     View Project
                   </div>
@@ -1345,7 +1344,7 @@ const Background1 = ({ className = "" }) => {
             <div className={styles.link}>
               <div
                 className={styles.viewProject1}
-                onClick={onViewProjectTextClick}
+                role="button" onClick={onViewProjectTextClick}
               >
                 View Project
               </div>

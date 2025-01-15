@@ -13,36 +13,32 @@ import ProjectListCard from "../components/project-list-card";
 import CertificateListCard from "../components/certificate-list-card";
 
 const UserCertificatesPage = () => {
-    const router = useRouter();
+  const router = useRouter();
 
-    const onLeftMenuClick = useCallback(() => {
-        router.push("/admin-project-page");
-    }, [router]);
+  const onLeftMenuClick = useCallback(() => {
+    router.push("/admin-project-page");
+  }, [router]);
 
-    const onProfileContainerClick = useCallback(() => {
-        router.push("/profile-page-admin");
-    }, [router]);
+  const onProfileContainerClick = useCallback(() => {
+    router.push("/profile-page-admin");
+  }, [router]);
 
-    const onSignOutContainerClick = useCallback(() => {
-        router.push("/sign-in-screen-admin");
-    }, [router]);
+  const onSignOutContainerClick = useCallback(() => {
+    router.push("/sign-in-screen-admin");
+  }, [router]);
 
-    return (
-        <div className={styles.adminCertificatesPage}>
+  return (
+    <div className={styles.adminCertificatesPage}>
+      <TopMenuBar />
+      <LeftMenuBar />
+      <AccountLeftMenu />
+      <HelpBox />
+      {/* <FrameComponent2 /> */}
 
-
-            <TopMenuBar />
-            <LeftMenuBar />
-            <AccountLeftMenu />
-            <HelpBox />
-            {/* <FrameComponent2 /> */}
-
-
-            {/* <Background1 /> */}
-            <CertificateListCard />
-
-        </div>
-    );
+      {/* <Background1 /> */}
+      <CertificateListCard />
+    </div>
+  );
 };
 
 export default UserCertificatesPage;

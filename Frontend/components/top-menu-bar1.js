@@ -12,7 +12,6 @@ import PropTypes from "prop-types";
 import styles from "./top-menu-bar1.module.css";
 import WalletConnector from "./WalletConnector/client";
 
-
 const TopMenuBar1 = ({ className = "" }) => {
   const onConnectWalletClick = useCallback(() => {
     // Please sync "User Dashboard - Wallet Pop-up" to the project
@@ -28,9 +27,7 @@ const TopMenuBar1 = ({ className = "" }) => {
         alt=""
         src="/logo1@2x.png"
       />
-      <div
-        className="absolute top-[34%] right-[27.31%] bottom-[42.67%] left-[61.76%] connectWallet"
-      >
+      <div className="absolute top-[34%] right-[27.31%] bottom-[42.67%] left-[61.76%] connectWallet">
         <WalletConnector />
       </div>
       <div className={styles.topRightMenuBar}>
@@ -39,7 +36,7 @@ const TopMenuBar1 = ({ className = "" }) => {
           placeholder="Type here..."
           variant="outlined"
           InputProps={{
-            startAdornment: <img width="15px" height="15px" src="/icon.svg" />,
+            startAdornment: <img width="15px" height="15px" src="/icon.svg" alt="r" />,
           }}
           sx={{
             "& fieldset": { borderColor: "#e2e8f0" },

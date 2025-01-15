@@ -26,10 +26,7 @@ const ProfilePageAdmin = () => {
   }, []);
 
   return (
-
-
     <div className={styles.projectsPageUser}>
-
       {/* <div className={styles.profileHeaderWrapper}> */}
       <div className={styles.profileHeader}>
         <div className={styles.profileTitleContainer}>

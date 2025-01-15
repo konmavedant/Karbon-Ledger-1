@@ -22,7 +22,9 @@ const User1 = ({ className = "" }) => {
         <div className={styles.accountPages}>ACCOUNT PAGES</div>
       </div>
       <div className={styles.userActions}>
-        <div className={styles.profile} onClick={onProfileContainerClick}>
+        <div className={styles.profile}
+          role="button"
+          onClick={onProfileContainerClick}>
           <div className={styles.actionIcons}>
             <div className={styles.actionIconsChild} />
             <Image
@@ -40,7 +42,9 @@ const User1 = ({ className = "" }) => {
         </div>
       </div>
       <div className={styles.userActions1}>
-        <div className={styles.signOut} onClick={onSignOutContainerClick}>
+        <div className={styles.signOut}
+          role="button"
+          onClick={onSignOutContainerClick}>
           <div className={styles.rectangleParent}>
             <div className={styles.frameChild} />
             <Image
