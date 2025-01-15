@@ -8,7 +8,7 @@ import { useRouter } from "next/router";
 import "./global.css";
 import WalletProvider from "@/context/walletProvider";
 
-export default function MyApp(props) {
+export default function MyApp(props: { Component: any; pageProps: any; }) {
   const router = useRouter();
   const { Component, pageProps } = props;
   useEffect(() => {
