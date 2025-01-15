@@ -5,7 +5,7 @@ import { useRouter } from 'next/router';
 import Image from 'next/image';
 import styles from "./project-list-card.module.css";
 import { useWallet } from '@/context/walletContext';
-import { Data, UTxO } from '@lucid-evolution/lucid';
+import { Data, toText, UTxO } from '@lucid-evolution/lucid';
 import { PID_MINTER, VALIDATOR_CONTRACT_ADDRESS } from '@/config/constants';
 import { acceptProject, rejectProject } from '@/lib/transactions';
 import { KarbonDatum } from '@/types/cardano';
@@ -83,9 +83,7 @@ const ProjectListCard = () => {
         return Object.keys(assets).some((key) => key.startsWith(PID_MINTER));
       });
 
-      const datum = await lucid.datumOf(filteredUtxos[0])
-      const m = Data.castFrom(datum, KarbonDatum)
-      console.log(filteredUtxos, m)
+
       setProjects(utxos)
     }
     fetchUtxos()
@@ -155,8 +153,10 @@ const ProjectItem: React.FC<ProjectItemProps> = ({
   project
 }) => {
   const [walletConnection] = useWallet()
+  const { lucid } = walletConnection
   const [rejecting, setRejecting] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [datum, setDatum] = useState<KarbonDatum | undefined>(undefined)
   async function handleReject(utxo: UTxO) {
     setRejecting(true)
     try {
@@ -176,7 +176,19 @@ const ProjectItem: React.FC<ProjectItemProps> = ({
     }
     setSubmitting(false)
   }
+
+  useEffect(() => {
+    async function fetchDatum() {
+      if (!lucid) return
+      const data = await lucid.datumOf(project)
+      const datum = Data.castFrom(data, KarbonDatum)
+      console.log(datum)
+      setDatum(datum)
+    }
+    fetchDatum()
+  }, [lucid])
   return (
+    datum &&
     <Box display="flex" alignItems="center" py={2} borderBottom="1px solid #e0e0e0">
       <Link href={`https://preview.cexplorer.io/tx/${project.txHash}`}
         target="_blank"
@@ -185,15 +197,15 @@ const ProjectItem: React.FC<ProjectItemProps> = ({
       </Link>
       <Box sx={{ width: '20%', display: 'flex', alignItems: 'center' }}>
         <Image src={PROJECTS[0].logoSrc} alt={PROJECTS[0].title} width={30} height={30} style={{ borderRadius: '4px' }} />
-        <ItemTypography ml={1}>{PROJECTS[0].title}</ItemTypography>
+        <ItemTypography ml={1}>{toText(datum.asset_name)}</ItemTypography>
       </Box>
-      <ItemTypography sx={{ width: '10%' }}>{PROJECTS[0].type}</ItemTypography>
+      <ItemTypography sx={{ width: '10%' }}>{toText(datum.categories)}</ItemTypography>
       <ItemTypography sx={{ width: '10%' }}>{PROJECTS[0].standard}</ItemTypography>
       <ItemTypography sx={{ width: '10%' }}>{PROJECTS[0].vintageFrom}</ItemTypography>
       <ItemTypography sx={{ width: '10%' }}>{PROJECTS[0].vintageTo}</ItemTypography>
       <ItemTypography sx={{ width: '10%' }}>{PROJECTS[0].location}</ItemTypography>
       <ItemTypography sx={{ width: '5%' }}>{PROJECTS[0].area}</ItemTypography>
-      <ItemTypography sx={{ width: '5%' }}>{PROJECTS[0].price}</ItemTypography>
+      <ItemTypography sx={{ width: '5%' }}>{Number(datum.fees_amount) / 1000000}</ItemTypography>
       <Box sx={{ width: '10%', display: 'flex', justifyContent: 'space-between' }}>
         <ActionButton variant='contained' onClick={() => handleAccept(project)} disabled={submitting}>{submitting ? "Accepting..." : "Accept"}</ActionButton>
         <ActionButton variant="outlined" color='error' onClick={() => { handleReject(project) }} disabled={rejecting}>{rejecting ? "Rejecting..." : "Reject"}</ActionButton>
